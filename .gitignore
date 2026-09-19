@@ -1,0 +1,15 @@
+# ===== 版本控制策略（2026-09-19 确认）=====
+# git 仅用于「开发项目」(script/)。本地知识库(archive/ memory/ docs/)的更新
+# 靠 docs/CHANGELOG.md + 每日 .workbuddy/memory/ 记录，不入库。
+
+# 忽略根下一切
+/*
+# 仅放行开发项目与 gitignore 自身
+!.gitignore
+!script/
+
+# 敏感/生成物显式排除（即便将来放宽规则也安全）
+secrets/
+.env
+*.sqlite
+*.db
