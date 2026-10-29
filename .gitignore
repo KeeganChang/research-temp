@@ -24,3 +24,11 @@ skills/
 !.workbuddy/commands/
 # memory 日志属「本地知识库」，沿用 09-19 策略：不入库
 .workbuddy/memory/
+
+# 修正(2026-10-30)：上方 skills/ 规则会匹配「任意层级」的同名目录，
+# 导致 .workbuddy/skills/research-assistant/skills/（套件内嵌套子技能）一并被吞。
+# → 显式重新放行 .workbuddy 内的嵌套 skills 目录；顶层第三方 skills/ 仍保持忽略。
+!.workbuddy/**/skills/
+
+# 开发产物
+script/__pycache__/
