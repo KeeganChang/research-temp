@@ -1,0 +1,214 @@
+{
+  "config": {"wide_screen_mode": true, "enable_forward": true},
+  "header": {
+    "title": {"tag": "plain_text", "content": "📡 A股近一周热点追踪 · 研判播报"},
+    "subtitle": {"tag": "plain_text", "content": "数据截至 2026-10-09 · 科技硬件退潮，内容/资源/券商接棒"},
+    "background_color": "0x6E92C4",
+    "text_tag_list": [
+      {"tag": "text_tag", "text": {"tag": "plain_text", "content": "WEEKLY"}, "color": "neutral"}
+    ]
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "background_style": "blue",
+      "text": {"tag": "lark_md", "content": "<font color=\"blue\">**核心结论 · 本期定调**</font>\n科技硬件退潮，内容 / 资源 / 券商接棒。AI 算力硬件链（半导体/元件/通信设备/消费电子）结束主升、进入退潮切换，5日+20日主力净流出合计超千亿；资金转向 内容传媒 / 资源避险 / 农业 / 券商，属存量博弈下的防御+题材轮动，非增量新主升。"}
+    },
+    {
+      "tag": "div",
+      "background_style": "grey",
+      "text": {"tag": "lark_md", "content": "<font color=\"blue\">**研判（所以 → 行动）**</font>\n1. **资金反转信号明确**：半导体 5日 <font color=\"green\">-443亿</font> / 20日 -630亿，机构级减仓、末端获利了结。\n2. **接棒三方向**：AI 应用/传媒内容、贵金属避险、证券改革预期，各有催化但多属短线。\n3. **风险**：大盘总评仅 18.82（弱），指数弱 + 量能不足，题材狂热难持续；警惕外部 337 调查压制果链。"}
+    },
+    {"tag": "hr"},
+    {
+      "tag": "div",
+      "text": {"tag": "lark_md", "content": "<font color=\"blue\">**三条主线结论 · 各带数据源**</font>"}
+    },
+    {
+      "tag": "column_set",
+      "horizontal_spacing": "8px",
+      "columns": [
+        {
+          "tag": "column",
+          "width": "weighted",
+          "weight": 5,
+          "background_style": "grey",
+          "corner_radius": true,
+          "padding": "6px",
+          "vertical_align": "center",
+          "elements": [
+            {"tag": "div", "text": {"tag": "lark_md", "content": "**[AI 应用 / 传媒内容（接棒 AI 硬件）](http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN202610091958349792cab5)**"}}
+          ]
+        },
+        {
+          "tag": "column",
+          "width": "narrow",
+          "background_style": "orange",
+          "corner_radius": true,
+          "padding": "4px",
+          "horizontal_align": "center",
+          "vertical_align": "center",
+          "elements": [
+            {"tag": "markdown", "content": "Tier2", "text_size": "notation", "text_align": "center"}
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "div",
+      "background_style": "grey",
+      "text": {"tag": "lark_md", "content": "数字媒体 <font color=\"red\">+8.00%</font>、出版 <font color=\"red\">+7.20%</font>、影视 <font color=\"red\">+7.16%</font>；中文在线 <font color=\"red\">+20.01%</font> 领涨。资金从硬件链撤出后涌入\"AI 落地应用 + 内容传媒\"，成新晋人气主线。\n_腾讯自选股 · 新质生产力顶层设计出炉_  ·  <font color=\"grey\">👁 0  👍 0</font>"},
+      "action": {"tag": "action", "actions": [{"tag": "button", "text": {"tag": "plain_text", "content": "🔗 数据源"}, "type": "primary", "url": "http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN202610091958349792cab5"}]}
+    },
+    {
+      "tag": "column_set",
+      "horizontal_spacing": "8px",
+      "columns": [
+        {
+          "tag": "column",
+          "width": "weighted",
+          "weight": 5,
+          "background_style": "grey",
+          "corner_radius": true,
+          "padding": "6px",
+          "vertical_align": "center",
+          "elements": [
+            {"tag": "div", "text": {"tag": "lark_md", "content": "**[贵金属 / 资源避险（中东局势 + 油价）](http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010162427952ef7b9)**"}}
+          ]
+        },
+        {
+          "tag": "column",
+          "width": "narrow",
+          "background_style": "carmine",
+          "corner_radius": true,
+          "padding": "4px",
+          "horizontal_align": "center",
+          "vertical_align": "center",
+          "elements": [
+            {"tag": "markdown", "content": "Tier3", "text_size": "notation", "text_align": "center"}
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "div",
+      "background_style": "grey",
+      "text": {"tag": "lark_md", "content": "贵金属 <font color=\"red\">+5.62%</font>（<font color=\"red\">+14.9亿</font> 今日）；西部黄金 <font color=\"red\">+9.98%</font>。地缘推升避险，属事件驱动型回流（20日仍 -68.6亿，短线非反转）。\n_央视财经 · 中东局势推高油轮运价_  ·  <font color=\"grey\">👁 0  👍 0</font>"},
+      "action": {"tag": "action", "actions": [{"tag": "button", "text": {"tag": "plain_text", "content": "🔗 数据源"}, "type": "primary", "url": "http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010162427952ef7b9"}]}
+    },
+    {
+      "tag": "column_set",
+      "horizontal_spacing": "8px",
+      "columns": [
+        {
+          "tag": "column",
+          "width": "weighted",
+          "weight": 5,
+          "background_style": "grey",
+          "corner_radius": true,
+          "padding": "6px",
+          "vertical_align": "center",
+          "elements": [
+            {"tag": "div", "text": {"tag": "lark_md", "content": "**[证券 / 金融改革预期](http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010190738b64ffbaa)**"}}
+          ]
+        },
+        {
+          "tag": "column",
+          "width": "narrow",
+          "background_style": "orange",
+          "corner_radius": true,
+          "padding": "4px",
+          "horizontal_align": "center",
+          "vertical_align": "center",
+          "elements": [
+            {"tag": "markdown", "content": "Tier2", "text_size": "notation", "text_align": "center"}
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "div",
+      "background_style": "grey",
+      "text": {"tag": "lark_md", "content": "证券Ⅱ <font color=\"red\">+2.23%</font>（<font color=\"red\">+13.5亿</font> 今日）；华鑫股份 <font color=\"red\">+10.03%</font>。政策预期驱动脉冲，持续性看后续政策落地。\n_证监会 · 专家座谈会_  ·  <font color=\"grey\">👁 0  👍 0</font>"},
+      "action": {"tag": "action", "actions": [{"tag": "button", "text": {"tag": "plain_text", "content": "🔗 数据源"}, "type": "primary", "url": "http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010190738b64ffbaa"}]}
+    },
+    {"tag": "hr"},
+    {
+      "tag": "collapsible_panel",
+      "expanded": false,
+      "header": {"title": {"tag": "plain_text", "content": "📊 资金流向全景（涌入 / 出逃 · 亿元）"}},
+      "elements": [
+        {"tag": "div", "text": {"tag": "lark_md", "content": "<font color=\"blue\">**① 资金涌入（接棒方向）**</font>"}},
+        {
+          "tag": "column_set",
+          "horizontal_spacing": "8px",
+          "columns": [
+            {
+              "tag": "column", "width": "weighted", "weight": 1, "vertical_align": "top",
+              "elements": [
+                {"tag": "div", "text": {"tag": "lark_md", "content": "- 电池 <font color=\"red\">+50.4</font>（今日）/ +91.6（5日）\n- 贵金属 <font color=\"red\">+14.9</font>（今日，20日曾 -68.6）\n- 种植业 <font color=\"red\">+10.8</font> / +12.5（5日）"}}
+              ]
+            },
+            {
+              "tag": "column", "width": "weighted", "weight": 1, "vertical_align": "top",
+              "elements": [
+                {"tag": "div", "text": {"tag": "lark_md", "content": "- 软件开发 <font color=\"red\">+14.5</font>（今日）\n- 证券Ⅱ <font color=\"red\">+13.5</font>（今日）\n- 数字媒体 +4.6 / 出版 <font color=\"red\">+9.5</font>"}}
+              ]
+            }
+          ]
+        },
+        {"tag": "div", "text": {"tag": "lark_md", "content": "<font color=\"blue\">**② 资金出逃（退潮方向）**</font>"}},
+        {
+          "tag": "column_set",
+          "horizontal_spacing": "8px",
+          "columns": [
+            {
+              "tag": "column", "width": "weighted", "weight": 1, "vertical_align": "top",
+              "elements": [
+                {"tag": "div", "text": {"tag": "lark_md", "content": "- 半导体 <font color=\"green\">-41.9</font> / <font color=\"green\">-443</font>（5日）/ -630（20日）\n- 元件 <font color=\"green\">-56.4</font>（今日）/ -172.9（5日）"}}
+              ]
+            },
+            {
+              "tag": "column", "width": "weighted", "weight": 1, "vertical_align": "top",
+              "elements": [
+                {"tag": "div", "text": {"tag": "lark_md", "content": "- 通信设备 <font color=\"green\">-39.0</font> / -306.4（5日）\n- 消费电子 <font color=\"green\">-20.0</font> / -76.7（5日）"}}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "collapsible_panel",
+      "expanded": false,
+      "header": {"title": {"tag": "plain_text", "content": "🔥 活口方向（退潮中仍具持续催化）"}},
+      "elements": [
+        {"tag": "div", "text": {"tag": "lark_md", "content": "- **半导体硬件链（结构性活口）**：广州半导体独角兽 IPO 募 61.57亿、PCB 产能紧缺/载板国产化加速、光刻机巨头上调在韩零部件报价 10%\n- **电池 / 锂电**：宁德时代 <font color=\"red\">+3.84%</font>、天赐材料 <font color=\"red\">+9.15%</font>、固态电池题材活跃\n- **机器人**：宇树科技-W 上市、新质生产力顶层设计明确含机器人\n- **地产链（局部）**：房贷贴息开启楼市结构性修复新周期"}}
+      ]
+    },
+    {
+      "tag": "collapsible_panel",
+      "expanded": false,
+      "header": {"title": {"tag": "plain_text", "content": "⚖️ 反方论点（含时间维度失效点）"}},
+      "elements": [
+        {"tag": "div", "text": {"tag": "lark_md", "content": "1. **AI应用/传媒或只是一日游腾挪**：历史传媒行情持续性弱。⏱ 需连续 2 周净流入才证真，否则证伪。\n2. **贵金属完全依赖地缘局势**：中东缓和则溢价回吐。⏱ 地缘窗口以\"周\"计，不可预测。\n3. **证券涨由座谈会预期驱动，非实质落地**：险资举牌为个体行为。⏱ 10月政策窗口+三季报扰动，预期易落空。\n4. **半导体减仓是机构级**：5日+20日净流出超千亿，反弹多短线非反转。⏱ 三季报验证期，业绩无超预期则继续承压。\n5. **指数弱、量能缩量震荡**：总评仅 18.82、价值主导，题材狂热能持续多久存疑。⏱ 成交额跌破均值则题材熄火。\n6. **外部摩擦升级**：美对立讯/富士康发起 337 调查，压制果链估值。⏱ 调查周期长，但情绪冲击即时。"}}
+      ]
+    },
+    {
+      "tag": "collapsible_panel",
+      "expanded": false,
+      "header": {"title": {"tag": "plain_text", "content": "🔗 信号源清单（7条 · 可点）"}},
+      "elements": [
+        {"tag": "div", "text": {"tag": "lark_md", "content": "- [新质生产力顶层设计出炉](http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN202610091958349792cab5) — 腾讯自选股 · 10-09\n- [中东局势推高油轮运价](http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010162427952ef7b9) — 央视财经 · 10-10\n- [证监会专家座谈会](http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010190738b64ffbaa) — 证监会 · 10-10\n- [苹果折叠屏 iPhone Duo 加单 30%](http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010151356a46ced7b) — 证券时报 · 10-10\n- [美国 337 调查 立讯/富士康](http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010175057987fc54f) — 半导体产业纵横 · 10-10\n- [广州半导体独角兽 IPO 61.57亿](http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010143225a6c2de72) — 半导体器件应用网 · 10-10\n- [PCB 产能紧缺 / 载板国产化](http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010191349987fdd78) — 点火调研 · 10-10"}}
+      ]
+    },
+    {"tag": "hr"},
+    {
+      "tag": "action",
+      "actions": [
+        {"tag": "button", "text": {"tag": "plain_text", "content": "📊 原始信号源"}, "type": "default", "url": "https://my.feishu.cn/base/GqZ8bhLL5aThICsG4bGcOnQIn6Z"},
+        {"tag": "button", "text": {"tag": "plain_text", "content": "📄 完整报告"}, "type": "primary", "url": "https://my.feishu.cn/docx/G0YQd4HBQodsOqxxRKCcBRlInwf"}
+      ]
+    }
+  ]
+}

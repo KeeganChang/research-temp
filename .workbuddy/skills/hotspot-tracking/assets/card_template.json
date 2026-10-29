@@ -1,0 +1,91 @@
+{
+  "schema": "2.0",
+  "config": {
+    "update_multi": true,
+    "width_mode": "default",
+    "style": {
+      "text_size": {
+        "title": { "default": "heading-2", "pc": "heading-2", "mobile": "heading-3" },
+        "body": { "default": "normal", "pc": "normal", "mobile": "normal" },
+        "caption": { "default": "notation", "pc": "notation", "mobile": "notation" }
+      }
+    }
+  },
+  "header": {
+    "title": { "tag": "plain_text", "content": "{{TITLE}}" },
+    "subtitle": { "tag": "plain_text", "content": "{{SUBTITLE}}" },
+    "template": "blue",
+    "icon": { "tag": "standard_icon", "token": "ai-common_colorful" },
+    "text_tag_list": [
+      { "tag": "text_tag", "text": { "tag": "plain_text", "content": "热点播报" }, "color": "blue" }
+    ]
+  },
+  "body": {
+    "direction": "vertical",
+    "padding": "12px 12px 20px 12px",
+    "elements": [
+      {
+        "tag": "interactive_container",
+        "has_border": true, "border_color": "blue-100", "corner_radius": "8px",
+        "background_style": "blue-50", "padding": "12px",
+        "vertical_spacing": "4px", "margin": "0px 0px 12px 0px",
+        "elements": [
+          { "tag": "markdown", "content": "**<font color='blue'>核心信号</font>**" },
+          { "tag": "markdown", "content": "{{CORE_SIGNAL}}" }
+        ]
+      },
+      {
+        "tag": "interactive_container",
+        "has_border": true, "border_color": "blue-100", "corner_radius": "8px",
+        "padding": "12px", "vertical_spacing": "4px", "margin": "0px 0px 12px 0px",
+        "elements": [
+          { "tag": "markdown", "content": "**① {{TOP1_TITLE}}**" },
+          { "tag": "markdown", "content": "{{TOP1_BODY}}" }
+        ]
+      },
+      {
+        "tag": "interactive_container",
+        "has_border": true, "border_color": "blue-100", "corner_radius": "8px",
+        "padding": "12px", "vertical_spacing": "4px", "margin": "0px 0px 12px 0px",
+        "elements": [
+          { "tag": "markdown", "content": "**② {{TOP2_TITLE}}**" },
+          { "tag": "markdown", "content": "{{TOP2_BODY}}" }
+        ]
+      },
+      {
+        "tag": "interactive_container",
+        "has_border": true, "border_color": "blue-100", "corner_radius": "8px",
+        "padding": "12px", "vertical_spacing": "4px", "margin": "0px 0px 12px 0px",
+        "elements": [
+          { "tag": "markdown", "content": "**③ {{TOP3_TITLE}}**" },
+          { "tag": "markdown", "content": "{{TOP3_BODY}}" }
+        ]
+      },
+      {
+        "tag": "column_set", "flex_mode": "none", "horizontal_spacing": "12px",
+        "columns": [
+          {
+            "tag": "column", "width": "weighted", "weight": 1,
+            "elements": [
+              {
+                "tag": "button", "text": { "tag": "plain_text", "content": "原始信号源" },
+                "type": "primary_filled", "width": "fill",
+                "behaviors": [ { "type": "open_url", "default_url": "{{BASE_URL}}" } ]
+              }
+            ]
+          },
+          {
+            "tag": "column", "width": "weighted", "weight": 1,
+            "elements": [
+              {
+                "tag": "button", "text": { "tag": "plain_text", "content": "完整报告" },
+                "type": "default", "width": "fill",
+                "behaviors": [ { "type": "open_url", "default_url": "{{DOC_URL}}" } ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

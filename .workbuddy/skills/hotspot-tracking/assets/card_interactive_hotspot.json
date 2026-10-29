@@ -1,0 +1,334 @@
+{
+  "schema": "2.0",
+  "config": {
+    "update_multi": true,
+    "width_mode": "default",
+    "style": {
+      "text_size": {
+        "title": { "default": "heading-2", "pc": "heading-2", "mobile": "heading-3" },
+        "body": { "default": "normal", "pc": "normal", "mobile": "normal" },
+        "caption": { "default": "notation", "pc": "notation", "mobile": "notation" }
+      }
+    }
+  },
+  "header": {
+    "title": { "tag": "plain_text", "content": "A股近一周热点追踪 · 研判播报" },
+    "subtitle": { "tag": "plain_text", "content": "2026-09-17 ~ 09-24 · 科技主升 → 退潮切换" },
+    "template": "blue",
+    "icon": { "tag": "standard_icon", "token": "ai-common_colorful" },
+    "text_tag_list": [
+      { "tag": "text_tag", "text": { "tag": "plain_text", "content": "热点播报" }, "color": "blue" }
+    ]
+  },
+  "body": {
+    "direction": "vertical",
+    "padding": "12px 12px 20px 12px",
+    "elements": [
+      {
+        "tag": "interactive_container",
+        "has_border": true,
+        "border_color": "blue-100",
+        "corner_radius": "8px",
+        "background_style": "blue-50",
+        "padding": "12px",
+        "vertical_spacing": "4px",
+        "margin": "0px 0px 12px 0px",
+        "elements": [
+          { "tag": "markdown", "content": "**<font color='blue'>核心结论</font>**" },
+          {
+            "tag": "markdown",
+            "content": "近一周A股呈 **科技主升 → 退潮切换** 两段式：9/14–9/18 科创综指 <font color='red'>+7%</font>、电子 <font color='red'>+6.06%</font> 领涨；9/21–9/24 全周主力 **净流出961亿**，电子从 <font color='red'>+324亿</font> 翻转为 <font color='green'>-302亿</font>，末端获利了结，非新起点。"
+          }
+        ]
+      },
+      {
+        "tag": "interactive_container",
+        "has_border": true,
+        "border_color": "blue-100",
+        "corner_radius": "8px",
+        "padding": "12px",
+        "vertical_spacing": "4px",
+        "margin": "0px 0px 12px 0px",
+        "elements": [
+          { "tag": "markdown", "content": "**研判（所以 → 行动）**" },
+          {
+            "tag": "markdown",
+            "content": "1. **科技资金反转是首要信号**：电子 +324→-302亿，主升浪末端获利了结。\n2. **活口两条线**：机器人审厂订单兑付（特斯拉链）+ 地产公积金新政 9/20 施行。\n3. **风险**：周成交年内新低、双节前量能不足；9/24 单日 <font color='green'>-1.22%</font> 已切防御。"
+          }
+        ]
+      },
+      {
+        "tag": "markdown",
+        "content": "**三条主线结论 · 各带数据源**",
+        "margin": "0px 0px 8px 0px"
+      },
+
+      {
+        "tag": "interactive_container",
+        "has_border": true,
+        "border_color": "blue-100",
+        "corner_radius": "8px",
+        "padding": "10px 11px",
+        "vertical_spacing": "5px",
+        "margin": "0px 0px 10px 0px",
+        "elements": [
+          { "tag": "markdown", "content": "[半导体 / 国产算力链（主升→分歧）](https://finance.eastmoney.com/a/202609243883764051.html) · **Tier2**" },
+          { "tag": "markdown", "content": "电子 <font color='red'>+6.06%</font> → 本周 <font color='green'>-1.67%</font> 净流出302亿，主升浪末端资金获利了结。" },
+          { "tag": "markdown", "content": "_东方财富 · 板块资金流 · 👁 0 · 👍 0_" },
+          {
+            "tag": "column_set",
+            "horizontal_spacing": "8px",
+            "columns": [
+              {
+                "tag": "column", "width": "weighted", "weight": 3,
+                "elements": [
+                  {
+                    "tag": "button", "text": { "tag": "plain_text", "content": "🔗 打开" },
+                    "type": "default", "width": "fill",
+                    "behaviors": [{ "type": "callback", "value": { "source_id": "src1", "action": "open" } }]
+                  }
+                ]
+              },
+              {
+                "tag": "column", "width": "weighted", "weight": 1,
+                "elements": [
+                  {
+                    "tag": "button", "text": { "tag": "plain_text", "content": "👍 赞" },
+                    "type": "default", "width": "fill",
+                    "behaviors": [{ "type": "callback", "value": { "source_id": "src1", "action": "like" } }]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "tag": "interactive_container",
+        "has_border": true,
+        "border_color": "blue-100",
+        "corner_radius": "8px",
+        "padding": "10px 11px",
+        "vertical_spacing": "5px",
+        "margin": "0px 0px 10px 0px",
+        "elements": [
+          { "tag": "markdown", "content": "[光模块 / CPO / 1.6T（高位回撤）](https://www.toutiao.com/article/7687000465594139170) · **Tier3**" },
+          { "tag": "markdown", "content": "通信 <font color='red'>+3.75%</font>；中际旭创净利 <font color='red'>+242%</font>、订单排至2027，资金高位分歧。" },
+          { "tag": "markdown", "content": "_今日头条 · 热点复盘 · 👁 0 · 👍 0_" },
+          {
+            "tag": "column_set",
+            "horizontal_spacing": "8px",
+            "columns": [
+              {
+                "tag": "column", "width": "weighted", "weight": 3,
+                "elements": [
+                  {
+                    "tag": "button", "text": { "tag": "plain_text", "content": "🔗 打开" },
+                    "type": "default", "width": "fill",
+                    "behaviors": [{ "type": "callback", "value": { "source_id": "src2", "action": "open" } }]
+                  }
+                ]
+              },
+              {
+                "tag": "column", "width": "weighted", "weight": 1,
+                "elements": [
+                  {
+                    "tag": "button", "text": { "tag": "plain_text", "content": "👍 赞" },
+                    "type": "default", "width": "fill",
+                    "behaviors": [{ "type": "callback", "value": { "source_id": "src2", "action": "like" } }]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "tag": "interactive_container",
+        "has_border": true,
+        "border_color": "blue-100",
+        "corner_radius": "8px",
+        "padding": "10px 11px",
+        "vertical_spacing": "5px",
+        "margin": "0px 0px 12px 0px",
+        "elements": [
+          { "tag": "markdown", "content": "[人形机器人 · 特斯拉审厂（持续催化）](https://news.qq.com/rain/a/20260922A05C8500) · **Tier3**" },
+          { "tag": "markdown", "content": "9/17 特斯拉新一轮审厂，2026 预计下线约5万台，订单兑现阶段为活口主线。" },
+          { "tag": "markdown", "content": "_腾讯新闻 · 👁 0 · 👍 0_" },
+          {
+            "tag": "column_set",
+            "horizontal_spacing": "8px",
+            "columns": [
+              {
+                "tag": "column", "width": "weighted", "weight": 3,
+                "elements": [
+                  {
+                    "tag": "button", "text": { "tag": "plain_text", "content": "🔗 打开" },
+                    "type": "default", "width": "fill",
+                    "behaviors": [{ "type": "callback", "value": { "source_id": "src3", "action": "open" } }]
+                  }
+                ]
+              },
+              {
+                "tag": "column", "width": "weighted", "weight": 1,
+                "elements": [
+                  {
+                    "tag": "button", "text": { "tag": "plain_text", "content": "👍 赞" },
+                    "type": "default", "width": "fill",
+                    "behaviors": [{ "type": "callback", "value": { "source_id": "src3", "action": "like" } }]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "tag": "collapsible_panel",
+        "expanded": false,
+        "header": {
+          "title": { "tag": "plain_text", "content": "📊 全量热点排名（9条 · H×R 评分）" },
+          "vertical_align": "center",
+          "icon": { "tag": "standard_icon", "token": "down-small-ccm_outlined" }
+        },
+        "elements": [
+          {
+            "tag": "markdown",
+            "content": "| # | 热点 | 信号 | H | R | 分 | 生命周期 |\n|---|---|---|---|---|---|---|\n| 1 | 半导体/国产算力链 | 电子+6.06%→-1.67%净流出302亿 | 5 | 5 | 25 | 主升→分歧 |\n| 2 | 光模块/CPO/1.6T | 通信+3.75%；中际旭创净利+242% | 5 | 5 | 25 | 高位回撤 |\n| 3 | 人形机器人 | 9/17特斯拉审厂，2026下线5万台 | 4 | 4 | 16 | 持续催化 |\n| 4 | 房地产 | +2.28%领涨；公积金条例9/20施行 | 4 | 3 | 12 | 政策脉冲 |\n| 5 | AI应用(Meta Muse) | Muse美区登顶；9/23-24 Connect | 3 | 4 | 12 | 海外映射 |\n| 6 | 创新药/CXO | 世界肺癌大会；百济净利+6倍 | 3 | 3 | 9 | 事件驱动 |\n| 7 | 商业航天 | 东方空间/蓝箭组网、星河动力入轨 | 3 | 3 | 9 | 主题 |\n| 8 | 煤炭/红利防御 | +2.10%，与科技反向 | 2 | 2 | 4 | 避险 |\n| 9 | 种业（厄尔尼诺） | 玉米种子入销售季 | 2 | 2 | 4 | 潜伏 |"
+          }
+        ]
+      },
+      {
+        "tag": "collapsible_panel",
+        "expanded": false,
+        "header": {
+          "title": { "tag": "plain_text", "content": "⏱ 政策与事件催化时间轴" },
+          "vertical_align": "center",
+          "icon": { "tag": "standard_icon", "token": "down-small-ccm_outlined" }
+        },
+        "elements": [
+          {
+            "tag": "markdown",
+            "content": "- **9/17** 特斯拉新一轮机器人审厂，Optimus 量产在即\n- **9/20** 《住房公积金管理条例》施行（1999年来最大修订，提取情形6→9种）\n- **9/23–25** 中美经贸对话 / 国事访问晚宴：宁德、比亚迪、英伟达、特斯拉\n- 电子信息制造业「十五五」规划：集成电路全链条攻关\n- 华为全联接大会：昇腾960 NPO 超节点、灵衢互联 → 高速光互联"
+          }
+        ]
+      },
+      {
+        "tag": "collapsible_panel",
+        "expanded": false,
+        "header": {
+          "title": { "tag": "plain_text", "content": "🌡 资金与个股温度计" },
+          "vertical_align": "center",
+          "icon": { "tag": "standard_icon", "token": "down-small-ccm_outlined" }
+        },
+        "elements": [
+          {
+            "tag": "markdown",
+            "content": "- **个股**：鼎阳科技 <font color='red'>+53%</font> 居首；奥佳华/联合光电/泰慕士/新华文轩 <font color='red'>+40%+</font>\n- **龙虎榜机构净买**：优利德 3.67亿、平潭发展 4.75亿(9/24单日)、我爱我家 1.38亿(地产)\n- **机构净卖**：科达制造 5.49亿\n- **9/24单日**：沪指 <font color='green'>-1.22%</font>，煤炭/银行/纺服居前，有色/建材/电子跌幅居前"
+          }
+        ]
+      },
+      {
+        "tag": "collapsible_panel",
+        "expanded": false,
+        "header": {
+          "title": { "tag": "plain_text", "content": "🔎 数据可信度（Tier 标注）" },
+          "vertical_align": "center",
+          "icon": { "tag": "standard_icon", "token": "down-small-ccm_outlined" }
+        },
+        "elements": [
+          {
+            "tag": "markdown",
+            "content": "- **Tier1**（官方/一手）：Choice/Wind 行业涨跌幅与资金流、交易所龙虎榜\n- **Tier2**（机构研报）：中信/中信建投/国盛晨会观点、ETF周观\n- **Tier3**（媒体转述）：今日头条/腾讯新闻个股涨幅榜，涨停叙事未交叉验证，仅作热度参考"
+          }
+        ]
+      },
+
+      {
+        "tag": "interactive_container",
+        "has_border": true,
+        "border_color": "blue-100",
+        "corner_radius": "8px",
+        "padding": "10px",
+        "vertical_spacing": "4px",
+        "margin": "0px 0px 12px 0px",
+        "elements": [
+          { "tag": "markdown", "content": "**<font color='grey'>这份研判对你有用吗？</font>**" },
+          {
+            "tag": "column_set",
+            "horizontal_spacing": "8px",
+            "columns": [
+              {
+                "tag": "column", "width": "weighted", "weight": 1,
+                "elements": [
+                  {
+                    "tag": "button", "text": { "tag": "plain_text", "content": "👍 有用" },
+                    "type": "primary_filled", "width": "fill",
+                    "behaviors": [{ "type": "callback", "value": { "key": "v_useful", "action": "vote" } }]
+                  }
+                ]
+              },
+              {
+                "tag": "column", "width": "weighted", "weight": 1,
+                "elements": [
+                  {
+                    "tag": "button", "text": { "tag": "plain_text", "content": "👎 存疑" },
+                    "type": "default", "width": "fill",
+                    "behaviors": [{ "type": "callback", "value": { "key": "v_doubt", "action": "vote" } }]
+                  }
+                ]
+              }
+            ]
+          },
+          { "tag": "markdown", "content": "_共 0 人反馈_" }
+        ]
+      },
+
+      {
+        "tag": "column_set",
+        "flex_mode": "none",
+        "horizontal_spacing": "12px",
+        "margin": "0px 0px 10px 0px",
+        "columns": [
+          {
+            "tag": "column", "width": "weighted", "weight": 1,
+            "elements": [
+              {
+                "tag": "button", "text": { "tag": "plain_text", "content": "🔍 追一下这条主线" },
+                "type": "primary_filled", "width": "fill",
+                "behaviors": [{ "type": "callback", "value": { "action": "drill", "label": "追一下：A股热点主线（P01）" } }]
+              }
+            ]
+          },
+          {
+            "tag": "column", "width": "weighted", "weight": 1,
+            "elements": [
+              {
+                "tag": "button", "text": { "tag": "plain_text", "content": "原始信号源" },
+                "type": "default", "width": "fill",
+                "behaviors": [{ "type": "open_url", "default_url": "https://my.feishu.cn/base/GqZ8bhLL5aThICsG4bGcOnQIn6Z" }]
+              }
+            ]
+          },
+          {
+            "tag": "column", "width": "weighted", "weight": 1,
+            "elements": [
+              {
+                "tag": "button", "text": { "tag": "plain_text", "content": "完整报告" },
+                "type": "default", "width": "fill",
+                "behaviors": [{ "type": "open_url", "default_url": "https://my.feishu.cn/docx/HjQ8dlqOYoVcHWxRcPQcnx9qnle" }]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "markdown",
+        "content": "> ⚠️ 以上内容由 AI 基于公开信息整理生成，仅供参考，不构成任何投资建议或个股推荐。投资有风险，决策需谨慎。"
+      }
+    ]
+  }
+}
