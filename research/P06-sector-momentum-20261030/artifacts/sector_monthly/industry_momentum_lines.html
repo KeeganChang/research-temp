@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>行业景气度走势 · 相对月份 × 景气度</title>
+<style>
+body{font:14px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif;color:#1a1a1a;background:#fff;margin:0;padding:28px 26px;max-width:1120px;margin:0 auto;}
+h1{font-size:21px;margin:0 0 4px;} .sub{color:#666;font-size:12.5px;margin-bottom:16px;}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 6px;}
+.tab{padding:6px 14px;border:1px solid #ccc;background:#fff;border-radius:5px;cursor:pointer;font-size:13px;}
+.tab.on{background:#c81e2d;color:#fff;border-color:#c81e2d;font-weight:600;}
+.lgs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px;}
+.lg{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border:1.5px solid;border-radius:14px;
+background:#fff;cursor:pointer;font-size:12px;}
+.lg i{width:11px;height:11px;border-radius:50%;display:inline-block;}
+.lg.off{opacity:.32;}
+.lg b{font-weight:600;font-variant-numeric:tabular-nums;}
+#wrap{border:1px solid #e5e5e5;border-radius:6px;background:#fff;}
+.note{background:#fbfbfb;border:1px solid #e5e5e5;border-left:3px solid #999;padding:10px 14px;font-size:12.5px;color:#444;margin:12px 0;}
+.tip{font-size:11px;fill:#1a1a1a;}
+.ax{font-size:11px;fill:#666;} .gl{stroke:#eee;}
+.gl0{stroke:#333;stroke-width:1.3;}
+.foot{margin-top:22px;padding-top:10px;border-top:1px solid #e5e5e5;font-size:11.5px;color:#888;}
+</style></head><body>
+<h1>行业景气度走势（相对月份 × 景气度）</h1>
+<div class="sub">method-sector-momentum · P06 ｜ 12 个申万一级行业 ｜ 数据窗口 2025-12-31 → 2026-10-29</div>
+
+<div class="bar">
+<button class="tab on" id="t-norm">① 归一化景气度（基准 100）</button>
+<button class="tab" id="t-mom">② 月度环比景气度（%）</button>
+<span style="color:#888;font-size:12px">点击图例可隐藏/显示某行业 · 悬停圆点看数值</span>
+</div>
+<div class="lgs"><button class="lg" data-s="煤炭" style="border-color:#c81e2d"><i style="background:#c81e2d"></i>煤炭 <b>+21.8%</b></button><button class="lg" data-s="石油石化" style="border-color:#16824a"><i style="background:#16824a"></i>石油石化 <b>+6.0%</b></button><button class="lg" data-s="银行" style="border-color:#1f6fb4"><i style="background:#1f6fb4"></i>银行 <b>+4.8%</b></button><button class="lg" data-s="公用事业" style="border-color:#e08c00"><i style="background:#e08c00"></i>公用事业 <b>-0.3%</b></button><button class="lg" data-s="电子" style="border-color:#7a4fbf"><i style="background:#7a4fbf"></i>电子 <b>-1.8%</b></button><button class="lg" data-s="通信" style="border-color:#0f8b8d"><i style="background:#0f8b8d"></i>通信 <b>-7.7%</b></button><button class="lg" data-s="交通运输" style="border-color:#b5651d"><i style="background:#b5651d"></i>交通运输 <b>-10.7%</b></button><button class="lg" data-s="食品饮料" style="border-color:#5a6b7d"><i style="background:#5a6b7d"></i>食品饮料 <b>-14.0%</b></button><button class="lg" data-s="有色金属" style="border-color:#d14d8a"><i style="background:#d14d8a"></i>有色金属 <b>-22.0%</b></button><button class="lg" data-s="国防军工" style="border-color:#3f8f2f"><i style="background:#3f8f2f"></i>国防军工 <b>-24.4%</b></button><button class="lg" data-s="计算机" style="border-color:#8a6d1f"><i style="background:#8a6d1f"></i>计算机 <b>-24.4%</b></button><button class="lg" data-s="电力设备" style="border-color:#2f4f8f"><i style="background:#2f4f8f"></i>电力设备 <b>-30.0%</b></button></div>
+<div id="wrap"></div>
+
+<div class="note"><b>横轴</b>为相对月份：T0 = 2025-12-31（基准月），T1 = 2026-02，… T9 = 2026-10（截至 10-29）。
+<b>纵轴</b>可切换两种景气度口径 —— ① 水平值（归一化指数，看全年轨迹与分化）② 变化率（月度环比，看边际景气）。
+⚠️ 接口省略 2026-01 月末 → <b>T1 为「2025-12-31 → 2026-02-27」跨 2 月累计</b>，故环比模式下 T1 一段不代表单月景气；T9 为当月截至 10-29，非完整月。</div>
+<div class="foot">由 AI 基于 NeoData 公开数据整理，仅供参考，不构成投资建议。</div>
+
+<script>
+const D = {"sectors": ["煤炭", "石油石化", "银行", "公用事业", "电子", "通信", "交通运输", "食品饮料", "有色金属", "国防军工", "计算机", "电力设备"], "colors": {"煤炭": "#c81e2d", "石油石化": "#16824a", "银行": "#1f6fb4", "公用事业": "#e08c00", "电子": "#7a4fbf", "通信": "#0f8b8d", "交通运输": "#b5651d", "食品饮料": "#5a6b7d", "有色金属": "#d14d8a", "国防军工": "#3f8f2f", "计算机": "#8a6d1f", "电力设备": "#2f4f8f"}, "relNorm": ["T0", "T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9"], "monthNorm": ["2025/12", "2026/02", "2026/03", "2026/04", "2026/05", "2026/06", "2026/07", "2026/08", "2026/09", "2026/10"], "norm": {"银行": [100.0, 92.8, 96.5, 96.0, 93.5, 87.7, 97.9, 98.2, 100.5, 104.8], "煤炭": [100.0, 115.5, 116.8, 123.2, 119.8, 101.4, 115.9, 130.1, 121.0, 121.8], "石油石化": [100.0, 119.1, 115.4, 120.6, 102.4, 89.7, 101.1, 110.9, 103.5, 106.0], "交通运输": [100.0, 103.7, 98.0, 97.3, 94.2, 85.4, 92.0, 91.6, 90.9, 89.3], "公用事业": [100.0, 107.9, 109.2, 109.4, 118.4, 101.7, 103.6, 101.3, 101.0, 99.7], "食品饮料": [100.0, 100.2, 97.3, 96.2, 91.0, 80.5, 89.6, 85.5, 84.0, 86.0], "电子": [100.0, 112.8, 97.6, 123.7, 145.8, 186.3, 121.6, 136.7, 125.5, 98.2], "通信": [100.0, 107.1, 106.0, 129.5, 155.9, 173.6, 118.2, 131.0, 123.7, 92.3], "计算机": [100.0, 108.6, 92.4, 98.5, 91.5, 87.6, 84.9, 87.1, 80.5, 75.6], "电力设备": [100.0, 109.6, 106.8, 116.4, 113.8, 107.3, 90.5, 90.4, 81.8, 70.0], "有色金属": [100.0, 125.2, 103.7, 111.9, 104.0, 99.8, 93.4, 102.5, 89.3, 78.0], "国防军工": [100.0, 111.6, 93.9, 102.6, 93.7, 93.4, 79.7, 83.2, 81.7, 75.6]}, "relMom": ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9"], "monthMom": ["2026/02", "2026/03", "2026/04", "2026/05", "2026/06", "2026/07", "2026/08", "2026/09", "2026/10"], "mom": {"银行": [-7.16, 3.93, -0.55, -2.56, -6.18, 11.57, 0.35, 2.32, 4.3], "煤炭": [15.55, 1.11, 5.47, -2.81, -15.3, 14.29, 12.22, -6.99, 0.66], "石油石化": [19.14, -3.17, 4.57, -15.07, -12.39, 12.63, 9.75, -6.71, 2.41], "交通运输": [3.72, -5.54, -0.73, -3.17, -9.33, 7.69, -0.38, -0.79, -1.77], "公用事业": [7.87, 1.25, 0.16, 8.26, -14.13, 1.86, -2.15, -0.39, -1.23], "食品饮料": [0.23, -2.89, -1.12, -5.43, -11.59, 11.34, -4.6, -1.77, 2.4], "电子": [12.82, -13.51, 26.79, 17.88, 27.73, -34.72, 12.42, -8.22, -21.7], "通信": [7.05, -1.02, 22.23, 20.4, 11.33, -31.9, 10.79, -5.53, -25.4], "计算机": [8.61, -14.93, 6.6, -7.1, -4.29, -3.06, 2.63, -7.66, -6.06], "电力设备": [9.56, -2.54, 8.98, -2.2, -5.74, -15.68, -0.09, -9.46, -14.41], "有色金属": [25.21, -17.21, 7.97, -7.06, -4.06, -6.42, 9.81, -12.87, -12.66], "国防军工": [11.65, -15.94, 9.28, -8.69, -0.26, -14.68, 4.45, -1.91, -7.38]}, "ytd": {"银行": 4.817595027492239, "煤炭": 21.787114662712902, "石油石化": 5.992871336121941, "交通运输": -10.71735545888297, "公用事业": -0.2937992247997956, "食品饮料": -14.012989423356181, "电子": -1.7523141684937293, "通信": -7.6913289418197195, "计算机": -24.425954567609367, "电力设备": -29.972750423017715, "有色金属": -21.96634631965645, "国防军工": -24.36940848597452}, "quad": {"银行": "双高(主推)", "煤炭": "双高(主推)", "石油石化": "双高(主推)", "交通运输": "脉冲(观察)", "公用事业": "脉冲(观察)", "食品饮料": "脉冲(观察)", "电子": "双低(规避)", "通信": "双低(规避)", "计算机": "双低(规避)", "电力设备": "脉冲(观察)", "有色金属": "双低(规避)", "国防军工": "脉冲(观察)"}};
+let mode = "norm", hidden = new Set();
+const W=1060, H=560, PL=62, PR=24, PT=26, PB=72;
+
+function scale(vals){
+  let lo=Math.min(...vals), hi=Math.max(...vals);
+  const pad=(hi-lo)*0.08||1; lo-=pad; hi+=pad;
+  if(mode==="norm" && lo>95) lo=95; if(mode==="norm" && hi<105) hi=105;
+  return {lo,hi, y:v=>H-PB-(v-lo)/(hi-lo)*(H-PT-PB)};
+}
+function render(){
+  const isNorm = mode==="norm";
+  const labels = isNorm? D.relNorm : D.relMom;
+  const months = isNorm? D.monthNorm : D.monthMom;
+  const data = isNorm? D.norm : D.mom;
+  const all = [].concat(...D.sectors.map(s=>data[s]));
+  const sc = scale(all);
+  const n = labels.length;
+  const X = i => PL + (n===1?0:i/(n-1))*(W-PL-PR);
+
+  let g="";
+  // 横向网格 + 纵轴刻度
+  for(let k=0;k<=6;k++){
+    const v = sc.lo + (sc.hi-sc.lo)*k/6, y = sc.y(v);
+    g += `<line class="gl${Math.abs(v)<0.001&&!isNorm?' gl0':''}" x1="${PL}" y1="${y.toFixed(1)}" x2="${W-PR}" y2="${y.toFixed(1)}"/>`;
+    g += `<text class="ax" x="${PL-8}" y="${(y+4).toFixed(1)}" text-anchor="end">${v.toFixed(isNorm?0:1)}</text>`;
+  }
+  if(isNorm){ const y0=sc.y(100); g+=`<line class="gl0" stroke-dasharray="5 4" x1="${PL}" y1="${y0.toFixed(1)}" x2="${W-PR}" y2="${y0.toFixed(1)}"/>`;
+    g+=`<text class="ax" x="${W-PR}" y="${(y0-6).toFixed(1)}" text-anchor="end">基准 100</text>`; }
+  // 横轴
+  for(let i=0;i<n;i++){
+    g += `<text class="ax" x="${X(i).toFixed(1)}" y="${H-PB+18}" text-anchor="middle">${labels[i]}</text>`;
+    g += `<text class="ax" x="${X(i).toFixed(1)}" y="${H-PB+34}" text-anchor="middle" style="font-size:10px">${months[i]}</text>`;
+  }
+  g += `<text class="ax" x="${PL}" y="${H-14}">纵轴：${isNorm?"归一化景气度指数（2025-12-31 = 100）":"月度环比景气度（%）"}</text>`;
+  // 折线
+  D.sectors.forEach(s=>{
+    if(hidden.has(s)) return;
+    const pts = data[s].map((v,i)=>`${X(i).toFixed(1)},${sc.y(v).toFixed(1)}`).join(" ");
+    g += `<polyline points="${pts}" fill="none" stroke="${D.colors[s]}" stroke-width="2" opacity=".9"/>`;
+    data[s].forEach((v,i)=>{
+      g += `<circle cx="${X(i).toFixed(1)}" cy="${sc.y(v).toFixed(1)}" r="3.2" fill="${D.colors[s]}">`
+        + `<title>${s} · ${labels[i]}（${months[i]}）：${isNorm? v.toFixed(1) : (v>=0?"+":"")+v.toFixed(1)+"%"}</title></circle>`;
+    });
+    const lastV = data[s][n-1];
+    g += `<text class="tip" x="${(X(n-1)+7).toFixed(1)}" y="${(sc.y(lastV)+4).toFixed(1)}" fill="${D.colors[s]}">${s}</text>`;
+  });
+  document.getElementById("wrap").innerHTML =
+    `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">${g}</svg>`;
+}
+document.getElementById("t-norm").onclick = e=>{mode="norm";e.target.classList.add("on");
+  document.getElementById("t-mom").classList.remove("on");render();};
+document.getElementById("t-mom").onclick = e=>{mode="mom";e.target.classList.add("on");
+  document.getElementById("t-norm").classList.remove("on");render();};
+document.querySelectorAll(".lg").forEach(b=>b.onclick=()=>{
+  const s=b.dataset.s; hidden.has(s)?hidden.delete(s):hidden.add(s);
+  b.classList.toggle("off"); render();});
+render();
+</script></body></html>

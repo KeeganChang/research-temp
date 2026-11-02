@@ -3,7 +3,7 @@
 """
 validate_frontmatter.py — 校验 research note 的 YAML frontmatter。
 
-规则（见 docs/SCENARIO.md §3）：每条 research note 必须带以下字段
+规则（见 docs/ARCHITECTURE.md §3 与 skills/file-manager/references/naming-and-frontmatter.md）：每条 research note 必须带以下字段
   source      (str)   数据来源描述，如 "NeoData / 公司公告 / 网页URL"
   url         (str)   必须以 http:// 或 https:// 开头
   fetched_at  (str)   抓取日期 YYYY-MM-DD
@@ -13,8 +13,8 @@ validate_frontmatter.py — 校验 research note 的 YAML frontmatter。
 file-manager 在 md 落盘时会调用本脚本做校验；缺字段/格式错则告警。
 
 用法：
-  python script/validate_frontmatter.py <file.md> [<file2.md> ...]
-  python script/validate_frontmatter.py archive/raw          # 递归目录
+  python -m script.validate_frontmatter <file.md> [<file2.md> ...]
+  python -m script.validate_frontmatter archive/raw          # 递归目录
 退出码：0 = 全部通过，1 = 存在错误
 """
 import sys
@@ -33,14 +33,17 @@ REQUIRED = {
     "url": str,
     "fetched_at": str,
     "type": str,
+    "structure": str,
     "confidence": str,
 }
 ENUMS = {
-    "type": {"structured", "unstructured"},
+    "type": {"资讯", "行业", "公司", "热点", "宏观", "个人配置"},
+    "structure": {"structured", "unstructured"},
     "confidence": {"high", "medium", "low"},
 }
 URL_RE = re.compile(r"^https?://", re.I)
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+PROJECT_RE = re.compile(r"^P\d{2}$")
 
 
 def parse_frontmatter(text: str):
@@ -102,6 +105,10 @@ def validate(fm):
     for k, allowed in ENUMS.items():
         if k in fm and str(fm[k]) not in allowed:
             errors.append(f"{k} 取值应为 {sorted(allowed)}，实际: {fm[k]!r}")
+
+    # project：可选，写了就必须是 research/ 下存在的 P<两位数字>
+    if "project" in fm and not PROJECT_RE.match(str(fm.get("project"))):
+        errors.append(f"project 取值应为 P<两位数字>（如 P01），实际: {fm.get('project')!r}")
 
     # 一致性提示（非阻断）：structured 建议附带数据文件
     if str(fm.get("type")) == "structured" and not any(

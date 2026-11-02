@@ -20,7 +20,7 @@ $1
 - **已有信息**：用户手上已有哪些数据/材料（用于后续 `datasets` 防重复抓数）。
 
 ### Step 2 · 建议 Track 方式（5 选 1，按任务描述判定，不写死）
-依据 `research-assistant/ROUTING.md` 的决策树，结合本任务描述推荐**唯一**一条 Track，并写明推荐理由：
+依据 `research-assistant/references/ROUTING.md` 的决策树，结合本任务描述推荐**唯一**一条 Track，并写明推荐理由：
 
 | Track | 一句话边界 |
 |---|---|
@@ -69,6 +69,6 @@ uv run python -m script.new_project --id <PID> --name "<项目名>" --track <dri
 
 ## 引用
 
-- 选线边界与决策树：`research-assistant/ROUTING.md`
-- 流程/门禁总纲：`research-assistant/AGENTS.md`
+- 选线边界与决策树：`research-assistant/references/ROUTING.md`
+- 流程/门禁总纲：`research-assistant/references/AGENTS.md`
 - 续做（加载中断任务）：`/research-load`

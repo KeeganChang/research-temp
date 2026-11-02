@@ -1,0 +1,82 @@
+# caliber.yaml —— P06 指标口径字典（人工维护；由 script/gen_evidence_sheet.py 读取成表）
+#
+# 铁律：每条必写 caveat ——「什么情况下这个数是错的」。
+# 口径没写死 = 同类事故会重演（CATL 成本口径教训）。
+#
+# kind: measured（可复算，来自脚本计算） | judgment（含分析师判定，不可完全复算）
+
+caliber:
+  - metric: 月度环比景气度
+    definition: 本月底收盘 / 上月底收盘 - 1
+    unit: "%"
+    source: series.json（由板块月 K 月底收盘提取）
+    kind: measured
+    caveat: >
+      ① 价格代理，不等于基本面景气（不含盈利/订单/产能）；
+      ② 接口省略 2026-01 月末 → T1 段为 2025-12-31→2026-02-27 跨 2 月累计，不可与其余月度同权比较。
+
+  - metric: 归一化景气度
+    definition: 月底收盘 / 2025-12-31 收盘 × 100（基准 = 100）
+    unit: 指数点（基准 100）
+    source: series.json
+    kind: measured
+    caveat: 仅表相对轨迹；基准日变更（如换成 2026-01-01）会整体平移，跨项目不可直接比。
+
+  - metric: YTD
+    definition: 最新观测点(2026-10-29)收盘 / 2025-12-31 收盘 - 1
+    unit: "%"
+    source: series.json
+    kind: measured
+    caveat: 截至 2026-10-29 的**不完整年度**，非全年收益；10-29 非月末，与月度环比口径不同源。
+
+  - metric: 近 3 月动量
+    definition: 最新观测点收盘 / 前推 3 个观测点收盘 - 1
+    unit: "%"
+    source: analysis_v2.json
+    kind: measured
+    caveat: n=3，单点噪声大；且观测点非严格月距（见月度环比 caveat ②）。
+
+  - metric: 振幅
+    definition: 期内归一化指数最大值 - 最小值
+    unit: 指数点
+    source: analysis_v2.json
+    kind: measured
+    caveat: 受极值主导（电子 6 月归一化达 ~186）；极值来自 TMT 泡沫式冲高，不代表常态波动。
+
+  - metric: 行业相关系数 ρ
+    definition: 12 行业月度环比序列两两 Pearson 相关系数
+    unit: 无量纲 [-1, 1]
+    source: analysis_v2.json
+    kind: measured
+    caveat: >
+      **n=9 期**（10 个月末点 → 9 个环比收益），远低于统计显著性所需样本量。
+      指示性结论，不可用于风险模型；边缘值 0.6–0.75 已标注存疑。
+
+  - metric: 主力净流入
+    definition: 当日主力资金净买入额（特大单 + 大单）
+    unit: 亿元
+    source: fund_flow.json（源自资讯正文，**不在结构化接口内**）
+    kind: measured
+    caveat: >
+      ① 日频 T+1，**无原生周度聚合**，「近一周」须逐日求和；
+      ② 数值分「逾 X 亿」（精确下限）与「超 X 亿」（仅知 > X）两种，**不可同权排序**；
+      ③ **大跌日修正**：2026-10-29 全市场超 4700 只个股下跌，当日读数被避险属性主导，非趋势买入。
+
+  - metric: 四象限归类
+    definition: 资金轴（净流入方向 正/负） × 景气轴（近 3 月动量 正/负）→ 双高/脉冲/未兑现/双低
+    unit: 类别
+    source: analysis_v2.json
+    kind: judgment
+    caveat: >
+      **判定类，非客观计算**：资金轴刻意用方向不用幅度（避免 -253 亿压平其余 11 个点），
+      景气轴用近 3 月动量而非 YTD（避免把已兑现涨幅误判为景气），均为分析师选择。
+      换一套阈值即换归类结果 → 变更时必须同时记录被否决的备选阈值。
+
+  - metric: 独立性（α 判定）
+    definition: 该行业与其余行业相关系数矩阵中的最大值
+    unit: 无量纲
+    source: analysis_v2.json
+    kind: judgment
+    caveat: >
+      低相关 ≠ 值得配置（本项目公用事业独立性最高却属脉冲象限）；
+      n=9 期下该指标仅作排序参考，不作阈值判断。

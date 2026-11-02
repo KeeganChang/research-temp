@@ -16,6 +16,9 @@ load_context.py — 研究上下文加载器（跨会话记忆的读取端 · v3
     python -m script.load_context --files               # 额外列出可加载的结构化数据文件
     python -m script.load_context --only open           # 只看 status=open 的结论
     python -m script.load_context --no-shared           # 不附加跨项目方法论
+    python -m script.load_context --lint                # 只读自检状态机（有严重项退出码 1）
+    python -m script.load_context --lint --json         # 自检结果机读
+    python -m script.load_context --list --all          # 连带显示 archived 项目（默认隐藏）
 
 项目结构（见 research/README.md）
 --------------------------------
@@ -77,8 +80,16 @@ except ImportError:
 RESEARCH_DIR = "research"
 SHARED_ID = "_shared"
 TEMPLATE_DIR = "_template"
+ARCHIVE_DIR = "_archive"
 LEGACY_STATE_REL = os.path.join("config", "research-state.yaml")
 ROOT_MARKER = "AGENTS.md"
+
+# ── --lint 校验用受控词表 ──────────────────────────────────────
+# 与 project.yaml 的 track / claim status 词表保持一致（改这里需同步模板与文档）。
+VALID_TRACKS = ("drill", "entry", "diagnostic", "inductive", "scenario")
+CLAIM_STATUS = ("open", "validated", "falsified")
+STATE_SEGMENTS = ("focus", "claims", "monitors", "queue", "datasets")
+STALE_DAYS = 90  # E3：命中率成熟期默认 90 天，超此未更新给提示
 
 
 def find_workspace_root(start: Path | None = None) -> Path:
@@ -103,17 +114,30 @@ def read_yaml(path: Path) -> dict:
 
 
 # ── 项目发现 ───────────────────────────────────────────────────
-def discover_projects(root: Path) -> list[dict]:
+def discover_projects(root: Path, include_archive: bool = False) -> list[dict]:
     """扫 research/*/project.yaml，返回项目清单（_template 除外）。
 
     没有 index.yaml 注册表是刻意的：注册表会与项目文件两处漂移。
+    include_archive=True 时额外扫 `research/_archive/` 下的已归档项目（供 --lint 全量自检）。
     """
     research_dir = root / RESEARCH_DIR
     if not research_dir.is_dir():
         return []
     projects: list[dict] = []
-    for entry in sorted(research_dir.iterdir()):
-        if not entry.is_dir() or entry.name == TEMPLATE_DIR:
+    scan_dirs = [research_dir]
+    if include_archive and (research_dir / ARCHIVE_DIR).is_dir():
+        scan_dirs.append(research_dir / ARCHIVE_DIR)
+    for base in scan_dirs:
+        projects.extend(_scan_dir(base, root))
+    # 稳定排序：先按目录名，保证输出可复现
+    projects.sort(key=lambda p: p["dir"])
+    return projects
+
+
+def _scan_dir(base: Path, root: Path) -> list[dict]:
+    projects: list[dict] = []
+    for entry in sorted(base.iterdir()):
+        if not entry.is_dir() or entry.name in (TEMPLATE_DIR, ARCHIVE_DIR):
             continue
         meta_path = entry / "project.yaml"
         state_path = entry / "research-state.yaml"
@@ -121,10 +145,12 @@ def discover_projects(root: Path) -> list[dict]:
             continue
         meta = read_yaml(meta_path)
         state = read_yaml(state_path) if state_path.is_file() else {}
+        in_archive = base.name == ARCHIVE_DIR
         projects.append(
             {
                 "id": str(meta.get("id") or entry.name),
-                "dir": entry.name,
+                "dir": f"{ARCHIVE_DIR}/{entry.name}" if in_archive else entry.name,
+                "archived": in_archive,
                 "name": meta.get("name") or entry.name,
                 "track": meta.get("track"),
                 "status": meta.get("status") or "unknown",
@@ -510,8 +536,210 @@ def render_json(projects: list[dict], shared: dict | None, only: str | None, leg
     return json.dumps(out, ensure_ascii=False, indent=2, default=str)
 
 
+# ── 状态机自检（--lint，只读）──────────────────────────────────
+def _blank(v) -> bool:
+    return v is None or (isinstance(v, str) and not v.strip())
+
+
+def _as_date(v):
+    """YAML 会把 2026-09-19 解析成 date；这里兼容 date 与字符串。"""
+    from datetime import date as _date
+
+    if hasattr(v, "year"):
+        return v
+    try:
+        return _date.fromisoformat(str(v)[:10])
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def lint_projects(projects: list[dict], root: Path, forest: dict) -> list[dict]:
+    """只读校验状态机与项目元信息。不改任何文件，只报问题。
+
+    级别：ERROR（门禁硬性缺失/悬空引用）> WARN（质量项缺失）> INFO（提示）。
+    """
+    from datetime import date as _date
+
+    issues: list[dict] = []
+
+    def add(level: str, project: str, code: str, detail: str) -> None:
+        issues.append({"level": level, "project": project, "code": code, "detail": detail})
+
+    by_id = {p["id"]: p for p in projects}
+
+    # queue.depends_on 可指向 claim(C-*) / monitor(M-*) / queue(Q-*) 任一对象 ID，
+    # 且允许跨项目引用（如子 task 依赖父项目结论）→ 先汇总全局对象 ID。
+    def object_ids(st: dict) -> set:
+        ids = set()
+        for key in ("claims", "monitors", "queue"):
+            for it in st.get(key) or []:
+                if it.get("id"):
+                    ids.add(str(it["id"]))
+        return ids
+
+    all_obj_ids: set = set()
+    for p in projects:
+        all_obj_ids |= object_ids(p.get("state") or {})
+
+    counts: dict[str, int] = {}
+    for p in projects:
+        counts[p["id"]] = counts.get(p["id"], 0) + 1
+    for pid, n in sorted(counts.items()):
+        if n > 1:
+            add("ERROR", pid, "DUP_ID", f"项目 ID 出现 {n} 次（ID 必须唯一）")
+
+    for p in projects:
+        pid = p["id"]
+        meta = p.get("meta") or {}
+        st = p.get("state") or {}
+
+        # —— project.yaml 必填
+        for f in ("id", "name"):
+            if _blank(meta.get(f)):
+                add("ERROR", pid, "META_MISSING", f"project.yaml 缺 `{f}`")
+        if pid != SHARED_ID:
+            tr = meta.get("track")
+            if _blank(tr):
+                add("ERROR", pid, "TRACK_MISSING", "project.yaml 缺 track")
+            elif str(tr).strip() not in VALID_TRACKS:
+                add("ERROR", pid, "TRACK_INVALID",
+                    f"track={tr!r} 不在 5 种内 {list(VALID_TRACKS)}")
+        if _blank(meta.get("status")):
+            add("WARN", pid, "STATUS_MISSING", "project.yaml 缺 status")
+
+        if not p.get("state_path"):
+            add("WARN", pid, "STATE_MISSING", "缺 research-state.yaml")
+            continue
+
+        # —— 状态机六段
+        for seg in STATE_SEGMENTS:
+            if seg not in st:
+                add("WARN", pid, "SEG_MISSING", f"research-state.yaml 缺 `{seg}` 段")
+
+        # —— claims（G5：confidence + status 必填；证伪留痕不删）
+        for c in st.get("claims") or []:
+            cid = c.get("id") or "?"
+            if _blank(c.get("id")) or _blank(c.get("statement")):
+                add("ERROR", pid, "CLAIM_INCOMPLETE", f"claim {cid} 缺 id/statement")
+            if _blank(c.get("confidence")) or _blank(c.get("status")):
+                add("ERROR", pid, "CLAIM_NO_GRADE",
+                    f"claim {cid} 缺 confidence/status（G5 未过）")
+            elif str(c.get("status")).strip() not in CLAIM_STATUS:
+                add("ERROR", pid, "CLAIM_STATUS",
+                    f"claim {cid} status={c.get('status')!r} 不在 {list(CLAIM_STATUS)}")
+            for key in ("evidence", "data"):
+                v = c.get(key)
+                if v and not (root / str(v)).exists():
+                    add("ERROR", pid, "REF_DANGLING",
+                        f"claim {cid} 的 {key} 指向不存在的文件：{v}")
+
+        # —— monitors（G6：阈值与 as_of）
+        for m in st.get("monitors") or []:
+            nm = m.get("name") or "?"
+            if _blank(m.get("threshold")):
+                add("WARN", pid, "MON_NO_THRESHOLD", f"monitor {nm} 缺 threshold")
+            if _blank(m.get("as_of")):
+                add("WARN", pid, "MON_NO_ASOF", f"monitor {nm} 缺 as_of")
+
+        # —— queue 依赖悬空（可指向 claim / monitor / queue，允许跨项目）
+        for q in st.get("queue") or []:
+            for d in q.get("depends_on") or []:
+                if str(d) not in all_obj_ids:
+                    add("WARN", pid, "Q_DEP_DANGLING",
+                        f"queue {q.get('id') or '?'} 依赖不存在的 ID：{d}")
+
+        # —— datasets 路径
+        for d in st.get("datasets") or []:
+            if d.get("path") and not (root / str(d["path"])).exists():
+                add("WARN", pid, "DATA_MISSING", f"dataset 路径不存在：{d['path']}")
+
+        # —— 关系层
+        nd = node_of(p)
+        if nd["parent"] and nd["parent"] not in by_id:
+            add("ERROR", pid, "PARENT_DANGLING", f"node.parent={nd['parent']} 不存在")
+
+        # —— 陈旧度
+        upd = st.get("updated_at") or meta.get("updated_at")
+        if _blank(upd):
+            add("WARN", pid, "NO_UPDATED", "缺 updated_at")
+        else:
+            d0 = _as_date(upd)
+            if d0 is None:
+                add("WARN", pid, "BAD_UPDATED", f"updated_at 无法解析为日期：{upd}")
+            elif (_date.today() - d0).days > STALE_DAYS:
+                add("INFO", pid, "STALE",
+                    f"updated_at={upd} 已超 {STALE_DAYS} 天未更新（E3 命中窗口）")
+
+    # —— 父已收口但子仍有 open 结论
+    for p in projects:
+        kids = forest["children"].get(p["id"]) or []
+        if kids and str(p.get("status")) in ("done", "archived"):
+            for k in kids:
+                kp = forest["by_id"].get(k) or {}
+                kst = kp.get("state") or {}
+                n_open = len([c for c in (kst.get("claims") or []) if c.get("status") == "open"])
+                if n_open:
+                    add("WARN", p["id"], "PARENT_DONE_CHILD_OPEN",
+                        f"父已 {p.get('status')}，但子 {k} 仍有 {n_open} 条 open 结论")
+
+    order = {"ERROR": 0, "WARN": 1, "INFO": 2}
+    issues.sort(key=lambda i: (order.get(i["level"], 9), i["project"], i["code"]))
+    return issues
+
+
+def render_lint(issues: list[dict], n_projects: int, hidden: int = 0) -> str:
+    from datetime import date as _date
+
+    n_err = sum(1 for i in issues if i["level"] == "ERROR")
+    n_warn = sum(1 for i in issues if i["level"] == "WARN")
+    n_info = sum(1 for i in issues if i["level"] == "INFO")
+
+    L: list[str] = [
+        "# 状态机自检（--lint · 只读，不改任何文件）",
+        "",
+        f"- 检查日期：{_date.today().isoformat()} · 项目数：{n_projects}"
+        + (f"（含 {hidden} 个已归档）" if hidden else ""),
+        f"- 结果：**严重 {n_err} · 警告 {n_warn} · 提示 {n_info}**",
+        "",
+    ]
+    if not issues:
+        L.append("✅ 无问题。")
+        return "\n".join(L)
+
+    L.append("| 级别 | 项目 | 代码 | 说明 |")
+    L.append("|------|------|------|------|")
+    for i in issues:
+        L.append(f"| **{i['level']}** | {i['project']} | `{i['code']}` | {i['detail']} |")
+    L.append("")
+    L.append(
+        "判定：严重项 = 门禁硬性缺失或悬空引用，须修；"
+        "警告 = 质量项缺失；提示 = 仅提醒。有严重项时退出码为 1。"
+    )
+    return "\n".join(L)
+
+
+def render_lint_json(issues: list[dict], n_projects: int, hidden: int = 0) -> str:
+    from datetime import date as _date
+
+    counts = {
+        "ERROR": sum(1 for i in issues if i["level"] == "ERROR"),
+        "WARN": sum(1 for i in issues if i["level"] == "WARN"),
+        "INFO": sum(1 for i in issues if i["level"] == "INFO"),
+    }
+    out = {
+        "schema": "research-lint/v1",
+        "checked_at": _date.today().isoformat(),
+        "projects": n_projects,
+        "archived_included": hidden,
+        "counts": counts,
+        "issues": issues,
+    }
+    return json.dumps(out, ensure_ascii=False, indent=2, default=str)
+
+
 # ── 清单渲染 ───────────────────────────────────────────────────
-def render_list(projects: list[dict], shared: dict | None, root: Path) -> str:
+def render_list(projects: list[dict], shared: dict | None, root: Path,
+                hidden_archived: int = 0) -> str:
     L: list[str] = [f"# 调研项目清单（{root.name}/research）", ""]
     if not projects and not shared:
         L.append(
@@ -524,6 +752,9 @@ def render_list(projects: list[dict], shared: dict | None, root: Path) -> str:
     forest = build_forest(shown)
     roll = compute_rollups(shown, forest)
 
+    if hidden_archived:
+        L.append(f"> 已隐藏 {hidden_archived} 个 `archived` 项目（`--all` 才显示；`--lint` 会纳入自检）")
+        L.append("")
     L.append("| ID | 名称 | Track | 状态 | Rollup | 父 | 层级 | 结论 | 待办未完 | 更新 |")
     L.append("|----|------|-------|------|--------|----|------|------|----------|------|")
     for pid, d in dfs_order(forest):
@@ -551,6 +782,10 @@ def main() -> int:
     ap.add_argument("--files", action="store_true", help="额外列出项目相关的证据/数据文件")
     ap.add_argument("--only", metavar="STATUS", help="只输出指定 status 的结论，如 open / validated")
     ap.add_argument("--no-shared", action="store_true", help="不附加跨项目方法论层（_shared）")
+    ap.add_argument("--lint", action="store_true",
+                    help="只读自检状态机（不改文件）：受控词表 / 门禁必填 / 悬空引用 / 陈旧度；有严重项退出码 1")
+    ap.add_argument("--all", action="store_true",
+                    help="连带显示 archived 项目（默认隐藏；--lint 始终纳入归档项目）")
     ap.add_argument("--root", help="手动指定 workspace 根（默认自动上溯查找 AGENTS.md）")
     args = ap.parse_args()
 
@@ -587,12 +822,44 @@ def main() -> int:
     # 全量建图一次，用于 --project 时展开子树
     forest_all = build_forest(projects)
 
+    # ── --lint：只读自检（含 _archive 下的归档项目），跑完即退出
+    if args.lint:
+        scan = discover_projects(root, include_archive=True)
+        if not scan:
+            sys.exit("[ERROR] 没有可自检的项目（research/*/project.yaml 均未找到）")
+        forest_scan = build_forest(scan)
+        issues = lint_projects(scan, root, forest_scan)
+        hidden = sum(1 for p in scan if p.get("archived"))
+        if args.json:
+            print(render_lint_json(issues, len(scan), hidden))
+        else:
+            print(render_lint(issues, len(scan), hidden))
+        return 1 if any(i["level"] == "ERROR" for i in issues) else 0
+
+    # ── archived 项目默认隐藏，--all 才显示（D8）；但显式 --project 指定的仍加载
+    hidden_archived = sum(1 for p in projects if str(p.get("status")) == "archived")
+    if hidden_archived and not args.all:
+        wanted = {k.strip().lower() for k in (args.project or "").split(",") if k.strip()}
+        kept = [
+            p for p in projects
+            if str(p.get("status")) != "archived"
+            or p["id"].lower() in wanted
+            or p["dir"].lower() in wanted
+        ]
+        actually_hidden = len(projects) - len(kept)
+        if actually_hidden:
+            projects = kept
+            forest_all = build_forest(projects)
+        hidden_archived = actually_hidden
+    else:
+        hidden_archived = 0
+
     normal, shared = split_projects(projects)
     if args.no_shared:
         shared = None
 
     if args.list:
-        print(render_list(normal, shared, root))
+        print(render_list(normal, shared, root, hidden_archived))
         return 0
 
     # 显式 --project 时按选择过滤；并自动带上所选节点的全部后代

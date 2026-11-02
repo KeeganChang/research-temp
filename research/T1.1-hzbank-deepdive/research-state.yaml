@@ -1,0 +1,156 @@
+# research-state.yaml —— 项目状态机模板
+#
+# 解决的问题：调研结论散落在 md 正文里，下次会话读不到、要重做。
+# 设计原则：
+#   1. 只存「可执行的沉淀」——结论(claims)、监控(monitors)、待办(queue)、已归档数据(datasets)，不抄正文。
+#   2. 每条结论必须带 evidence(证据笔记) + data(结构化记录)，可回溯、可审计。
+#   3. status 驱动生命周期：open → validated / falsified，证伪的结论不删。
+#   4. 项目收尾回写这里；下次开场跑 `python -m script.load_context --project <PID>` 加载。
+#   5. 多 task 单方向派生：子节点只写 node.parent；children / depth 不存储，由 load_context 运行时建图。
+#
+# 与门禁的对应（见 research-assistant/references/AGENTS.md）：
+#   G4 成稿 → 每条 claim 必须有 evidence↔data 互指；反方论点 ≥5 条（至少 1 条时间维度）
+#   G5 校验 → 每条 claim 必须带 confidence + status（无悬空结论）
+#   G6 回写 → monitors 带 last / as_of / threshold；queue 带 depends_on
+#
+# 约定：路径一律相对 workspace 根，不写绝对路径。
+
+version: 2
+project_id: T1.1
+updated_at: 2026-11-03
+
+# ── 关系层（多 task 用 · 单方向派生）────────────────────────────
+# parent：父节点 ID；顶层项目为 null。children / depth 由 load_context 按 parent 派生，不双写。
+# 新增子 task = 只建新节点并写它的 parent，不改父文件。
+node:
+  parent: T1
+  depends_on: []              # 跨节点依赖（其他节点 ID）；当前仅展示，不做硬阻塞
+
+# ── 当前研究焦点 ──────────────────────────────────────────────
+focus:
+  topic: "杭州银行（600926.SH）A3 公司级深度：高 ROE 驱动分解、资产质量真实性、区域集中度、估值与配置角色"
+  type: 公司                   # 受控 6 类之一（资讯|行业|公司|热点|宏观|个人配置）
+  status: active               # active | paused | done
+  started_at: 2026-11-03
+  rationale: "T1 短名单杭州银行 ROE 全行业第一，需下钻验证高质量溢价是否可持续、配置角色如何定位"
+
+# ── 结论台账 ──────────────────────────────────────────────────
+# confidence: high | medium | low
+# status: open(待验证) | validated(已验证) | falsified(已证伪)
+claims:
+  - id: C-T1.1-01
+    statement: >
+      杭州银行年化 ROE 17.74% 全行业第一，但同比 -1.26pct，且拨备覆盖率年内从 ~502% 降至 472%（释放约 30pct 利润）——高 ROE 部分由拨备反哺支撑，纯经营改善的可持续性存疑。
+    confidence: medium
+    status: open
+    tags: [银行, 杭州银行, ROE, 拨备反哺, 盈利质量]
+    evidence: research/T1.1-hzbank-deepdive/T1.1-LarkDoc-主交付.md
+    data: research/T1.1-hzbank-deepdive/T1.1-LarkDoc-主交付.md#3.2
+    derived_from:
+      project: T1
+      claim: C-T1-01
+    next_action: Q-T1.1-01
+    counter_arguments:
+      - "时间维度：若拨备回归常态或不良抬头，ROE 将显著回落，溢价不可简单外推"
+      - "零售风险上升：零售不良 1.48%(+0.27pct)、个人经营贷 2.08%，尚未被估值充分定价"
+      - "息差再收窄：3Q26 NIM 测算 1.30%(环比-7bp)，明年利息净收入增速或放缓"
+      - "区域集中度：贷款集中于浙江/长三角，单一区域β高，地产/平台/小微违约将集中暴露"
+      - "其他非息拖累：投资收益同比-53.4%，债市反转则 FVTPL 波动加大"
+      - "估值溢价已高：PB 0.84x 远高于行业均值 0.56x，安全边际低于大行"
+  - id: C-T1.1-02
+    statement: >
+      表观资产质量极优（不良 0.76%、连续14季度低位、关注 0.50%），但结构分化：对公不良 0.53%(↓)、零售不良 1.48%(↑)、个人经营贷 2.08%、逾期率 +13bp——零售转型下的资产质量隐忧已现。
+    confidence: medium
+    status: open
+    tags: [银行, 杭州银行, 资产质量, 零售风险]
+    evidence: research/T1.1-hzbank-deepdive/T1.1-LarkDoc-主交付.md
+    data: research/T1.1-hzbank-deepdive/T1.1-LarkDoc-主交付.md#3.3
+    derived_from:
+      project: T1
+      claim: C-T1-01
+    next_action: Q-T1.1-02
+    counter_arguments:
+      - "拨备覆盖率 470.95% 仍显著领先同业，安全垫厚，短期不良波动可控"
+      - "对公不良率降至 0.53%，优质客群结构支撑整体稳健"
+      - "关注率较年初下降，先行指标未恶化"
+      - "零售 AUM 7734 亿(+11%)，财富管理沉淀改善零售质量"
+      - "公司坚持对公审慎投放+存量清收，预计资产质量稳定"
+      - "时间维度：若经济复苏带动零售资产质量修复，隐忧将自然消退"
+  - id: C-T1.1-03
+    statement: >
+      贷款高度集中于浙江/长三角（做精杭州、深耕浙江），区域β强但单一区域集中度高于全国布局型银行（如招行），区域地产/平台/小微违约将集中暴露。
+    confidence: medium
+    status: open
+    tags: [银行, 杭州银行, 区域集中度, 风险]
+    evidence: research/T1.1-hzbank-deepdive/T1.1-LarkDoc-主交付.md
+    data: research/T1.1-hzbank-deepdive/T1.1-LarkDoc-主交付.md#3.4
+    counter_arguments:
+      - "浙江民营经济/数字经济/先进制造发达，优质融资需求持续"
+      - "已拓展长三角/京津冀/珠三角，区域适度分散"
+      - "制造业/科技/绿色贷款高增，客群结构优化降低集中度风险"
+      - "区域经济韧性强，违约系统性暴露概率低"
+      - "时间维度：若国家区域协调政策加码，集中度风险被稀释"
+      - "对公审慎投放+零售结构优化，单一行业暴露可控"
+  - id: C-T1.1-04
+    statement: >
+      在"银行是唯一主推"逻辑下，杭州银行配置角色为弹性α（进攻），不宜单押；应搭配农业银行级大行（确定性底仓）对冲其集中度与零售风险，组合优于单一标的。
+    confidence: high
+    status: open
+    tags: [银行, 杭州银行, 配置, 组合, 主推]
+    evidence: research/T1.1-hzbank-deepdive/T1.1-LarkDoc-主交付.md
+    data: research/T1.1-hzbank-deepdive/T1.1-LarkDoc-主交付.md#五
+    derived_from:
+      project: T1
+      claim: C-T1-04
+    counter_arguments:
+      - "时间维度：若市场风格全面转向质量α，单押杭州银行弹性更大"
+      - "若银行业整体重估（PB 从0.56向1.0修复），弹性α收益更高"
+      - "大行股息率虽稳但弹性不足，纯防御或跑输"
+      - "区域集中度若被重新定价为正向（浙江红利），单一标的更优"
+      - "零售风险若修复，杭州银行质量溢价将获额外重估"
+      - "估值已反映'首推'，短期追高性价比低，但中期仍具配置价值"
+
+# ── 监控指标（带上次观测值 + 告警阈值）────────────────────────
+monitors:
+  - id: M-T1.1-01
+    name: "杭州银行 年化ROE"
+    last: "17.74%"
+    as_of: 2026-06-30
+    threshold: "跌破 15% 告警（高 ROE 可持续性失效）"
+    source: research/T1.1-hzbank-deepdive/T1.1-LarkDoc-主交付.md
+  - id: M-T1.1-02
+    name: "杭州银行 不良率"
+    last: "0.76%"
+    as_of: 2026-09-30
+    threshold: "升破 1.0% 告警（资产质量恶化）"
+    source: research/T1.1-hzbank-deepdive/T1.1-LarkDoc-主交付.md
+  - id: M-T1.1-03
+    name: "杭州银行 PB(26E)"
+    last: "0.84x"
+    as_of: 2026-11-02
+    threshold: "升破 1.0x 估值过热 / 跌破 0.70x 超跌"
+    source: research/T1.1-hzbank-deepdive/T1.1-LarkDoc-主交付.md
+
+# ── 下一步动作队列 ────────────────────────────────────────────
+queue: []
+#  - id: Q-P00-01
+#    action: ""             # 待办描述（load_context 渲染用 action）
+#    type: 行业             # 类型，便于分流
+#    priority: P0           # P0 | P1 | P2
+#    depends_on: [C-P00-01] # 依赖的 claim / 其他任务（G6 回写必填依赖关系）
+#    status: pending        # pending | doing | done | dropped
+#    output: archive/raw/行业/xxx.md
+
+# ── 呈现层视图（非 SSOT，本地 SSOT 为本文件 + 主交付 Doc）────────
+views:
+  - kind: lark_doc
+    title: "T1.1 · 杭州银行个股深度（A3）— 主交付"
+    url: "https://gcnyro8kdjoa.feishu.cn/docx/Y8aPdj64XoeN5tx6TVScSmTinbg"
+    generated_by: "lark-cli docs +create --doc-format markdown"
+    sync_direction: "local → lark（单向，Doc 为主交付）"
+
+# ── 已归档结构化记录索引（避免下次重复抓数）────────────────────
+datasets: []
+#  - path: archive/raw/行业/xxx.csv   # load_context 会校验此路径是否存在
+#    covers: ""                       # 覆盖内容说明
+#    as_of: 2026-09-19

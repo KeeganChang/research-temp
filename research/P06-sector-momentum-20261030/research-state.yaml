@@ -1,0 +1,233 @@
+# research-state.yaml —— P06 行业景气度横截面跟踪（method-sector-momentum 首个案例）
+#
+# 回写于 2026-10-30（v2 回跑完成）。下次开场：`python -m script.load_context --project P06`
+# 路径一律相对 workspace 根。
+#
+# ⚠️ 状态机降级（P06 试点 · 2026-11-02 批准）：
+#   自本日起本文件为「可选复用层」，**非每轮回写门禁**。
+#   后续重跑只按需更新 claims/monitors，不强制六段全写；
+#   准确性保障改由「报告内联引用 + 口径块 + 反方≥5」承担（见证据链精简方案 v1.1 §3.4）。
+
+version: 2
+project_id: P06
+updated_at: 2026-10-30
+
+node:
+  parent: null
+  depends_on: []
+
+focus:
+  topic: "A股 12 个申万一级行业的景气度横截面：资金流 × 月度景气双维交叉"
+  type: 行业
+  status: active
+  started_at: 2026-10-29
+  rationale: >
+    周/月频重跑式行业监测。本轮同时是 method-sector-momentum 的首次模板回跑
+    （v2 补齐 v1 缺失的 M1 流出侧 / M4 四象限 / M5 同涨同跌）。
+
+# ── 结论台账 ──────────────────────────────────────────────────
+claims:
+  - id: C-P06-01
+    statement: >
+      双高象限（资金流入 + 近 3 月动量转正）仅 3 个行业：银行、煤炭、石油石化。
+      其中**银行是唯一真 α** —— 资金 +26 亿、近 3 月 +7.0%、YTD +4.8%、振幅仅 17（全场最低），
+      且与最相关对手的相关系数 0.76 为双高象限中最低（波动不同源）。
+    confidence: medium          # 相关系数 n=9 期，独立性判定带噪声
+    status: open
+    tags: [行业景气, 资金流, 银行, 四象限]
+    evidence: research/P06-sector-momentum-20261030/artifacts/sector_monthly/industry_sentiment_2026_v2.html
+    data: research/P06-sector-momentum-20261030/artifacts/sector_monthly/analysis_v2.json
+    next_action: Q-P06-04
+    counter_arguments:
+      - "价格景气 ≠ 基本面景气：月度环比只反映定价边际，未含盈利 / 订单 / 产能。"
+      - "【时间维度】资金流是 2026-10-29 单日快照（日频 T+1，无周度聚合），日内反转 / 尾盘拉抬会失真。"
+      - "幸存者偏差：只看流入 Top 会忽略流出侧同量级信号（电子 -253 亿），单边叙事偏乐观。"
+      - "指数编制失真：板块指数多为市值加权，银行读数被四大行绑架，未必代表全行业。"
+      - "事件脉冲不可外推：银行 / 煤炭 / 石油石化 10-29 集体创新高，部分受当日避险资金推动（见 C-P06-03）。"
+
+  - id: C-P06-02
+    statement: >
+      国防军工是**事件脉冲而非趋势反转**：资金流入第 1（+39 亿）但近 3 月 -4.8%、YTD -24.4%、振幅 36。
+      催化为海上发射三项国家标准 2026-11-01 实施（一次性重定价）。
+    confidence: high
+    status: open
+    tags: [行业景气, 事件驱动, 国防军工, 脉冲]
+    evidence: research/P06-sector-momentum-20261030/artifacts/sector_monthly/industry_sentiment_2026_v2.html
+    data: research/P06-sector-momentum-20261030/artifacts/sector_monthly/analysis_v2.json
+    next_action: Q-P06-03
+    counter_arguments:
+      - "国标实施若带来订单实质落地，脉冲可能转为趋势（需 11 月后订单 / 招标数据验证）。"
+      - "【时间维度】单日流入 -24.4% YTD 的深跌板块，也可能是底部反转的第一根资金信号。"
+
+  - id: C-P06-03
+    statement: >
+      ★ 方法论结论：2026-10-29 全市场超 4700 只个股下跌，当日资金流被**避险属性**主导而非景气趋势，
+      导致「脉冲」象限系统性虚高（5 个脉冲行业中 4 个为当日流入 + 中期下跌的防御品种）。
+      → 已固化为 method-sector-momentum 的「M4 大跌日修正」硬规矩。
+    confidence: high
+    status: validated
+    tags: [方法论, 资金流, 口径, 大跌日]
+    evidence: research/P06-sector-momentum-20261030/artifacts/sector_monthly/industry_sentiment_2026_v2.html
+    data: research/P06-sector-momentum-20261030/artifacts/sector_monthly/analysis_v2.json
+    counter_arguments:
+      - "若后续在上涨日重跑仍出现同样结构，则「避险主导」解释不成立，需另找原因。"
+
+  - id: C-P06-04
+    statement: >
+      同涨同跌检验：电子-通信 ρ=0.94、计算机-有色金属 ρ=0.94、煤炭-石油石化 ρ=0.91（月度环比，n=9 期）
+      → 这些组合定价同一 β，同时持有属**假分散**。独立性最高的是公用事业（ρ=0.59），
+      但独立性 ≠ 值得配置（公用事业属脉冲象限）。
+    confidence: medium          # n=9 期，相关系数噪声大，指示性
+    status: open
+    tags: [相关性, β与α, 分散度]
+    evidence: research/P06-sector-momentum-20261030/artifacts/sector_monthly/industry_sentiment_2026_v2.html
+    data: research/P06-sector-momentum-20261030/artifacts/sector_monthly/analysis_v2.json
+
+  - id: C-P06-05
+    statement: >
+      双低象限（规避）4 个：电子（资金 -253 亿、近 3 月 -17.5%、振幅 89）、
+      通信（-89 亿 / -20.1%）、有色金属（-10 亿 / -15.7%）、计算机（-10 亿 / -11.1%）。
+      资金与趋势双负，无反转证据。
+    confidence: medium
+    status: open
+    tags: [行业景气, TMT, 双低]
+    evidence: research/P06-sector-momentum-20261030/artifacts/sector_monthly/industry_sentiment_2026_v2.html
+    data: research/P06-sector-momentum-20261030/artifacts/sector_monthly/analysis_v2.json
+    counter_arguments:
+      - "电子 YTD -1.8% 但振幅 89 —— 深跌后可能存在超跌反弹的技术性机会（本方法不做择时，无法判定）。"
+
+  - id: C-P06-06
+    statement: >
+      全年呈极端 K 型分化：煤炭 YTD +21.8% vs 电力设备 -30.0%，首尾价差 51.8 个百分点；
+      红利防御（煤炭 / 石油石化 / 银行）与前期高估 TMT（通信 / 计算机 / 电子）走势背离。
+    confidence: high
+    status: open
+    tags: [行业景气, K型分化, YTD]
+    evidence: research/P06-sector-momentum-20261030/artifacts/sector_monthly/industry_sentiment_2026_v2.html
+    data: research/P06-sector-momentum-20261030/artifacts/sector_monthly/analysis_v2.json
+
+# ── 监控指标 ──────────────────────────────────────────────────
+monitors:
+  - id: M-P06-01
+    name: "银行 · 近 3 个月累计涨跌幅"
+    last: "+7.0%"
+    as_of: 2026-10-29
+    threshold: "跌破 +2% 告警（主推逻辑失效）"
+    source: research/P06-sector-momentum-20261030/artifacts/sector_monthly/analysis_v2.json
+
+  - id: M-P06-02
+    name: "银行 · 主力净流入方向"
+    last: "+26 亿（2026-10-29 单日）"
+    as_of: 2026-10-29
+    threshold: "连续 2 个交易日转负告警"
+    source: research/P06-sector-momentum-20261030/artifacts/sector_monthly/fund_flow.json
+
+  - id: M-P06-03
+    name: "国防军工 · 象限迁移"
+    last: "脉冲(观察)"
+    as_of: 2026-10-29
+    threshold: "近 3 月动量转正 → 升级双高；继续为负且资金转出 → 降为双低"
+    source: research/P06-sector-momentum-20261030/artifacts/sector_monthly/analysis_v2.json
+
+  - id: M-P06-04
+    name: "煤炭 · YTD"
+    last: "+21.8%"
+    as_of: 2026-10-29
+    threshold: "跌破 +10% 告警（景气透支 / 红利资金再分配）"
+    source: research/P06-sector-momentum-20261030/artifacts/sector_monthly/analysis_v2.json
+
+  - id: M-P06-05
+    name: "电子-通信 · 月度环比相关系数"
+    last: "0.94"
+    as_of: 2026-10-29
+    threshold: "跌破 0.70 → β 结构变化，分散度假设需重估"
+    source: research/P06-sector-momentum-20261030/artifacts/sector_monthly/analysis_v2.json
+
+# ── 下一步动作队列 ────────────────────────────────────────────
+queue:
+  - id: Q-P06-01
+    action: "把行业全集从 12 个扩到全部 31 个申万一级行业（当前为 12 个代表行业）"
+    type: 行业
+    priority: P1
+    depends_on: []
+    status: pending
+    output: research/P06-sector-momentum-20261030/artifacts/
+
+  - id: Q-P06-02
+    action: "严格「近一周」口径：逐日拉取板块资金主力统计后求和（当前为 2026-10-29 单日快照）"
+    type: 行业
+    priority: P1
+    depends_on: []
+    status: pending
+
+  - id: Q-P06-03
+    action: "报告确认后归档：入 archive/raw/行业/（带 frontmatter，project: P06），经 validate_frontmatter 校验"
+    type: 行业
+    priority: P1
+    depends_on: []
+    status: pending
+
+  - id: Q-P06-04
+    action: "下钻主推行业（银行 / 煤炭 / 石油石化）到公司层：建子 task 走 method-topdown 的 A3"
+    type: 行业
+    priority: P2
+    depends_on: [C-P06-01]
+    status: pending
+
+  - id: Q-P06-05
+    action: "补齐 2026-01 月末数据（接口省略，导致时序第 2 段为跨 2 月累计）"
+    type: 行业
+    priority: P2
+    depends_on: []
+    status: pending
+
+# ── 已归档结构化记录索引（避免下次重复抓数）────────────────────
+datasets:
+  - path: research/P06-sector-momentum-20261030/artifacts/sector_monthly/analysis_v2.json
+    covers: "v2 计算结果：12 行业月度环比 / 归一化 / YTD / 近3月动量 / 振幅 / 四象限 / 相关矩阵"
+    as_of: 2026-10-29
+
+  - path: research/P06-sector-momentum-20261030/artifacts/sector_monthly/series.json
+    covers: "12 个申万一级行业 2025-12-31 → 2026-10-29 的 10 个月末收盘点（缺 2026-01 月末）"
+    as_of: 2026-10-29
+
+  - path: research/P06-sector-momentum-20261030/artifacts/sector_monthly/fund_flow.json
+    covers: "2026-10-29 板块资金流原始返回（行业层 + 概念层；资讯正文 3 篇同源互证）"
+    as_of: 2026-10-29
+
+  - path: research/P06-sector-momentum-20261030/artifacts/sector_monthly/rerun_v2.py
+    covers: "回跑计算脚本（资金流提取 + 景气度计算 + 相关矩阵 + 四象限），可复算"
+    as_of: 2026-10-30
+
+  - path: research/P06-sector-momentum-20261030/artifacts/sector_monthly/verify_numbers.py
+    covers: "数字溯源校验脚本：叙述手写数字 vs analysis_v2.json 比对 + 宏观断言出处×引用双向检查 + 数据源独立性复核"
+    as_of: 2026-10-30
+
+  - path: research/P06-sector-momentum-20261030/artifacts/sector_monthly/industry_momentum_lines.html
+    covers: "景气度走势折线图（横轴相对月份 × 纵轴景气度，12 行业；归一化/环比双模式 + 图例开关 + hover 数值）"
+    as_of: 2026-10-30
+
+# ── 呈现层视图（**非 SSOT；交付载体以 Lark Doc 为主**）────────────────────
+# 铁律 #2：本项目 SSOT 仍是本文件 + caliber.yaml + artifacts/ 下的原始数据。
+# Lark Doc 是人读主交付（findings + 内联引用 + 口径块 + 末尾 reference）；
+# Lark Sheet 仅承载**复杂计算**，置于 Doc 末尾 reference 段链接，单向同步、永不反向写。
+views:
+  - kind: lark_doc
+    title: "P06 · A股行业景气度横截面（2026-10-30）— 主交付"
+    url: "https://gcnyro8kdjoa.feishu.cn/docx/RO46dM29Ro9xbWxuLwccq28Zndd"
+    document_id: "RO46dM29Ro9xbWxuLwccq28Zndd"
+    role: "人读主交付（口径块 + 内联引用 + 末尾 reference）；复杂计算 Sheet 挂在其 reference 段"
+    generated_by: "本地 markdown 重组（证据链精简方案 v1.1 §4.5）"
+    sync_direction: "local → lark（单向）"
+  - kind: lark_sheet
+    title: "P06 A股行业景气度 · 证据链 2026-10-30"
+    url: "https://gcnyro8kdjoa.feishu.cn/sheets/PP4asTZZThkKUXtURutcahCYnNf"
+    spreadsheet_token: "PP4asTZZThkKUXtURutcahCYnNf"
+    tabs: [00_概览, 01_口径, 02_数据源, 03_计算方式, 04_结论与证据, 05_监控与失效, 06_待办与缺口]
+    generated_by: script/gen_evidence_sheet.py
+    sync_direction: "local → lark（单向）"
+    role: "复杂计算附件（四象限/相关矩阵可复算视图），挂在 Lark Doc 末尾 reference 段"
+    note: >
+      交付形态（2026-11-02 定）：Lark Doc 为主、Sheet 入 reference。
+      重新同步：改本地 → python -m script.gen_evidence_sheet --project P06 --csv-dir <dir> → 拖入 lark，
+      再在 Doc 末尾 reference 段链接本表。**不要在 lark 里改数据后反向写回本地** —— 那会得到两份会漂移的台账。

@@ -1,0 +1,137 @@
+# research-state.yaml —— 项目状态机模板
+#
+# 解决的问题：调研结论散落在 md 正文里，下次会话读不到、要重做。
+# 设计原则：
+#   1. 只存「可执行的沉淀」——结论(claims)、监控(monitors)、待办(queue)、已归档数据(datasets)，不抄正文。
+#   2. 每条结论必须带 evidence(证据笔记) + data(结构化记录)，可回溯、可审计。
+#   3. status 驱动生命周期：open → validated / falsified，证伪的结论不删。
+#   4. 项目收尾回写这里；下次开场跑 `python -m script.load_context --project <PID>` 加载。
+#   5. 多 task 单方向派生：子节点只写 node.parent；children / depth 不存储，由 load_context 运行时建图。
+#
+# 与门禁的对应（见 research-assistant/references/AGENTS.md）：
+#   G4 成稿 → 每条 claim 必须有 evidence↔data 互指；反方论点 ≥5 条（至少 1 条时间维度）
+#   G5 校验 → 每条 claim 必须带 confidence + status（无悬空结论）
+#   G6 回写 → monitors 带 last / as_of / threshold；queue 带 depends_on
+#
+# 约定：路径一律相对 workspace 根，不写绝对路径。
+
+version: 2
+project_id: T1
+updated_at: 2026-11-03T23:50Z
+
+# ── 关系层（多 task 用 · 单方向派生）────────────────────────────
+# parent：父节点 ID；顶层项目为 null。children / depth 由 load_context 按 parent 派生，不双写。
+# 新增子 task = 只建新节点并写它的 parent，不改父文件。
+node:
+  parent: P06
+  depends_on: []              # 跨节点依赖（其他节点 ID）；当前仅展示，不做硬阻塞
+
+# ── 当前研究焦点 ──────────────────────────────────────────────
+focus:
+  topic: "银行板块为何是 P06 唯一主推 + 内部谁最值得配"
+  type: 行业                   # 受控 6 类之一（资讯|行业|公司|热点|宏观|个人配置）
+  status: active               # active | paused | done
+  started_at: 2026-11-03
+  rationale: "P06 景气横截面判定银行为唯一主推、其余补涨/阴跌；本 task 向下论证归因（宏观/基本面/资金三维）+ 内部短名单。状态机为可选复用层，仅回填关键结论。"
+
+# ── 结论台账 ──────────────────────────────────────────────────
+# confidence: high | medium | low
+# status: open(待验证) | validated(已验证) | falsified(已证伪)
+claims:
+  - id: C-T1-01
+    statement: >
+      银行为 P06 唯一主推，核心由四维合力驱动：资金再配置（科技回撤→红利蓄水池）、
+      基本面拐点（2026Q2 净息差 1.41% 环比+1bp，2022 来首次单季环比回升）、
+      高股息确定性硬化（六大行分红比例 30%→31%、合计派息超 2200 亿）、
+      估值地板（42 家全破净、平均 PB 0.56）+ 长线锁仓（险资第一大持仓 ~23%）。
+    confidence: high
+    status: validated
+    tags: [主推归因, 资金, 基本面, 高股息]
+    derived_from:
+      project: P06
+      claim: C-P06-主推-银行
+    counter_arguments:
+      - "【时间维度】风格'跷跷板'可逆：2026-07 银行月涨 14%，8 月初 AI 反弹单日跌回大半，相对收益依赖成长端持续弱势（中国金融网 2026-08）。"
+      - "净息差企稳是'阶段性'：资产端收益率下行未根本扭转，负债成本改善幅度收窄，若重现单边下行则分红逻辑松动（新浪财经 2026-10-22）。"
+      - "零售信贷风险未出清：信用卡/消费贷/经营贷不良生成率仍升，招行亦承认为客观事实，可能吞噬利润与拨备（新华财经 2026-09-01）。"
+      - "主动基金低配(1.1%)是双刃：提供向上燃料但增量受限；被动资金(沪深300ETF)若转向，权重大行直接承压（格隆汇 2026-07）。"
+      - "破净≠必然修复：修复依赖'确定性溢价'共识；若经济强复苏、资金回流成长，相对收益收敛（中新网 2026-10-09）。"
+      - "分红可持续性约束：华夏(-18.35%)/光大(-24.01%)因增提拨备致利润负增，分红覆盖率须逐季跟踪（新华财经 2026-09-01）。"
+  - id: C-T1-02
+    statement: >
+      A 股银行盈利分化显著：城商行 ROE 均值 11.78% 领跑，国有大行 9.06%，股份行 8.39% 垫底；
+      头部个体杭州银行 17.74%（全行业第一）、农行为唯一 ROE 破 10% 的国有行（10.14%）。
+    confidence: high
+    status: validated
+    tags: [竞争格局, ROE, 分化]
+    counter_arguments:
+      - "城商行高 ROE 含区域集中度风险：当地产业/地产波动时风险也集中，不可等同于低风险。"
+  - id: C-T1-03
+    statement: >
+      银行内部短名单（5 家）：农业银行(601288)、杭州银行(600926)、成都银行(601838)、
+      招商银行(600036)、常熟银行(601128)——分别对应确定性底仓/区域标杆/极致资产质量/零售壁垒/农商行标杆。
+    confidence: medium
+    status: open
+    tags: [短名单, 配置]
+    counter_arguments:
+      - "落单一个股深度财务建模属 A3 子 task 范畴，本名单仅为行业层初筛，未经个股级现金流拆分验证。"
+  - id: C-T1-04
+    statement: >
+      主推逻辑绝对收益（股息+温和修复）确定性高、中期可持续；相对收益（跑赢其他行业）中期可持续
+      但依赖成长板块弱势延续。与 P06'唯一主推、其余补涨/阴跌'判定一致。
+    confidence: medium
+    status: open
+    tags: [可持续性, 判定]
+    counter_arguments:
+      - "若风险偏好回升 + 科技业绩兑现，相对收益收敛，银行退居'底仓'而非'主推'。"
+
+# ── 监控指标（带上次观测值 + 告警阈值）────────────────────────
+monitors:
+  - id: M-T1-01
+    name: "商业银行净息差（季度）"
+    last: "1.41%"
+    as_of: 2026-06-30
+    threshold: "环比转负（重现单边下行）即触发主推逻辑松动复核"
+    source: "金融监管总局 / 新华财经 2026-09-01"
+  - id: M-T1-02
+    name: "银行板块平均 PB（LF）"
+    last: "0.56x"
+    as_of: 2026-06-30
+    threshold: "回升至 0.7x 以上视为估值修复进入中段，相对收益弹性下降"
+    source: "中国经营报 / 格隆汇 2026-07~08"
+  - id: M-T1-03
+    name: "险资重仓银行股持股量（半年）"
+    last: "约 549 亿股（+12% YoY）"
+    as_of: 2026-06-30
+    threshold: "持股量环比转负即意味着制度性配置松动"
+    source: "新浪财经 2026-10-22"
+
+# ── 下一步动作队列 ────────────────────────────────────────────
+queue: []
+#  - id: Q-P00-01
+#    action: ""             # 待办描述（load_context 渲染用 action）
+#    type: 行业             # 类型，便于分流
+#    priority: P0           # P0 | P1 | P2
+#    depends_on: [C-P00-01] # 依赖的 claim / 其他任务（G6 回写必填依赖关系）
+#    status: pending        # pending | doing | done | dropped
+#    output: archive/raw/行业/xxx.md
+
+# ── 已归档结构化记录索引（避免下次重复抓数）────────────────────
+datasets: []
+
+# ── 呈现层视图（**非 SSOT**）────────────────────────────────────────────
+# 铁律 #2：本项目 SSOT 是本文件 + P06 的 caliber.yaml + 本地 md。
+# 飞书 Doc 为唯一主交付，单向同步、永不反向写。
+views:
+  - kind: lark_doc
+    title: "T1 · A股银行行业深度（2026-11-03）— 主交付"
+    url: "https://gcnyro8kdjoa.feishu.cn/docx/LXC5dbKW2oKWSAxWXqNcHU45ned"
+    document_id: "LXC5dbKW2oKWSAxWXqNcHU45ned"
+    generated_by: "lark-cli docs +create --doc-format markdown"
+    sync_direction: "local → lark（单向）"
+    note: >
+      复杂计算未单列 Sheet（本 task 无四象限/相关矩阵类复算，直接内联 Doc）。
+      本地源：research/T1-bank-deepdive/T1-LarkDoc-主交付.md。
+#  - path: archive/raw/行业/xxx.csv   # load_context 会校验此路径是否存在
+#    covers: ""                       # 覆盖内容说明
+#    as_of: 2026-09-19

@@ -30,13 +30,16 @@ uv run python -m script.load_context --project <PID> --files
 
 需要机读可用 `--json`；只看未完成结论用 `--only open`。
 
+> 状态机本身可疑（ID 对不上、引用悬空、缺 confidence）时先跑 `uv run python -m script.load_context --lint`
+> —— **只读自检**，按 严重 / 警告 / 提示 三级报问题，不改任何文件；有严重项退出码 1。
+
 ### Step 3 · 定位中断点（关键动作）
 按下表自上而下**首个不成立**的项即中断点，从该处续做：
 
 | 断点 | 判据 | 续做动作 |
 |---|---|---|
 | **G1 立项** | `project.yaml` 缺驱动问题 / 边界 / 交付物 | 回到 `/research-init` 补齐三件套 |
-| **G2 选线** | `project.yaml` 的 `track` 为空或理由不成立 | 重跑选线（依据任务描述 + `ROUTING.md`） |
+| **G2 选线** | `project.yaml` 的 `track` 为空或理由不成立 | 重跑选线（依据任务描述 + `references/ROUTING.md`） |
 | **G3 采集** | 有 focus 但 claims 为空 | 按所选 Track 骨架分模块采集证据 |
 | **G4 成稿** | claims 有内容，但反方 <5 条 / 口径未登记 / 证据不可互指 | 补反方 + 登记口径 + 补齐 claim↔evidence 指针 |
 | **G5 校验** | claims 缺 `confidence` 或 `status` | 给每条 claim 标 confidence + status |
@@ -62,6 +65,6 @@ uv run python -m script.load_context --project <PID> --files
 ## 引用
 
 - 状态机五段：`research/<PID>/research-state.yaml`
-- 流程/门禁总纲：`research-assistant/AGENTS.md`
+- 流程/门禁总纲：`research-assistant/references/AGENTS.md`
 - 新建任务：`/research-init`
 - 全流程编排：`/research`
