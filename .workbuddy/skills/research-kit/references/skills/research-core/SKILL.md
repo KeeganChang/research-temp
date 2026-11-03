@@ -17,7 +17,7 @@ version: 1.2
 
 ### Step 0 — 定位项目
 - 若为续做：`load_context --project <PID>` 读取 `focus / claims / monitors / queue / datasets`。
-- 若为新建：`new_project --id <PID> --name "..." --track <drill|entry|diagnostic|inductive|scenario>`，生成 `research/<PID>-<slug>/` 及 `research-state.yaml`。track 值由 G2 按 `references/ROUTING.md` 决策树动态确定，**不预置、不写死**。
+- 若为新建：`new_project --id <PID> --name "..." --track <drill|entry|diagnostic|inductive|scenario>`，生成 `research/<PID>-<slug>/` 及 `research-state.yaml`。track 值由 G2 按 `references/ROUTING-quick.md` 决策树动态确定，**不预置、不写死**。
 - 建子 task：`new_project --parent <父PID>`，只需在新节点写 `node.parent`，**不改父文件**。
 - **门禁 G1 未过不得进入 Step 1。**
 
@@ -29,13 +29,13 @@ version: 1.2
 
 不满足 → 退回向用户澄清，不推进。
 
-### Step 2 — 选线门禁 G2（按任务描述套 `references/ROUTING.md` 决策树五选一，不写死）
+### Step 2 — 选线门禁 G2（按任务描述套 `references/ROUTING-quick.md` 决策树五选一，不写死）
 - **drill** 下钻选优：演绎·总→分，落点「最优子集 + 多空」。
 - **entry** 进入测绘：横向·context→players，落点「机会区/禁区 + 玩家地图」。
 - **diagnostic** 诊断归因：逆向·果→因，落点「根因诊断 + 修复」。
 - **inductive** 归纳洞察：归纳·样本→规律，落点「分群/模式 + 洞察」。
 - **scenario** 情景推演：推演·现在→未来，落点「情景矩阵 + 触发」。
-- 选线**不写死**：直接依据「任务描述」套用 `references/ROUTING.md` 决策树判定，而非读某个预设字段；判定结果写回 `project.yaml` 的 `track` 字段仅作续做记录。同一条链不可混跑（铁律 #3），跨 Track 用父子 task 串起。
+- 选线**不写死**：直接依据「任务描述」套用 `references/ROUTING-quick.md` 决策树判定，而非读某个预设字段；判定结果写回 `project.yaml` 的 `track` 字段仅作续做记录。同一条链不可混跑（铁律 #3），跨 Track 用父子 task 串起。
 
 ### Step 3 — 分模块采集（G3）
 - 按所选 Track 加载对应**骨架**技能（research-track-<drill|entry|diagnostic|inductive|scenario>）。
@@ -88,3 +88,4 @@ version: 1.2
 - 交付标准（Lark Doc 为主 / 三段式内联 / Sheet 退 reference / 文件级粒度 / 一次性也推 Doc / html 自包含报告）：`references/delivery-standard.md`
 - Lark Doc 主交付模板：`references/templates/lark-doc-delivery.md`
 - HTML 交付渲染（output_target=html，合并自 frontend-design）：`references/skills/research-html/SKILL.md` + 模板 `references/templates/html-delivery.html`
+- PPT 交付渲染（output_target=ppt，由 workbuddy-pptx 技能 / 场景 #49「制作PPT」渲染）：`references/skills/research-ppt/SKILL.md`

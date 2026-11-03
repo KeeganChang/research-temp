@@ -62,4 +62,4 @@ depends_on: [research-core]
 ## 引用
 
 - 编排：research-core（门禁 G1–G6）
-- 选线边界：references/ROUTING.md
+- 选线边界：references/ROUTING-quick.md（速查）/ references/ROUTING.md（完整）

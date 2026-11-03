@@ -43,4 +43,4 @@ depends_on: [research-core]
 - 注意：归因结论须标注「可证伪条件」，防止把相关性当因果。
 
 ## 引用
-- 编排：research-core ｜ 边界路由：references/ROUTING.md
+- 编排：research-core ｜ 边界路由：references/ROUTING-quick.md

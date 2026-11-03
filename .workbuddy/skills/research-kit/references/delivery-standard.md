@@ -4,7 +4,8 @@ title: 交付标准（Delivery Standard）
 type: config
 derived_from: 证据链精简方案 v1.1 §4.5 + §8 Q1/Q2
 applies_to: 所有 research-kit 产出（一次性 / 月频 / 跨会话）
-output_target: lark   # 可选：local（本地 md）/ lark（飞书 Doc+Sheet）/ html（自包含单页报告）/ workbuddy_library（资料库，未测试）
+output_target: lark   # 可选：local（本地 md）/ lark（飞书 Doc+Sheet）/ html（自包含单页报告）/ ppt（自包含 PPTX 报告，由 workbuddy-pptx 技能 / 场景 #49「制作PPT」渲染）/ workbuddy_library（资料库，未测试）
+master_template: ""   # 可选·仅 output_target=ppt：公司/客户模板 .pptx 路径（写成 <path/to/company.pptx> 占位，勿硬编码绝对路径）。留空 = 用 research-ppt 投研风自绘
 ---
 
 # 交付标准（Delivery Standard）
@@ -23,10 +24,27 @@ output_target: lark   # 可选：local（本地 md）/ lark（飞书 Doc+Sheet�
 | `lark` | 飞书 **Doc + Sheet**（lark-cli 推送） | `templates/lark-doc-delivery.md` | 人读 + 复杂计算视图；单向呈现，本地 SSOT 不反向写 |
 | `html` | **自包含单页 HTML 报告**（落 `output/`） | `templates/html-delivery.html` + `references/skills/research-html/` | 内嵌 CSS、离线可读、可打印/导出 PDF；渲染能力由 research-html 子技能（合并自 frontend-design）提供 |
 | `workbuddy_library` | WorkBuddy **资料库**上传（未测试） | `templates/local-delivery.md` | 复用 local 模板生成的 md，再上传资料库；链路尚未实测 |
+| `ppt` | **自包含 PPTX 报告**（由 workbuddy-pptx 技能 / 场景 #49「制作PPT」渲染） | `references/skills/research-ppt/SKILL.md` | 投研风 deck（封面 / 口径块 / 章节 / 反方 / Reference）；遵循三段式与反方≥5；单向呈现，本地 SSOT 不反向写 |
 
 - 切换输出目标 = 改本文件 frontmatter 的 `output_target` 一行，**不动**模板与门禁。
 - 无论哪个目标，**三段式（口径块 → 内联引用 → Reference）与 rubric 门禁不变**（准确性保障与载体解耦）。
 - `html` 目标**不引入外部依赖**（字体走系统栈、无 CDN）；交付文件须满足 `references/report-rubric-v1.md` 的 G_rubric 前置清单，与 lark/local 同标准。
+
+### 0.1 ppt 的风格锁（master_template）
+
+> 仅在 `output_target: ppt` 时生效。用于「公司/客户有强制模板，但不想让产物绑定模板文件」的场景。
+
+`master_template` 留空 → `research-ppt` 用投研风场景配色自绘（默认）。填了模板路径 → 出片前先抽模板的视觉变量，固化为「风格锁」：
+
+1. **抽取**：`python references/skills/research-ppt/extract_master_style.py <template.pptx>`
+   → 产出 `<stem>-style-lock.yaml`（palette / fonts / page / layouts / master_shapes）+ 可直接粘用的 `const LOCK = {...}`。
+2. **落到 .slide**：用 `LOCK` 的 `bg / ink / inkSub / accent / fontTitle / fontBody` 替换场景配色常量。**A股 涨跌色不取模板色**，仍为涨 `#D8382E` / 跌 `#1F9D55`。
+3. **母版元素**：`master_shapes` 给了母版非占位符形状的 bbox（Logo / 页眉页脚条），按 bbox 复刻为页脚元素，并校验正文不压其安全区。
+
+**边界（别误解为"套母版"）**：
+- 只锁**视觉变量**（颜色/字体/版心），**不套版式占位符**——DSL 仍是自由绘制，标题正文不会随母版版式自动排版。
+- 要真正按版式出页（`layout_index` + 占位符），走 `slide_*` 工具链（`slide_add_slides` / `slide_set_page_properties`），那不属于本轻量方案。
+- 产物**不依赖模板文件**：可 lint、可迁移、可离线复现；模板换版只需重跑抽取刷新 LOCK。
 
 ## 1. 载体分层（§4.5）
 

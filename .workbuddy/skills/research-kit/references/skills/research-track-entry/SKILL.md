@@ -44,4 +44,4 @@ depends_on: [research-core]
 - 未启用域时，只输出骨架级结论。
 
 ## 引用
-- 编排：research-core ｜ 边界路由：references/ROUTING.md
+- 编排：research-core ｜ 边界路由：references/ROUTING-quick.md

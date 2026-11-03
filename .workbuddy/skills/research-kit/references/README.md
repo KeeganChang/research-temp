@@ -10,7 +10,8 @@
 - 顶层 `SKILL.md`：唯一加载入口（怎么开始、何时读哪个文件、硬规矩）。
 - 配置文档（本目录内）：
   - `AGENTS.md`：核心原则（铁律）+ 配置与规范入口指针（流程图/门禁/状态机/路由的详细定义见 research-core 与各专文件）。
-  - `ROUTING.md`：5 种 Track 的使用边界与选线决策树（G2 依据，选线权威，不写死）。
+  - `ROUTING-quick.md`：选线速查（5-track 边界表 + 决策树，G2 每任务必读）。
+  - `ROUTING.md`：选线完整版（反模式 / Track 配合 / method 清单 / 扩展，按需查）。
   - `README.md`：本文件（采用方式 / 接入新框架 / 目录结构）。
   - `templates/research-state.yaml`：跨会话状态机模板（node 关系层 + focus/claims/monitors/queue/datasets）。
   - `research-project-naming.md`：调研项目目录命名（`<PID>-<slug>[-<YYYYMMDD>]`）的唯一权威；file-manager 不重复定义，只指向本文件。
@@ -79,7 +80,8 @@ research-kit/
 ├── SKILL.md                    # 唯一加载入口（顶层只留它）
 └── references/                 # 其余内容，按需查阅
     ├── AGENTS.md               # 核心原则（铁律）+ 配置与规范入口指针
-    ├── ROUTING.md              # 5 种 Track 使用边界 + 选线决策树（选线权威）
+    ├── ROUTING-quick.md        # 选线速查（5-track 表+决策树，每任务必读）
+    ├── ROUTING.md              # 选线完整版（反模式/配合/method 清单/扩展）
     ├── README.md               # 本文件
     ├── templates/
     │   └── research-state.yaml # 状态机模板（含 node 关系层）

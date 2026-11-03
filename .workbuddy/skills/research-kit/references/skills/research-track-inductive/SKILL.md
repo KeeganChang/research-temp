@@ -42,4 +42,4 @@ depends_on: [research-core]
 - 注意：分层须带「可解释性 + 稳定性」双验证，防止统计噪声当洞察。
 
 ## 引用
-- 编排：research-core ｜ 边界路由：references/ROUTING.md
+- 编排：research-core ｜ 边界路由：references/ROUTING-quick.md

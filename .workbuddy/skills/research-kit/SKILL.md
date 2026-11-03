@@ -12,7 +12,7 @@ version: 2.0
 ## 怎么开始
 
 1. **读编排核心**：`references/skills/research-core/SKILL.md` —— 门禁与状态机回写都在这里，所有调研必经。
-2. **选 Track**（5 选 1）：依据**任务描述**套 `references/ROUTING.md` 决策树动态判定，**不读预设字段、不写死**。
+2. **选 Track**（5 选 1）：依据**任务描述**套 `references/ROUTING-quick.md` 决策树动态判定，**不读预设字段、不写死**。（反模式 / Track 配合 / method 清单见完整版 `references/ROUTING.md`，按需才读）
    - **drill 下钻选优**（演绎·总→分）→ `references/skills/research-track-drill/`
    - **entry 进入测绘**（横向·context→players）→ `references/skills/research-track-entry/`
    - **diagnostic 诊断归因**（逆向·果→因）→ `references/skills/research-track-diagnostic/`
@@ -26,12 +26,13 @@ version: 2.0
 | 你要做什么 | 去读 |
 |---|---|
 | 跑一次调研 / 门禁细节 / 状态机回写 | `references/skills/research-core/SKILL.md` |
-| 判断该走哪条 Track | `references/ROUTING.md`（选线权威） |
+| 判断该走哪条 Track | `references/ROUTING-quick.md`（每任务速查；反模式/方法清单见完整版 `references/ROUTING.md`） |
 | 看完整流程图 + G1–G6 门禁定义 + 技能路由 | `references/skills/research-core/SKILL.md` |
 | 采用本套件 / 接入新框架 / 目录说明 | `references/README.md` |
 | 新建项目的状态机文件长什么样 | `references/templates/research-state.yaml` |
 | 某语境的具体算法与口径 | `references/skills/method-*/SKILL.md` |
 | 产出 HTML 交付 / 渲染（output_target=html） | `references/skills/research-html/SKILL.md` |
+| 产出 PPT 交付 / 渲染（output_target=ppt） | `references/skills/research-ppt/SKILL.md` |
 
 ## 套件内构成
 
@@ -45,12 +46,14 @@ version: 2.0
 | `references/skills/research-track-scenario/` | Track 骨架：情景推演 | 是 |
 | `references/skills/research-module/` | 任意框架接入模板（含 Cohort 示例） | 是 |
 | `references/skills/research-html/` | HTML 交付渲染（合并自 frontend-design，output_target=html） | 按需·output_target=html |
+| `references/skills/research-ppt/` | PPT 交付渲染（output_target=ppt，由 workbuddy-pptx 技能 / 场景 #49「制作PPT」渲染） | 按需·output_target=ppt |
 | `references/skills/method-topdown/` | method：景气链（→drill，含 A股 细化 a1/a2/a3） | 按需·语境匹配 |
 | `references/skills/method-market-entry/` | method：市场进入（→entry） | 按需·语境匹配 |
 | `references/skills/method-ecommerce-ops/` | method：电商经营诊断（→diagnostic） | 按需·语境匹配 |
 | `references/skills/method-sector-momentum/` | method：行业景气度横截面跟踪（→drill） | 按需·语境匹配 |
 | `references/AGENTS.md` | 核心原则（铁律）+ 配置与规范入口指针（详细定义在各专文件） | — |
-| `references/ROUTING.md` | 5 种 Track 使用边界 + 选线决策树（选线权威） | — |
+| `references/ROUTING-quick.md` | 选线速查（5-track 边界表 + 决策树，每任务必读） | — |
+| `references/ROUTING.md` | 选线完整版（反模式 / Track 配合 / method 清单 / 扩展） | — |
 | `references/README.md` | 采用 / 接入新框架 / 目录结构 | — |
 | `references/templates/research-state.yaml` | 状态机模板（含 node 关系层） | — |
 
@@ -72,6 +75,6 @@ version: 2.0
 ## 引用
 
 - 流程与门禁（G1–G6 + G_rubric）：`references/skills/research-core/SKILL.md`（AGENTS.md 只列原则与入口）
-- 选线边界与决策：`references/ROUTING.md`
+- 选线边界与决策：`references/ROUTING-quick.md`（速查）/ `references/ROUTING.md`（完整，含反模式与方法清单）
 - 状态机：`references/templates/research-state.yaml`
 - 编排细节：`references/skills/research-core/SKILL.md`

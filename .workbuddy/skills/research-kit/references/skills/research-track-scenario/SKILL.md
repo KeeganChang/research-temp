@@ -42,4 +42,4 @@ depends_on: [research-core]
 - 注意：须显式标注「假设依赖」，防止把单点测算当确定性结论。
 
 ## 引用
-- 编排：research-core ｜ 边界路由：references/ROUTING.md
+- 编排：research-core ｜ 边界路由：references/ROUTING-quick.md
