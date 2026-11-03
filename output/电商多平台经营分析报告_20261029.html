@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电商多平台经营分析报告 · 案例：拾光生活（直播电商）</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#f4f6fa; --panel:#ffffff; --ink:#1f2937; --sub:#6b7280; --line:#e5e7eb;
+    --primary:#2D6CDF; --accent:#E63946; --ok:#07a35a; --warn:#e8a33d;
+    --c-douyin:#2D6CDF; --c-taobao:#FF7A00; --c-channels:#07C160; --c-kuaishou:#9B5DE5;
+    --shadow:0 1px 3px rgba(16,24,40,.06),0 6px 24px rgba(16,24,40,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.65;font-size:14px}
+  /* layout */
+  .shell{display:flex;min-height:100vh}
+  nav.side{width:232px;flex:0 0 232px;background:#0f1b2d;color:#cdd6e4;position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px 14px}
+  nav.side h2{font-size:13px;letter-spacing:.5px;color:#7e8aa0;margin:18px 10px 8px;text-transform:uppercase}
+  nav.side a{display:block;color:#cdd6e4;text-decoration:none;padding:9px 12px;border-radius:8px;font-size:13.5px;margin:2px 0;transition:.15s}
+  nav.side a:hover{background:#1b2b42;color:#fff}
+  nav.side a.active{background:var(--primary);color:#fff}
+  nav.side .brand{font-size:16px;font-weight:700;color:#fff;padding:6px 12px 14px}
+  nav.side .brand small{display:block;font-weight:400;color:#7e8aa0;font-size:11.5px;margin-top:3px}
+  main{flex:1;min-width:0;padding:30px 40px 80px;max-width:1180px}
+  .cover{background:linear-gradient(135deg,#0f1b2d,#1d3a5f);color:#fff;border-radius:16px;padding:34px 38px;box-shadow:var(--shadow);margin-bottom:26px}
+  .cover .tag{display:inline-block;background:rgba(255,255,255,.14);padding:4px 11px;border-radius:20px;font-size:12px;margin-bottom:14px}
+  .cover h1{font-size:27px;font-weight:800;letter-spacing:.5px}
+  .cover p{color:#b9c6da;margin-top:10px;font-size:13.5px;max-width:760px}
+  .cover .meta{margin-top:18px;display:flex;gap:26px;flex-wrap:wrap;font-size:12.5px;color:#9fb0c8}
+  .cover .meta b{color:#fff;font-size:15px;display:block}
+  section{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px 28px;margin-bottom:22px;box-shadow:var(--shadow);scroll-margin-top:16px}
+  section h3{font-size:19px;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+  section h3 .num{background:var(--primary);color:#fff;width:26px;height:26px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+  section .lead{color:var(--sub);margin:6px 0 18px;font-size:13.5px}
+  h4{font-size:15px;margin:20px 0 10px;color:#111827}
+  p{margin:8px 0}
+  ul,ol{margin:8px 0 8px 22px}
+  li{margin:5px 0}
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:920px){.g2,.g3,.g4{grid-template-columns:1fr}main{padding:20px}}
+  .kpi{background:#fafbff;border:1px solid var(--line);border-radius:12px;padding:16px 16px}
+  .kpi .label{font-size:12px;color:var(--sub)}
+  .kpi .val{font-size:25px;font-weight:800;margin-top:4px;color:var(--ink)}
+  .kpi .val small{font-size:13px;font-weight:600;color:var(--sub)}
+  .kpi .delta{font-size:12px;margin-top:3px}
+  .up{color:var(--ok)}.down{color:var(--accent)}
+  .chart-box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 16px 8px;height:340px}
+  .chart-box.tall{height:380px}
+  .chart-title{font-size:13.5px;font-weight:700;margin-bottom:6px;color:#374151}
+  table{border-collapse:collapse;width:100%;font-size:13px;margin:10px 0}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:center}
+  th{background:#f3f6fb;font-weight:700;color:#374151}
+  td.l,th.l{text-align:left}
+  tbody tr:nth-child(even){background:#fafbfd}
+  .pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11.5px;font-weight:600}
+  .pill.g{background:#e7f7ee;color:#07a35a}.pill.y{background:#fdf3e2;color:#c8881f}.pill.r{background:#fdeaea;color:#d23b3b}
+  .card{border:1px solid var(--line);border-radius:12px;padding:16px}
+  .card h5{font-size:14px;margin-bottom:6px}
+  .callout{border-left:4px solid var(--primary);background:#f3f7ff;padding:12px 16px;border-radius:0 10px 10px 0;margin:12px 0;font-size:13.5px}
+  .callout.warn{border-color:var(--warn);background:#fdf8ee}
+  .callout.danger{border-color:var(--accent);background:#fdeeef}
+  .selector{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px}
+  .selector button{border:1.5px solid var(--line);background:#fff;padding:9px 16px;border-radius:10px;cursor:pointer;font-size:13.5px;font-weight:600;color:#374151;transition:.15s}
+  .selector button:hover{border-color:var(--primary)}
+  .selector button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .detail-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .detail-head .dot{width:14px;height:14px;border-radius:50%}
+  .detail-head h4{margin:0;font-size:18px}
+  .detail-head .sub{color:var(--sub);font-size:12.5px}
+  .note{font-size:12px;color:var(--sub);background:#f7f9fc;border:1px dashed var(--line);border-radius:10px;padding:12px 14px;margin-top:14px}
+  .flex{display:flex;gap:14px;flex-wrap:wrap}
+  .flex1{flex:1;min-width:240px}
+  .act{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
+  .act:last-child{border-bottom:none}
+  .act .pri{flex:0 0 54px;font-size:11px;font-weight:700;padding:3px 0;border-radius:6px;text-align:center}
+  .pri.p0{background:#fdeeef;color:#d23b3b}.pri.p1{background:#fdf3e2;color:#c8881f}.pri.p2{background:#e7f7ee;color:#07a35a}
+  .act .body b{font-size:13.5px}
+  .act .body span{color:var(--sub);font-size:12.5px}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--sub);margin-top:8px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:middle}
+  footer{color:var(--sub);font-size:12px;text-align:center;padding:20px}
+  code{background:#eef1f6;padding:1px 6px;border-radius:5px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav class="side">
+  <div class="brand">电商经营分析报告<small>案例：拾光生活 · 直播电商多平台经营</small></div>
+  <h2>导航</h2>
+  <a href="#s0" class="active">执行摘要</a>
+  <a href="#s1">一、案例背景与经营模式</a>
+  <a href="#s2">二、多平台渠道经营对比</a>
+  <a href="#s3">三、流量结构分析</a>
+  <a href="#s4">四、转化漏斗分析</a>
+  <a href="#s5">五、货品与主播经营</a>
+  <a href="#s6">六、数据复盘看板</a>
+  <a href="#s7">七、诊断与优化建议</a>
+  <a href="#s8">八、行动清单与复盘机制</a>
+  <h2>说明</h2>
+  <a href="#s9">数据口径与替换指引</a>
+</nav>
+
+<main>
+  <!-- COVER -->
+  <div class="cover" id="s0">
+    <span class="tag">经营分析报告 · Business Operations Review</span>
+    <h1>电商多平台经营分析报告</h1>
+    <p>以新消费家居品牌「拾光生活」的直播电商业务为案例，对其在抖音、淘宝直播、视频号、快手四大渠道的流量结构、转化效率、货品与主播经营进行分渠道拆解，定位增长瓶颈并给出资源再分配与优化行动清单。</p>
+    <div class="meta">
+      <div><b>¥1.20 亿</b>月均 GMV</div>
+      <div><b>4 渠道</b>抖音 / 淘宝 / 视频号 / 快手</div>
+      <div><b>32 人</b>直播团队</div>
+      <div><b>2026 Q3</b>分析窗口</div>
+    </div>
+  </div>
+
+  <!-- EXEC SUMMARY -->
+  <section>
+    <h3><span class="num">★</span>执行摘要</h3>
+    <div class="lead">核心结论：业务盘子健康（月 GMV 1.2 亿），但增长杠杆分布不均——抖音/淘宝靠付费堆量、效率临界；视频号/快手自然流量健康、却受限于规模。下一步不是「再加预算」，而是「重新分配预算 + 把高效渠道的打法复制出去」。</div>
+    <div class="grid g4">
+      <div class="kpi"><div class="label">月均 GMV</div><div class="val">¥1.20<small> 亿</small></div><div class="delta up">▲ 环比 +14.6%</div></div>
+      <div class="kpi"><div class="label">整体支付转化率</div><div class="val">4.4<small> %</small></div><div class="delta up">▲ 高于行业 3% 基准</div></div>
+      <div class="kpi"><div class="label">整体 GPM</div><div class="val">¥1,569</div><div class="delta up">▲ 达成 800 目标线 1.96×</div></div>
+      <div class="kpi"><div class="label">自然流量占比</div><div class="val">52.4<small> %</small></div><div class="delta down">▼ 未达 50% 健康线（注①）</div></div>
+    </div>
+    <div class="callout">
+      <b>三条最重要的判断：</b>
+      <ol style="margin-top:6px">
+        <li><b>抖音是「利润奶牛也是流量黑洞」</b>：贡献 43% GMV，但付费占比 52%、ROI 2.8 已逼近警戒线，自然流量必须拉起来。</li>
+        <li><b>视频号是被低估的效率冠军</b>：GMV 仅 16%，却拿下最高 GPM（¥1,939）、最高 ROI（3.4）、最高自然占比（67%）——该加投公域撬规模。</li>
+        <li><b>淘宝客单价最高（¥220）但严重依赖付费（62%）</b>：用高客单沉淀私域、降低投流依赖是关键命题。</li>
+      </ol>
+    </div>
+    <p class="note">注①：整体自然流量占比 52.4% 看似过线，但被视频号(67%)/快手(72%)拉高；核心渠道抖音(48%)/淘宝(38%)均未达标，结构失衡。后续章节按渠道拆解。</p>
+  </section>
+
+  <!-- 1 BACKGROUND -->
+  <section id="s1">
+    <h3><span class="num">1</span>案例背景与经营模式</h3>
+    <div class="lead">先定义「我们是谁、在哪卖、卖什么」，这是后面所有指标可比性的基础。</div>
+    <div class="grid g3">
+      <div class="card"><h5>品牌画像</h5><p>「拾光生活」——家居生活方式新消费品牌，主营家居家纺、厨房用品、香薰个护。2021 年成立，年 GMV 约 14.4 亿。</p></div>
+      <div class="card"><h5>团队与组织</h5><p>直播团队 32 人：主播 8 / 中控 4 / 投流 3 / 选品运营 12 / 短视频 5。4 渠道共用一盘货，独立排班与投流账户。</p></div>
+      <div class="card"><h5>经营模式</h5><p>「一盘货、多平台分发」：统一供应链与选品，按渠道特性做货盘与话术差异化，All-in 直播电商而非货架铺货。</p></div>
+    </div>
+    <h4>人货场模型（分渠道差异化）</h4>
+    <table>
+      <thead><tr><th class="l">渠道</th><th class="l">人（主播风格）</th><th class="l">货（货盘重心）</th><th class="l">场（流量逻辑）</th></tr></thead>
+      <tbody>
+        <tr><td class="l"><b>抖音</b></td><td class="l">强人设、快节奏、憋单</td><td class="l">爆款+福利款冲量</td><td class="l">内容推荐，付费撬动</td></tr>
+        <tr><td class="l"><b>淘宝直播</b></td><td class="l">专业讲解、性价比</td><td class="l">高客单品牌款</td><td class="l">搜索+推荐，强付费</td></tr>
+        <tr><td class="l"><b>视频号</b></td><td class="l">温情、信任、私域</td><td class="l">中高客单品质款</td><td class="l">社交裂变+私域</td></tr>
+        <tr><td class="l"><b>快手</b></td><td class="l">老铁、接地气</td><td class="l">性价比组合装</td><td class="l">私域信任，自然为主</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 2 CHANNEL COMPARISON -->
+  <section id="s2">
+    <h3><span class="num">2</span>多平台渠道经营对比</h3>
+    <div class="lead">四渠道同台对比。下方「渠道详情」可点选任一平台，联动查看其流量结构与转化漏斗。</div>
+    <div class="grid g2">
+      <div class="chart-box"><div class="chart-title">各渠道 GMV 贡献（万元/月）</div><canvas id="gmvChart"></canvas></div>
+      <div class="chart-box"><div class="chart-title">核心指标雷达（归一化 0–100，越大越好）</div><canvas id="radarChart"></canvas></div>
+    </div>
+
+    <h4>渠道核心指标总表</h4>
+    <table>
+      <thead><tr><th class="l">指标</th><th>抖音</th><th>淘宝直播</th><th>视频号</th><th>快手</th></tr></thead>
+      <tbody>
+        <tr><td class="l">GMV（万元/月）</td><td><b>5,200</b></td><td>3,800</td><td>1,900</td><td>1,100</td></tr>
+        <tr><td class="l">GMV 占比</td><td>43.3%</td><td>31.7%</td><td>15.8%</td><td>9.2%</td></tr>
+        <tr><td class="l">观看人次（万）</td><td>3,100</td><td>1,650</td><td>980</td><td>920</td></tr>
+        <tr><td class="l">人均停留（秒）</td><td>78</td><td>92</td><td>105</td><td>88</td></tr>
+        <tr><td class="l">互动率</td><td>6.2%</td><td>4.1%</td><td>7.8%</td><td>8.5%</td></tr>
+        <tr><td class="l">支付转化率（UV）</td><td>4.8%</td><td>4.8%</td><td>4.7%</td><td>3.3%</td></tr>
+        <tr><td class="l">客单价（¥）</td><td>168</td><td><b>220</b></td><td>280</td><td>95</td></tr>
+        <tr><td class="l">GPM（¥/千次观看）</td><td>1,677</td><td><b>2,303</b></td><td>1,939</td><td>1,196</td></tr>
+        <tr><td class="l">自然流量占比</td><td class="down">48%</td><td class="down">38%</td><td class="up">67%</td><td class="up">72%</td></tr>
+        <tr><td class="l">付费 ROI</td><td>2.8</td><td class="down">2.3</td><td class="up">3.4</td><td>3.1</td></tr>
+        <tr><td class="l">综合评级</td><td><span class="pill y">规模王</span></td><td><span class="pill y">高客单</span></td><td><span class="pill g">效率王</span></td><td><span class="pill r">待起量</span></td></tr>
+      </tbody>
+    </table>
+
+    <h4>渠道详情（点选切换）</h4>
+    <div class="selector" id="pSel">
+      <button data-p="douyin" class="active">抖音</button>
+      <button data-p="taobao">淘宝直播</button>
+      <button data-p="channels">视频号</button>
+      <button data-p="kuaishou">快手</button>
+    </div>
+    <div class="card" id="detailCard">
+      <div class="detail-head">
+        <span class="dot" id="dDot"></span>
+        <div><h4 id="dName">抖音</h4><div class="sub" id="dSub"></div></div>
+      </div>
+      <div class="grid g2">
+        <div class="chart-box" style="height:300px"><div class="chart-title">流量结构：自然 vs 付费</div><canvas id="trafficDoughnut"></canvas></div>
+        <div class="chart-box" style="height:300px"><div class="chart-title">转化漏斗（相对曝光 100%）</div><canvas id="funnelChart"></canvas></div>
+      </div>
+      <div class="callout" id="dDiag" style="margin-top:14px"></div>
+    </div>
+  </section>
+
+  <!-- 3 TRAFFIC -->
+  <section id="s3">
+    <h3><span class="num">3</span>流量结构分析</h3>
+    <div class="lead">流量公式：自然推荐流量 = f(停留时长, 互动率, 转化率, 复访率)。付费是「买精准用户进房」，但最终能否触发自然放大，全看直播间内的人货匹配数据。</div>
+    <div class="chart-box tall"><div class="chart-title">各渠道流量来源结构（自然 / 付费，占比 %）</div><canvas id="trafficStack"></canvas></div>
+    <div class="legend">
+      <span><i style="background:#07C160"></i>自然流量（推荐/搜索/私域/关注）</span>
+      <span><i style="background:#E63946"></i>付费流量（千川 / 引力魔方 / 微信豆ADQ / 磁力金牛）</span>
+    </div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card"><h5>结构性问题</h5>
+        <ul>
+          <li><b>抖音 48% / 淘宝 38%</b>：两大核心渠道自然占比均低于 50% 健康线，流量成本承压。</li>
+          <li><b>淘宝 62% 付费</b>：行业最强付费依赖，ROI 2.3 为四渠道最低，边际效应急剧递减。</li>
+          <li><b>视频号 67% / 快手 72%</b>：自然流量健康，但体量小，未被充分「加杠杆」。</li>
+        </ul>
+      </div>
+      <div class="card"><h5>流量运营策略对齐</h5>
+        <ul>
+          <li><b>冷启动期（前 30 场）</b>：70% 付费 + 30% 自然，用付费拉精准用户、养标签。</li>
+          <li><b>成长期</b>：50/50，靠互动数据触发推荐。</li>
+          <li><b>成熟期</b>：30% 付费 + 70% 自然——抖音/淘宝当前卡在「成长期偏前」，需冲自然。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout warn"><b>关键洞察：</b>抖音/淘宝的付费 ROI 已逼近临界，继续加预算的边际回报很低；更优解是提升直播间互动与停留，把自然占比各拉 5–8 个点，等价于「免费」多出 8–12% 的流量。</div>
+  </section>
+
+  <!-- 4 FUNNEL -->
+  <section id="s4">
+    <h3><span class="num">4</span>转化漏斗分析</h3>
+    <div class="lead">统一漏斗口径：曝光 → 进入直播间 → 停留&gt;30s → 点击购物车 → 下单 → 支付。哪一层漏得最狠，哪一层就是该渠道的优化主战场。</div>
+    <div class="chart-box tall"><div class="chart-title">四渠道转化漏斗对比（各层相对曝光 100%，单位 %）</div><canvas id="funnelAll"></canvas></div>
+    <table>
+      <thead><tr><th class="l">漏斗层</th><th>抖音</th><th>淘宝</th><th>视频号</th><th>快手</th><th class="l">漏点诊断</th></tr></thead>
+      <tbody>
+        <tr><td class="l">进入直播间</td><td>62%</td><td>70%</td><td>58%</td><td>68%</td><td class="l">视频号封面/标题点击率偏低</td></tr>
+        <tr><td class="l">停留&gt;30s</td><td>38%</td><td>45%</td><td>42%</td><td>40%</td><td class="l">抖音开头 30s 留存弱，需强钩子</td></tr>
+        <tr><td class="l">点击购物车</td><td>14%</td><td>18%</td><td>16%</td><td>15%</td><td class="l">普遍漏点：讲解→购物车引导不足</td></tr>
+        <tr><td class="l">下单</td><td>6.0%</td><td>7.0%</td><td>6.5%</td><td>5.0%</td><td class="l">快手下单转化最弱</td></tr>
+        <tr><td class="l">支付</td><td>4.8%</td><td>4.8%</td><td>4.7%</td><td>3.3%</td><td class="l">快手支付掉单明显</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>漏斗结论：</b>全渠道最大的共同漏点在「<b>点击购物车</b>」层（仅 14–18%）。说明「讲得好」但「引导加购的动作少/晚」。建议每讲解完一个卖点立即口播+弹窗引导加购，而非集中到结尾。</div>
+  </section>
+
+  <!-- 5 PRODUCT & HOST -->
+  <section id="s5">
+    <h3><span class="num">5</span>货品与主播经营</h3>
+    <div class="lead">货盘 = 引流款 + 爆款 + 利润款 + 福利秒杀款。主播 = 直播间的灵魂，但别押注单人，要建梯队。</div>
+    <div class="grid g2">
+      <div>
+        <h4>整体货品组合</h4>
+        <table>
+          <thead><tr><th class="l">角色</th><th>代表品</th><th>GMV占比</th><th class="l">目的</th></tr></thead>
+          <tbody>
+            <tr><td class="l">引流款</td><td>9.9 元福利</td><td>8%</td><td class="l">拉停留/互动</td></tr>
+            <tr><td class="l">爆款/主推</td><td>明星单品</td><td>42%</td><td class="l">冲 GMV</td></tr>
+            <tr><td class="l">利润款</td><td>套装/升级款</td><td>35%</td><td class="l">赚钱（毛利55%+）</td></tr>
+            <tr><td class="l">清仓/秒杀</td><td>临期/尾货</td><td>15%</td><td class="l">拉指标/清库存</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h4>分渠道货盘重心</h4>
+        <ul>
+          <li><b>抖音</b>：爆款前置到第 2  slot 接首波流量，福利款做停留钩子。</li>
+          <li><b>淘宝</b>：高客单品牌款 + 店铺粉丝券，强化「值」。</li>
+          <li><b>视频号</b>：中高客单品质款，靠信任溢价。</li>
+          <li><b>快手</b>：组合装提客单，老铁专享价做复购。</li>
+        </ul>
+      </div>
+    </div>
+    <h4>主播能力矩阵（8 人，按四象限评估）</h4>
+    <table>
+      <thead><tr><th class="l">主播</th><th>主战场</th><th>话术执行</th><th>节奏把控</th><th>临场应变</th><th>镜头感</th><th class="l">定位</th></tr></thead>
+      <tbody>
+        <tr><td class="l">A（头部）</td><td>抖音</td><td>优</td><td>优</td><td>优</td><td>优</td><td class="l">标杆，话术 SOP 化输出</td></tr>
+        <tr><td class="l">B</td><td>视频号</td><td>优</td><td>良</td><td>良</td><td>优</td><td class="l">高转化，可复制打法</td></tr>
+        <tr><td class="l">C</td><td>淘宝</td><td>良</td><td>优</td><td>中</td><td>良</td><td class="l">专业讲解型</td></tr>
+        <tr><td class="l">D</td><td>快手</td><td>良</td><td>中</td><td>优</td><td>良</td><td class="l">老铁信任型</td></tr>
+        <tr><td class="l">E–H（梯队）</td><td>轮播</td><td>中</td><td>中</td><td>中</td><td>中</td><td class="l">培养中，跟播头部学</td></tr>
+      </tbody>
+    </table>
+    <div class="callout warn"><b>主播风险：</b>GMV 高度集中在 A/B 两人（约占 55%）。一旦任一请假即掉量。<b>动作：</b>把 A 的憋单话术、B 的转化话术拆成 SOP，E–H 跟播复制，3 个月内把头部依赖降到 40% 以下。</div>
+  </section>
+
+  <!-- 6 DASHBOARD -->
+  <section id="s6">
+    <h3><span class="num">6</span>数据复盘看板</h3>
+    <div class="lead">经营例会的固定看板模板（可直接套用）。趋势为近 30 天合成示例。</div>
+    <div class="chart-box"><div class="chart-title">近 30 天 各渠道日 GMV 趋势（万元）</div><canvas id="trendChart"></canvas></div>
+    <h4>月度核心指标卡（对照目标）</h4>
+    <table>
+      <thead><tr><th class="l">指标</th><th>本月</th><th>目标</th><th class="l">达成</th></tr></thead>
+      <tbody>
+        <tr><td class="l">GMV（亿）</td><td>1.20</td><td>1.15</td><td class="l"><span class="pill g">104%</span></td></tr>
+        <tr><td class="l">GPM（¥）</td><td>1,569</td><td>1,400</td><td class="l"><span class="pill g">112%</span></td></tr>
+        <tr><td class="l">自然流量占比</td><td>52.4%</td><td>55%</td><td class="l"><span class="pill y">95%</span></td></tr>
+        <tr><td class="l">整体付费 ROI</td><td>2.9</td><td>3.0</td><td class="l"><span class="pill y">97%</span></td></tr>
+        <tr><td class="l">UV 价值（¥）</td><td>8.6</td><td>8.0</td><td class="l"><span class="pill g">108%</span></td></tr>
+        <tr><td class="l">退款率</td><td>9.1%</td><td>&lt;10%</td><td class="l"><span class="pill g">达标</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 7 DIAGNOSIS -->
+  <section id="s7">
+    <h3><span class="num">7</span>诊断与优化建议</h3>
+    <div class="lead">分渠道下诊断书 + 给出可落地的优化动作。先救漏点，再冲规模。</div>
+
+    <div class="card" style="border-left:4px solid var(--c-douyin);margin-bottom:14px">
+      <h5>① 抖音 · 规模王但流量成本高</h5>
+      <p><b>诊断：</b>贡献 43% GMV，却吃掉了最高的付费预算（52%），ROI 2.8 临界；人均停留 78s 刚过线，自然流量起不来。</p>
+      <ul>
+        <li>每 15–20 分钟一轮福袋（关注+评论），把停留拉到 90s+；</li>
+        <li>爆款从第 4 slot 前置到第 2 slot，接住开播首波千川流量；</li>
+        <li>千川创意 3 天一轮换，衰竭素材立即停投；把自然占比拉到 55%。</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--c-taobao);margin-bottom:14px">
+      <h5>② 淘宝直播 · 高客单但重度付费</h5>
+      <p><b>诊断：</b>客单价最高（¥220）、GPM 最高（¥2,303），但付费占比 62%、ROI 2.3 全场最低，流量成本吃掉利润。</p>
+      <ul>
+        <li>用高客单做私域沉淀（店铺粉丝群+会员券），提升复购降付费依赖；</li>
+        <li>优化引力魔方人群包，砍掉 ROI&lt;2.0 的计划；</li>
+        <li>短视频种草引流，把自然搜索占比从 38% 提到 45%。</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--c-channels);margin-bottom:14px">
+      <h5>③ 视频号 · 被低估的效率冠军</h5>
+      <p><b>诊断：</b>GPM 1,939 / ROI 3.4 / 自然 67% 三项第一，但 GMV 仅 16%——典型的「效率高、规模小」。</p>
+      <ul>
+        <li>加大公域投放（微信豆+ADQ）撬规模，把月 GMV 从 1,900 万冲 3,000 万；</li>
+        <li>社群裂变扩私域池，巩固自然流量基本盘；</li>
+        <li>把 B 主播的高转化话术 SOP 化，反向赋能抖音/快手。</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--c-kuaishou);margin-bottom:14px">
+      <h5>④ 快手 · 待起量的信任洼地</h5>
+      <p><b>诊断：</b>客单价最低（¥95）、GPM 最低（¥1,196）、支付转化最弱（3.3%）；但自然占比 72% 健康，老铁基本盘稳。</p>
+      <ul>
+        <li>推组合装/家庭装把客单价拉到 120+；</li>
+        <li>磁力金牛适度拉新，突破私域天花板；</li>
+        <li>针对掉单（支付层 3.3%）做限时锁单话术。</li>
+      </ul>
+    </div>
+
+    <div class="callout danger"><b>跨渠道资源再分配建议：</b>从抖音/淘宝的<b>低效付费</b>中挪出 10–15% 预算，转投「视频号公域 + 快手拉新」。逻辑：把钱从 ROI 2.3–2.8 的渠道，挪到 ROI 3.1–3.4 的渠道，整体 ROI 结构性提升，且不增加总预算。</div>
+  </section>
+
+  <!-- 8 ACTION -->
+  <section id="s8">
+    <h3><span class="num">8</span>行动清单与复盘机制</h3>
+    <div class="lead">诊断不落地等于零。下面是可直接派发的行动清单（P0 立即 / P1 两周内 / P2 一个月）。</div>
+    <div class="act"><div class="pri p0">P0</div><div class="body"><b>抖音爆款前置 + 福袋节奏</b><br><span>负责：抖音运营 + 主播A ｜ 提升停留至 90s、自然占比至 55% ｜ 1 周内上线</span></div></div>
+    <div class="act"><div class="pri p0">P0</div><div class="body"><b>全渠道「讲卖点即加购」引导改造</b><br><span>负责：选品运营 ｜ 攻破点击购物车漏点（14→18%）｜ 2 周内</span></div></div>
+    <div class="act"><div class="pri p1">P1</div><div class="body"><b>视频号公域加投 + 社群裂变</b><br><span>负责：投流 + 私域 ｜ GMV 1,900→3,000 万 ｜ 1 个月</span></div></div>
+    <div class="act"><div class="pri p1">P1</div><div class="body"><b>淘宝高客单私域沉淀</b><br><span>负责：淘宝运营 ｜ 付费占比 62%→52% ｜ 1 个月</span></div></div>
+    <div class="act"><div class="pri p1">P1</div><div class="body"><b>头部话术 SOP 化（A/B 输出）</b><br><div style="height:4px"></div><span>负责：主播主管 ｜ 降低头部 GMV 依赖 55%→40% ｜ 3 个月</span></div></div>
+    <div class="act"><div class="pri p2">P2</div><div class="body"><b>快手组合装提客单 + 磁力金牛拉新</b><br><span>负责：快手运营 ｜ 客单价 95→120、支付转化 3.3%→4% ｜ 1 个月</span></div></div>
+    <div class="act"><div class="pri p2">P2</div><div class="body"><b>建立周度数据复盘会</b><br><span>负责：数据分析 ｜ 套用第六章看板，逐渠道过指标 ｜ 常态化</span></div></div>
+
+    <h4>复盘机制（建议节奏）</h4>
+    <ul>
+      <li><b>每日</b>（下播 2h 内）：核心指标看板 + 异常归因（掉在线→切福利款；转化低→调话术节奏）。</li>
+      <li><b>每周</b>：四渠道横向对比，定下周优化优先级（套用本报告第七章口径）。</li>
+      <li><b>每月</b>：预算再分配评审，淘汰 ROI 持续&lt;2.0 的计划，把预算导向高效渠道。</li>
+    </ul>
+  </section>
+
+  <!-- 9 DATA NOTES -->
+  <section id="s9">
+    <h3><span class="num">9</span>数据口径与替换指引</h3>
+    <div class="lead">本报告为「以电商为案例」的示范分析，数据均为<b>合成示例</b>，用于演示框架与看板。接入真实业务时按以下口径替换。</div>
+    <table>
+      <thead><tr><th class="l">指标</th><th class="l">定义口径</th><th class="l">数据来源</th></tr></thead>
+      <tbody>
+        <tr><td class="l">GMV</td><td class="l">确认收货口径或支付口径（需统一），含退款需单列</td><td class="l">各平台后台 / 聚合 BI</td></tr>
+        <tr><td class="l">GPM</td><td class="l">GMV ÷ 观看人次 × 1000</td><td class="l">直播间看板</td></tr>
+        <tr><td class="l">支付转化率</td><td class="l">支付人数 ÷ 观看 UV（本报告采用 UV 口径）</td><td class="l">直播间看板</td></tr>
+        <tr><td class="l">自然流量占比</td><td class="l">自然渠道进入人次 ÷ 总进入人次</td><td class="l">流量来源拆解</td></tr>
+        <tr><td class="l">付费 ROI</td><td class="l">广告带来 GMV ÷ 广告消耗</td><td class="l">千川/引力魔方/ADQ/磁力</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <b>如何替换成你的真实数据：</b>
+      ① 表格：直接改 HTML 中 <code>&lt;table&gt;</code> 内的数值即可；
+      ② 图表：打开本文件，找到 <code>&lt;script&gt;</code> 中的 <code>const DATA = {...}</code> 对象，按字段替换四渠道的数值，刷新页面即生效；
+      ③ 漏斗与流量结构：同在 <code>DATA</code> 对象的 <code>funnel</code> 与 <code>traffic</code> 字段中维护。
+      结构（章节、诊断框架）可原样复用。
+    </div>
+  </section>
+
+  <footer>电商多平台经营分析报告 · 案例示范 · 数据均为合成示例，仅供方法论演示 ｜ 生成于 2026-10-29</footer>
+</main>
+</div>
+
+<script>
+const PALETTE = {douyin:'#2D6CDF',taobao:'#FF7A00',channels:'#07C160',kuaishou:'#9B5DE5'};
+const NAMES = {douyin:'抖音',taobao:'淘宝直播',channels:'视频号',kuaishou:'快手'};
+const DATA = {
+  douyin:  {gmv:5200, viewers:3100, stay:78, engage:6.2, conv:4.8, aov:168, gpm:1677, organic:48, roi:2.8,
+            traffic:{organic:48,paid:52}, funnel:[100,62,38,14,6.0,4.8],
+            sub:'规模王 · 43.3% GMV · 付费占比过高',
+            diag:'<b>诊断：</b>贡献 43% GMV，却吃最高付费预算（52%），ROI 2.8 临界；停留 78s 刚过线，自然流量起不来。<br><b>动作：</b>福袋拉停留至 90s+、爆款前置第 2 slot 接首波流量、千川创意 3 天一轮换，自然占比拉到 55%。'},
+  taobao:  {gmv:3800, viewers:1650, stay:92, engage:4.1, conv:4.8, aov:220, gpm:2303, organic:38, roi:2.3,
+            traffic:{organic:38,paid:62}, funnel:[100,70,45,18,7.0,4.8],
+            sub:'高客单 · AOV ¥220 · 重度付费依赖',
+            diag:'<b>诊断：</b>客单价/AOV 最高（¥220）、GPM 最高（¥2,303），但付费占比 62%、ROI 2.3 全场最低。<br><b>动作：</b>高客单沉淀私域降付费依赖、砍 ROI&lt;2.0 计划、短视频种草把自然占比 38%→45%。'},
+  channels:{gmv:1900, viewers:980, stay:105, engage:7.8, conv:4.7, aov:280, gpm:1939, organic:67, roi:3.4,
+            traffic:{organic:67,paid:33}, funnel:[100,58,42,16,6.5,4.7],
+            sub:'效率王 · GPM/ROI/自然占比 三项第一',
+            diag:'<b>诊断：</b>GPM 1939 / ROI 3.4 / 自然 67% 三项第一，但 GMV 仅 16%——效率高、规模小。<br><b>动作：</b>加投公域撬规模（1900→3000 万）、社群裂变扩私域、把高转化话术反向赋能他平台。'},
+  kuaishou:{gmv:1100, viewers:920, stay:88, engage:8.5, conv:3.3, aov:95, gpm:1196, organic:72, roi:3.1,
+            traffic:{organic:72,paid:28}, funnel:[100,68,40,15,5.0,3.3],
+            sub:'待起量 · 自然健康 · 客单价偏低',
+            diag:'<b>诊断：</b>客单价最低（¥95）、GPM 最低（¥1,196）、支付转化最弱（3.3%）；但自然 72% 健康。<br><b>动作：</b>组合装提客单至 120+、磁力金牛拉新破天花板、限时锁单攻掉单。'}
+};
+const ORDER = ['douyin','taobao','channels','kuaishou'];
+
+/* ---------- charts ---------- */
+Chart.defaults.font.family = '-apple-system,"PingFang SC","Microsoft YaHei",sans-serif';
+Chart.defaults.color = '#6b7280';
+
+new Chart(document.getElementById('gmvChart'),{
+  type:'bar',
+  data:{labels:ORDER.map(k=>NAMES[k]),
+    datasets:[{label:'GMV(万元)',data:ORDER.map(k=>DATA[k].gmv),
+      backgroundColor:ORDER.map(k=>PALETTE[k]),borderRadius:6}]},
+  options:{plugins:{legend:{display:false}},
+    scales:{y:{beginAtZero:true,grid:{color:'#eef1f6'}},x:{grid:{display:false}}}}
+});
+
+const maxOf = key => Math.max(...ORDER.map(k=>DATA[k][key]));
+const radarMetrics = [['gmv','GMV'],['organic','自然流量'],['conv','转化率'],['aov','客单价'],['gpm','GPM'],['roi','ROI']];
+new Chart(document.getElementById('radarChart'),{
+  type:'radar',
+  data:{labels:radarMetrics.map(m=>m[1]),
+    datasets:ORDER.map(k=>({label:NAMES[k],
+      data:radarMetrics.map(m=>Math.round(DATA[k][m[0]]/maxOf(m[0])*100)),
+      borderColor:PALETTE[k],backgroundColor:PALETTE[k]+'22',pointBackgroundColor:PALETTE[k]}))},
+  options:{plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}},
+    scales:{r:{min:0,max:100,grid:{color:'#eef1f6'},pointLabels:{font:{size:11}},ticks:{display:false}}}}
+});
+
+new Chart(document.getElementById('trafficStack'),{
+  type:'bar',
+  data:{labels:ORDER.map(k=>NAMES[k]),
+    datasets:[
+      {label:'自然流量',data:ORDER.map(k=>DATA[k].traffic.organic),backgroundColor:'#07C160',borderRadius:4},
+      {label:'付费流量',data:ORDER.map(k=>DATA[k].traffic.paid),backgroundColor:'#E63946',borderRadius:4}
+    ]},
+  options:{indexAxis:'y',plugins:{legend:{position:'bottom'}},
+    scales:{x:{stacked:true,max:100,grid:{color:'#eef1f6'},ticks:{callback:v=>v+'%'}},
+            y:{stacked:true,grid:{display:false}}}}
+});
+
+const FUNNEL_LABELS=['曝光','进入','停留>30s','点购物车','下单','支付'];
+new Chart(document.getElementById('funnelAll'),{
+  type:'line',
+  data:{labels:FUNNEL_LABELS,
+    datasets:ORDER.map(k=>({label:NAMES[k],data:DATA[k].funnel,
+      borderColor:PALETTE[k],backgroundColor:PALETTE[k]+'11',fill:false,tension:.25,pointRadius:3}))},
+  options:{plugins:{legend:{position:'bottom'}},
+    scales:{y:{beginAtZero:true,max:100,grid:{color:'#eef1f6'},ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}}}
+});
+
+/* 30-day trend (synthetic) */
+const trend = {douyin:[150,165,140,180,172,160,190,175,168,182,195,178,188,200,185,192,205,198,210,195,215,208,220,205,225,218,230,212,235,228],
+  taobao:[120,128,115,135,130,122,140,132,128,138,145,135,142,150,140,146,155,148,158,150,162,155,168,160,172,165,178,170,182,175],
+  channels:[55,60,52,64,62,58,68,63,60,66,70,65,68,72,68,70,75,72,78,73,80,76,82,78,85,82,88,84,90,86],
+  kuaishou:[32,35,30,38,36,33,40,37,35,39,42,38,40,43,39,41,45,42,46,43,48,45,50,47,52,49,54,51,56,53]};
+new Chart(document.getElementById('trendChart'),{
+  type:'line',
+  data:{labels:Array.from({length:30},(_,i)=>'D'+(i+1)),
+    datasets:ORDER.map(k=>({label:NAMES[k],data:trend[k],borderColor:PALETTE[k],backgroundColor:PALETTE[k]+'11',fill:false,tension:.3,pointRadius:0,borderWidth:2}))},
+  options:{plugins:{legend:{position:'bottom'}},
+    scales:{y:{grid:{color:'#eef1f6'}},x:{grid:{display:false},ticks:{maxTicksLimit:10}}}}
+});
+
+/* ---------- interactive detail ---------- */
+let doughnutChart, funnelChart;
+function renderDetail(key){
+  const d = DATA[key];
+  document.getElementById('dName').textContent = NAMES[key];
+  document.getElementById('dSub').textContent = d.sub;
+  document.getElementById('dDot').style.background = PALETTE[key];
+  document.getElementById('dDiag').innerHTML = d.diag;
+
+  if(doughnutChart) doughnutChart.destroy();
+  doughnutChart = new Chart(document.getElementById('trafficDoughnut'),{
+    type:'doughnut',
+    data:{labels:['自然流量','付费流量'],datasets:[{data:[d.traffic.organic,d.traffic.paid],
+      backgroundColor:['#07C160','#E63946'],borderWidth:2,borderColor:'#fff'}]},
+    options:{plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.label+': '+c.parsed+'%'}}},
+      cutout:'58%'}
+  });
+
+  if(funnelChart) funnelChart.destroy();
+  funnelChart = new Chart(document.getElementById('funnelChart'),{
+    type:'bar',
+    data:{labels:FUNNEL_LABELS,datasets:[{label:'相对曝光%',data:d.funnel,
+      backgroundColor:PALETTE[key],borderRadius:4}]},
+    options:{indexAxis:'y',plugins:{legend:{display:false}},
+      scales:{x:{beginAtZero:true,max:100,grid:{color:'#eef1f6'},ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}
+  });
+}
+const sel = document.getElementById('pSel');
+sel.addEventListener('click',e=>{
+  if(e.target.tagName!=='BUTTON')return;
+  [...sel.children].forEach(b=>b.classList.remove('active'));
+  e.target.classList.add('active');
+  renderDetail(e.target.dataset.p);
+});
+renderDetail('douyin');
+
+/* ---------- sidebar active highlight ---------- */
+const links = [...document.querySelectorAll('nav.side a')];
+const secs = links.map(a=>document.querySelector(a.getAttribute('href')));
+const obs = new IntersectionObserver(es=>{
+  es.forEach(en=>{ if(en.isIntersecting){
+    const id='#'+en.target.id;
+    links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')===id));
+  }});
+},{rootMargin:'-20% 0px -70% 0px'});
+secs.forEach(s=>s&&obs.observe(s));
+</script>
+</body>
+</html>

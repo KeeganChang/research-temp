@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飞书真实卡片还原 · A股热点追踪</title>
+<style>
+  :root{
+    --fs-blue:#3370ff; --fs-blue-d:#2860e1; --fs-blue-50:#eef3ff; --fs-blue-100:#dbe4ff;
+    --fs-text:#1f2329; --fs-text-2:#646a73; --fs-grey:#8f959e; --fs-border:#e5e6eb;
+    --fs-bg:#f5f6f7; --up:#f54a45; --down:#2ea121;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:#eef0f2;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    display:flex;justify-content:center;padding:28px 12px;color:var(--fs-text);}
+  .card{width:100%;max-width:440px;background:#fff;border-radius:8px;overflow:hidden;
+    box-shadow:0 1px 3px rgba(31,35,41,.1),0 4px 14px rgba(31,35,41,.08);font-size:14px;line-height:1.55;}
+  /* 飞书 blue 模板 header */
+  .hdr{background:linear-gradient(135deg,#3370ff 0%,#4e83fd 100%);color:#fff;padding:14px 16px;position:relative;}
+  .hdr .row{display:flex;align-items:center;gap:8px;}
+  .hdr .ic{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:13px;}
+  .hdr .ttl{font-size:16px;font-weight:600;flex:1;}
+  .hdr .tag{background:rgba(255,255,255,.2);color:#fff;font-size:11px;padding:2px 8px;border-radius:11px;font-weight:500;}
+  .hdr .sub{font-size:12px;opacity:.85;margin-top:4px;padding-left:30px;}
+  .body{padding:12px 12px 18px;}
+  /* 容器 */
+  .box{border:1px solid var(--fs-blue-100);border-radius:8px;padding:12px;margin-bottom:12px;}
+  .box.blue{background:var(--fs-blue-50);}
+  .box .h{font-weight:600;color:var(--fs-blue);margin-bottom:6px;font-size:14px;}
+  .box.plain .h{color:var(--fs-text);}
+  .seclabel{font-weight:600;margin:0 0 8px;}
+  /* 三条主线 */
+  .concl{border:1px solid var(--fs-border);border-radius:8px;padding:10px 11px;margin-bottom:10px;}
+  .concl .title{font-size:14px;}
+  .concl .title a{color:var(--fs-blue);text-decoration:none;}
+  .concl .title a:hover{text-decoration:underline;}
+  .concl .tier{font-weight:700;}
+  .concl .md{margin:5px 0 0;}
+  .concl .src{color:var(--fs-grey);font-style:italic;font-size:12.5px;margin-top:5px;}
+  .up{color:var(--up);font-weight:600;} .down{color:var(--down);font-weight:600;}
+  /* 按钮分栏 */
+  .cols{display:grid;gap:8px;margin-top:8px;}
+  .cols.c41{grid-template-columns:3fr 1fr;}
+  .cols.c11{grid-template-columns:1fr 1fr;}
+  .cols.c31{grid-template-columns:1fr 1fr 1fr;}
+  .btn{border-radius:6px;font-size:13px;padding:7px 10px;text-align:center;cursor:pointer;font-family:inherit;border:1px solid var(--fs-border);background:#fff;color:var(--fs-text);transition:.12s;}
+  .btn:hover{background:#f5f6f7;}
+  .btn.p{background:var(--fs-blue);border-color:var(--fs-blue);color:#fff;}
+  .btn.p:hover{background:var(--fs-blue-d);}
+  .btn:active{transform:scale(.98);}
+  /* 折叠面板 */
+  .panel{margin-bottom:10px;border:1px solid var(--fs-border);border-radius:8px;overflow:hidden;}
+  .panel .ph{background:var(--fs-bg);padding:10px 12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:13.5px;font-weight:500;}
+  .panel .ph:hover{background:#eceef0;}
+  .panel .chev{transition:.2s;color:var(--fs-grey);font-size:12px;}
+  .panel.open .chev{transform:rotate(180deg);}
+  .panel .pb{display:none;padding:10px 12px;border-top:1px solid var(--fs-border);font-size:13px;}
+  .panel.open .pb{display:block;}
+  .panel table{width:100%;border-collapse:collapse;font-size:11.5px;}
+  .panel th,.panel td{border:1px solid var(--fs-border);padding:3px 5px;text-align:left;}
+  .panel th{background:var(--fs-bg);font-weight:600;}
+  .panel ul{margin:0;padding-left:18px;}
+  /* 反馈框 */
+  .feed{border:1px solid var(--fs-blue-100);background:var(--fs-blue-50);border-radius:8px;padding:10px;margin-bottom:12px;}
+  .feed .q{color:var(--fs-grey);font-weight:500;margin-bottom:6px;}
+  .feed .n{color:var(--fs-grey);font-style:italic;font-size:12.5px;margin-top:6px;}
+  .disc{color:var(--fs-grey);font-size:12px;border-left:3px solid var(--fs-border);padding-left:8px;margin-top:4px;}
+  .note{margin:18px auto 0;max-width:440px;font-size:12px;color:#8f959e;text-align:center;line-height:1.6;}
+  .note code{background:#eef0f2;padding:1px 5px;border-radius:4px;}
+</style>
+</head>
+<body>
+<div class="card">
+  <!-- 飞书 template:blue header -->
+  <div class="hdr">
+    <div class="row">
+      <div class="ic">🤖</div>
+      <div class="ttl">A股近一周热点追踪 · 研判播报</div>
+      <div class="tag">热点播报</div>
+    </div>
+    <div class="sub">2026-09-17 ~ 09-24 · 科技主升 → 退潮切换</div>
+  </div>
+
+  <div class="body">
+    <!-- 核心结论 -->
+    <div class="box blue">
+      <div class="h">核心结论</div>
+      <div>近一周A股呈 <b>科技主升 → 退潮切换</b> 两段式：9/14–9/18 科创综指 <span class="up">+7%</span>、电子 <span class="up">+6.06%</span> 领涨；9/21–9/24 全周主力 <b>净流出961亿</b>，电子从 <span class="up">+324亿</span> 翻转为 <span class="down">-302亿</span>，末端获利了结，非新起点。</div>
+    </div>
+
+    <!-- 研判 -->
+    <div class="box plain">
+      <div class="h">研判（所以 → 行动）</div>
+      <div>1. <b>科技资金反转是首要信号</b>：电子 +324→-302亿，主升浪末端获利了结。<br>
+      2. <b>活口两条线</b>：机器人审厂订单兑付（特斯拉链）+ 地产公积金新政 9/20 施行。<br>
+      3. <b>风险</b>：周成交年内新低、双节前量能不足；9/24 单日 <span class="down">-1.22%</span> 已切防御。</div>
+    </div>
+
+    <div class="seclabel">三条主线结论 · 各带数据源</div>
+
+    <!-- 主线1 -->
+    <div class="concl">
+      <div class="title"><a href="https://finance.eastmoney.com/a/202609243883764051.html" target="_blank">半导体 / 国产算力链（主升→分歧）</a> · <span class="tier">Tier2</span></div>
+      <div class="md">电子 <span class="up">+6.06%</span> → 本周 <span class="down">-1.67%</span> 净流出302亿，主升浪末端资金获利了结。</div>
+      <div class="src">东方财富 · 板块资金流 · 👁 0 · 👍 0</div>
+      <div class="cols c41">
+        <div class="btn" onclick="toast('🔗 打开链接（回调计点击）')">🔗 打开</div>
+        <div class="btn" onclick="toast('👍 点赞（回调计赞）')">👍 赞</div>
+      </div>
+    </div>
+
+    <!-- 主线2 -->
+    <div class="concl">
+      <div class="title"><a href="https://www.toutiao.com/article/7687000465594139170" target="_blank">光模块 / CPO / 1.6T（高位回撤）</a> · <span class="tier">Tier3</span></div>
+      <div class="md">通信 <span class="up">+3.75%</span>；中际旭创净利 <span class="up">+242%</span>、订单排至2027，资金高位分歧。</div>
+      <div class="src">今日头条 · 热点复盘 · 👁 0 · 👍 0</div>
+      <div class="cols c41">
+        <div class="btn" onclick="toast('🔗 打开链接（回调计点击）')">🔗 打开</div>
+        <div class="btn" onclick="toast('👍 点赞（回调计赞）')">👍 赞</div>
+      </div>
+    </div>
+
+    <!-- 主线3 -->
+    <div class="concl">
+      <div class="title"><a href="https://news.qq.com/rain/a/20260922A05C8500" target="_blank">人形机器人 · 特斯拉审厂（持续催化）</a> · <span class="tier">Tier3</span></div>
+      <div class="md">9/17 特斯拉新一轮审厂，2026 预计下线约5万台，订单兑现阶段为活口主线。</div>
+      <div class="src">腾讯新闻 · 👁 0 · 👍 0</div>
+      <div class="cols c41">
+        <div class="btn" onclick="toast('🔗 打开链接（回调计点击）')">🔗 打开</div>
+        <div class="btn" onclick="toast('👍 点赞（回调计赞）')">👍 赞</div>
+      </div>
+    </div>
+
+    <!-- 折叠：排名 -->
+    <div class="panel" onclick="toggleP(this)">
+      <div class="ph"><span>📊 全量热点排名（9条 · H×R 评分）</span><span class="chev">▾</span></div>
+      <div class="pb">
+        <table>
+          <tr><th>#</th><th>热点</th><th>信号</th><th>H</th><th>R</th><th>分</th><th>生命周期</th></tr>
+          <tr><td>1</td><td>半导体/国产算力链</td><td>电子+6.06%→-1.67%净流出302亿</td><td>5</td><td>5</td><td>25</td><td>主升→分歧</td></tr>
+          <tr><td>2</td><td>光模块/CPO/1.6T</td><td>通信+3.75%；中际旭创净利+242%</td><td>5</td><td>5</td><td>25</td><td>高位回撤</td></tr>
+          <tr><td>3</td><td>人形机器人</td><td>9/17特斯拉审厂，2026下线5万台</td><td>4</td><td>4</td><td>16</td><td>持续催化</td></tr>
+          <tr><td>4</td><td>房地产</td><td>+2.28%领涨；公积金条例9/20施行</td><td>4</td><td>3</td><td>12</td><td>政策脉冲</td></tr>
+          <tr><td>5</td><td>AI应用(Meta Muse)</td><td>Muse美区登顶；9/23-24 Connect</td><td>3</td><td>4</td><td>12</td><td>海外映射</td></tr>
+          <tr><td>6</td><td>创新药/CXO</td><td>世界肺癌大会；百济净利+6倍</td><td>3</td><td>3</td><td>9</td><td>事件驱动</td></tr>
+          <tr><td>7</td><td>商业航天</td><td>东方空间/蓝箭组网、星河动力入轨</td><td>3</td><td>3</td><td>9</td><td>主题</td></tr>
+          <tr><td>8</td><td>煤炭/红利防御</td><td>+2.10%，与科技反向</td><td>2</td><td>2</td><td>4</td><td>避险</td></tr>
+          <tr><td>9</td><td>种业（厄尔尼诺）</td><td>玉米种子入销售季</td><td>2</td><td>2</td><td>4</td><td>潜伏</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 折叠：时间轴 -->
+    <div class="panel" onclick="toggleP(this)">
+      <div class="ph"><span>⏱ 政策与事件催化时间轴</span><span class="chev">▾</span></div>
+      <div class="pb">
+        <ul>
+          <li><b>9/17</b> 特斯拉新一轮机器人审厂，Optimus 量产在即</li>
+          <li><b>9/20</b> 《住房公积金管理条例》施行（1999年来最大修订，提取情形6→9种）</li>
+          <li><b>9/23–25</b> 中美经贸对话 / 国事访问晚宴：宁德、比亚迪、英伟达、特斯拉</li>
+          <li>电子信息制造业「十五五」规划：集成电路全链条攻关</li>
+          <li>华为全联接大会：昇腾960 NPO 超节点、灵衢互联 → 高速光互联</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 折叠：温度计 -->
+    <div class="panel" onclick="toggleP(this)">
+      <div class="ph"><span>🌡 资金与个股温度计</span><span class="chev">▾</span></div>
+      <div class="pb">
+        <ul>
+          <li><b>个股</b>：鼎阳科技 <span class="up">+53%</span> 居首；奥佳华/联合光电/泰慕士/新华文轩 <span class="up">+40%+</span></li>
+          <li><b>龙虎榜机构净买</b>：优利德 3.67亿、平潭发展 4.75亿(9/24单日)、我爱我家 1.38亿(地产)</li>
+          <li><b>机构净卖</b>：科达制造 5.49亿</li>
+          <li><b>9/24单日</b>：沪指 <span class="down">-1.22%</span>，煤炭/银行/纺服居前，有色/建材/电子跌幅居前</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 折叠：Tier -->
+    <div class="panel" onclick="toggleP(this)">
+      <div class="ph"><span>🔎 数据可信度（Tier 标注）</span><span class="chev">▾</span></div>
+      <div class="pb">
+        <ul>
+          <li><b>Tier1</b>（官方/一手）：Choice/Wind 行业涨跌幅与资金流、交易所龙虎榜</li>
+          <li><b>Tier2</b>（机构研报）：中信/中信建投/国盛晨会观点、ETF周观</li>
+          <li><b>Tier3</b>（媒体转述）：今日头条/腾讯新闻个股涨幅榜，涨停叙事未交叉验证，仅作热度参考</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 反馈 -->
+    <div class="feed">
+      <div class="q">这份研判对你有用吗？</div>
+      <div class="cols c11">
+        <div class="btn p" onclick="toast('👍 记「有用」')">👍 有用</div>
+        <div class="btn" onclick="toast('👎 记「存疑」')">👎 存疑</div>
+      </div>
+      <div class="n">共 0 人反馈</div>
+    </div>
+
+    <!-- 三连 -->
+    <div class="cols c31">
+      <div class="btn p" onclick="toast('🔍 追一下这条主线')">🔍 追一下这条主线</div>
+      <div class="btn" onclick="window.open('https://my.feishu.cn/base/GqZ8bhLL5aThICsG4bGcOnQIn6Z')">原始信号源</div>
+      <div class="btn" onclick="window.open('https://my.feishu.cn/docx/HjQ8dlqOYoVcHWxRcPQcnx9qnle')">完整报告</div>
+    </div>
+
+    <div class="disc">⚠️ 以上内容由 AI 基于公开信息整理生成，仅供参考，不构成任何投资建议或个股推荐。投资有风险，决策需谨慎。</div>
+  </div>
+</div>
+
+<div class="note">↑ 这是<b>飞书 Card 2.0 原生视觉还原</b>（白底蓝头、原生按钮、4 面板默认收起），严格对照已发送的 <code>card_interactive_hotspot.json</code>（群「A股热点雷达」v3 卡 <code>om_x100b63bac6c720a4b10039d35f9d636</code>）。点赞/点击为占位 0（后端未部署）。与此前「雾色系美化看板」不同——后者是设计稿风格，非飞书真实样子。</div>
+
+<script>
+  function toggleP(el){ el.classList.toggle('open'); }
+  let t; function toast(m){ clearTimeout(t); let d=document.createElement('div');
+    d.textContent=m; d.style.cssText='position:fixed;left:50%;top:20px;transform:translateX(-50%);background:#1f2329;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;z-index:99;';
+    document.body.appendChild(d); t=setTimeout(()=>d.remove(),1600); }
+</script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股热点追踪卡 · 飞书原生卡设计稿（最新数据）</title>
+<style>
+  /* ===== 飞书原生卡设计稿：仅保留 Card 2.0 原生可实现的样式 =====
+         已去除：渐变表头 / 暖白画布底 / 投影 / 圆角 / 彩色 pill 底色块 / 悬浮
+         目标：本 HTML 即原生卡 1:1 设计稿，二者视觉一致 ===== */
+  :root{
+    --feishu-blue:#6E92C4; --blue-50:#EAF1F8; --blue-100:#CFE0F0;
+    --red:#C2605C; --red-50:#F7ECEC;
+    --green:#5E9B78; --green-50:#EBF3EE;
+    --orange:#CE8E6B; --orange-50:#F8F0E8;
+    --purple:#9A8BC0; --purple-50:#F1ECF8;
+    --grey-50:#F6F4F0; --grey-100:#EDEAE4; --grey-200:#E1DDD6;
+    --grey-text:#9AA0A6; --text:#383D45; --text-2:#6B7178;
+    --border:#E4E1DC;
+    --up:#C2605C; --down:#5E9B78;   /* 涨红跌绿 */
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:#ECECEC;color:var(--text);padding:28px 16px 60px;-webkit-font-smoothing:antialiased;}
+  .stage{display:flex;flex-direction:column;align-items:center;gap:14px;}
+  .hint{font-size:12.5px;color:var(--grey-text);text-align:center;max-width:480px;line-height:1.7;}
+
+  /* ===== 飞书卡片外观（扁平化，对齐 Card 2.0 原生能力）===== */
+  .card{width:480px;max-width:100%;background:#fff;overflow:hidden;border:1px solid var(--border);font-size:13px;}
+  .card-hd{padding:12px 14px;color:#fff;position:relative;background:#6E92C4;}
+  .hd-blue{background:#6E92C4;}
+  .card-hd .t{font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px;}
+  .card-hd .s{font-size:11px;opacity:.92;margin-top:3px;}
+  .card-hd .corner{position:absolute;top:12px;right:12px;font-size:10.5px;opacity:.85;}
+  .card-bd{padding:12px 13px 15px;display:flex;flex-direction:column;gap:9px;}
+  .box{border:1px solid var(--blue-100);background:var(--blue-50);padding:9px 10px;display:flex;flex-direction:column;gap:5px;}
+  .box .lab{font-size:12px;font-weight:600;color:var(--feishu-blue);}
+  .box.n{border-color:var(--border);background:var(--grey-50);}
+  .box.n .lab{color:var(--text-2);}
+  .box .txt{font-size:12.5px;line-height:1.62;color:var(--text);}
+  .md b{font-weight:600;}
+  .up{color:var(--up);font-weight:600;} .down{color:var(--down);font-weight:600;}
+  .hr{height:1px;background:var(--grey-100);}
+  /* Tier 徽章：彩色圆角底块（对齐原生 column_set 的 background_style + corner_radius；无渐变/无投影） */
+  .pill{display:inline-block;font-size:10px;font-weight:700;line-height:1;padding:3px 7px;border-radius:8px;color:#fff;vertical-align:middle;}
+  .pill.hi{background:var(--green);}
+  .pill.mid{background:var(--orange);}
+  .pill.lo{background:var(--red);}
+
+  /* 双栏（对齐原生 column_set 分栏） */
+  .cols{display:flex;gap:12px;}
+  .cols .col{flex:1;min-width:0;}
+
+  /* ===== S2 结论单元（标题含数据源链接 + Tier；已去计数/悬浮）===== */
+  .seclabel{font-size:12px;font-weight:700;color:var(--feishu-blue);letter-spacing:.5px;margin-top:3px;}
+  .concl{border:1px solid var(--border);background:#fff;padding:10px 11px;display:flex;flex-direction:column;gap:6px;}
+  .concl .clab{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .concl .ctitle{font-size:13.5px;font-weight:600;color:var(--feishu-blue);flex:1;min-width:0;text-decoration:none;}
+  .concl .src{font-size:11.5px;color:var(--grey-text);}
+  .concl .act{display:flex;align-items:center;gap:8px;margin-top:5px;}
+  .concl .right{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto;}
+  .concl .cnt{font-size:11px;color:var(--grey-text);white-space:nowrap;}
+  .concl .lk{font-size:11.5px;color:var(--feishu-blue);text-decoration:none;cursor:pointer;white-space:nowrap;}
+
+  /* ===== 折叠面板 ===== */
+  .panel{border:1px solid var(--border);overflow:hidden;background:#fff;}
+  .panel-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;cursor:pointer;
+    user-select:none;background:var(--grey-50);font-size:13px;font-weight:600;color:var(--text);}
+  .panel-h .chev{color:var(--grey-text);font-size:13px;}
+  .panel.open .panel-h .chev{transform:rotate(180deg);}
+  .panel-b{max-height:0;overflow:hidden;transition:max-height .25s ease;}
+  .panel.open .panel-b{max-height:1200px;}
+  .panel-b-in{padding:11px 12px;border-top:1px solid var(--border);}
+  .panel-b-in table{width:100%;border-collapse:collapse;font-size:11.5px;}
+  .panel-b-in th,.panel-b-in td{border:1px solid var(--grey-100);padding:5px 6px;text-align:left;line-height:1.45;}
+  .panel-b-in th{background:var(--grey-50);font-weight:600;}
+  .panel-b-in td .up{color:var(--up);font-weight:600;}
+  .panel-b-in td .down{color:var(--down);font-weight:600;}
+  .panel-b-in .md{font-size:12.5px;line-height:1.62;color:var(--text);}
+  .panel-b-in .md a{color:var(--feishu-blue);text-decoration:none;}
+  .panel-b-in ol{margin:0;padding-left:20px;}
+  .panel-b-in li{margin:6px 0;font-size:12.5px;line-height:1.6;}
+  .panel-b-in .time{color:var(--feishu-blue);font-weight:600;}
+
+  /* ===== 贴底 footer（无投票，仅链接）===== */
+  .foot{display:flex;align-items:center;gap:8px;padding:8px 13px;}
+  .foot .flab{font-size:11.5px;color:var(--text-2);font-weight:600;}
+  .foot .flink{font-size:12px;color:var(--feishu-blue);text-decoration:none;cursor:pointer;font-weight:500;white-space:nowrap;}
+  .foot .fspace{flex:1;}
+
+  .disc{font-size:10.5px;color:var(--grey-text);line-height:1.6;padding:7px 10px;margin:0 13px 12px;}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="hint">🎨 飞书原生卡设计稿 · <b>最新一周数据（2026-10-09 / 10-10）</b> · 与群内原生卡 v3 一致。<br>已去除（原生不支持）：渐变表头 / 暖白画布底 / 投影 / 悬浮；👁/👍 为静态展示（默认 0，后端未接）。<br>已保留（原生实测支持）：Tier 彩色圆角徽章（column_set + corner_radius + notation 小字）、双栏分栏、涨红跌绿语义色。</div>
+
+  <div class="card">
+    <div class="card-hd hd-blue">
+      <div class="t">📡 A股近一周热点追踪 · 研判播报</div>
+      <div class="s">数据截至 2026-10-09 · 科技硬件退潮，内容/资源/券商接棒</div>
+      <div class="corner">WEEKLY</div>
+    </div>
+
+    <div class="card-bd">
+      <!-- 核心结论 -->
+      <div class="box">
+        <div class="lab">核心结论 · 本期定调</div>
+        <div class="txt md">科技硬件退潮，内容 / 资源 / 券商接棒。AI 算力硬件链（半导体/元件/通信设备/消费电子）结束主升、进入退潮切换，5日+20日主力净流出合计超千亿；资金转向 <b>内容传媒 / 资源避险 / 农业 / 券商</b>，属存量博弈下的防御+题材轮动，非增量新主升。</div>
+      </div>
+
+      <!-- 研判 -->
+      <div class="box n">
+        <div class="lab">研判（所以 → 行动）</div>
+        <div class="txt md">1. <b>资金反转信号明确</b>：半导体 5日 <span class="down">-443亿</span> / 20日 -630亿，机构级减仓、末端获利了结。<br>2. <b>接棒三方向</b>：AI 应用/传媒内容、贵金属避险、证券改革预期，各有催化但多属短线。<br>3. <b>风险</b>：大盘总评仅 18.82（弱），指数弱 + 量能不足，题材狂热难持续；警惕外部 337 调查压制果链。</div>
+      </div>
+
+      <!-- 三条结论（各带数据源） -->
+      <div class="seclabel">三条主线结论 · 各带数据源</div>
+
+      <div class="concl" data-s="s1">
+        <div class="clab"><a class="ctitle" href="http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN202610091958349792cab5" target="_blank" title="新质生产力顶层设计出炉（含 AI/数字经济/机器人）">AI 应用 / 传媒内容（接棒 AI 硬件）</a><span class="pill mid" title="数据可信度 Tier2 · 机构研报">Tier2</span></div>
+        <div class="txt md">数字媒体 <span class="up">+8.00%</span>、出版 <span class="up">+7.20%</span>、影视 <span class="up">+7.16%</span>；中文在线 <span class="up">+20.01%</span> 领涨。资金从硬件链撤出后涌入"AI 落地应用 + 内容传媒"，成新晋人气主线。</div>
+        <div class="act">
+          <span class="src">腾讯自选股 · 新质生产力顶层设计出炉</span>
+          <span class="right"><span class="cnt">👁 0</span><span class="cnt">👍 0</span><a class="lk" href="http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN202610091958349792cab5" target="_blank">🔗 打开</a></span>
+        </div>
+      </div>
+
+      <div class="concl" data-s="s2">
+        <div class="clab"><a class="ctitle" href="http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010162427952ef7b9" target="_blank" title="中东局势推高油轮运价、加剧全球运力紧张">贵金属 / 资源避险（中东局势 + 油价）</a><span class="pill lo" title="数据可信度 Tier3 · 媒体转述">Tier3</span></div>
+        <div class="txt md">贵金属 <span class="up">+5.62%</span>（<span class="up">+14.9亿</span> 今日）；西部黄金 <span class="up">+9.98%</span>。地缘推升避险，属事件驱动型回流（20日仍 -68.6亿，短线非反转）。</div>
+        <div class="act">
+          <span class="src">央视财经 · 中东局势推高油轮运价</span>
+          <span class="right"><span class="cnt">👁 0</span><span class="cnt">👍 0</span><a class="lk" href="http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010162427952ef7b9" target="_blank">🔗 打开</a></span>
+        </div>
+      </div>
+
+      <div class="concl" data-s="s3">
+        <div class="clab"><a class="ctitle" href="http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010190738b64ffbaa" target="_blank" title="证监会召开资本市场和金融形势专家座谈会">证券 / 金融改革预期</a><span class="pill mid" title="数据可信度 Tier2 · 机构研报">Tier2</span></div>
+        <div class="txt md">证券Ⅱ <span class="up">+2.23%</span>（<span class="up">+13.5亿</span> 今日）；华鑫股份 <span class="up">+10.03%</span>。政策预期驱动脉冲，持续性看后续政策落地。</div>
+        <div class="act">
+          <span class="src">证监会 · 专家座谈会</span>
+          <span class="right"><span class="cnt">👁 0</span><span class="cnt">👍 0</span><a class="lk" href="http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010190738b64ffbaa" target="_blank">🔗 打开</a></span>
+        </div>
+      </div>
+
+      <!-- 折叠：资金流向全景 -->
+      <div class="panel" data-panel>
+        <div class="panel-h" onclick="toggle(this)"><span>📊 资金流向全景（涌入 / 出逃 · 亿元）</span><span class="chev">▾</span></div>
+        <div class="panel-b"><div class="panel-b-in md">
+          <b>① 资金涌入（接棒方向）</b>
+          <div class="cols">
+            <div class="col">
+              - 电池 <span class="up">+50.4</span>（今日）/ +91.6（5日）<br>
+              - 贵金属 <span class="up">+14.9</span>（今日，20日曾 -68.6）<br>
+              - 种植业 <span class="up">+10.8</span> / +12.5（5日）
+            </div>
+            <div class="col">
+              - 软件开发 <span class="up">+14.5</span>（今日）<br>
+              - 证券Ⅱ <span class="up">+13.5</span>（今日）<br>
+              - 数字媒体 +4.6 / 出版 <span class="up">+9.5</span>
+            </div>
+          </div><br>
+          <b>② 资金出逃（退潮方向）</b>
+          <div class="cols">
+            <div class="col">
+              - 半导体 <span class="down">-41.9</span> / <span class="down">-443</span>（5日）/ -630（20日）<br>
+              - 元件 <span class="down">-56.4</span>（今日）/ -172.9（5日）
+            </div>
+            <div class="col">
+              - 通信设备 <span class="down">-39.0</span> / -306.4（5日）<br>
+              - 消费电子 <span class="down">-20.0</span> / -76.7（5日）
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 折叠：活口 -->
+      <div class="panel" data-panel>
+        <div class="panel-h" onclick="toggle(this)"><span>🔥 活口方向（退潮中仍具持续催化）</span><span class="chev">▾</span></div>
+        <div class="panel-b"><div class="panel-b-in md">
+          - <b>半导体硬件链（结构性活口）</b>：广州半导体独角兽 IPO 募 61.57亿、PCB 产能紧缺/载板国产化加速、光刻机巨头上调在韩零部件报价 10%<br>
+          - <b>电池 / 锂电</b>：宁德时代 <span class="up">+3.84%</span>、天赐材料 <span class="up">+9.15%</span>、固态电池题材活跃<br>
+          - <b>机器人</b>：宇树科技-W 上市、新质生产力顶层设计明确含机器人<br>
+          - <b>地产链（局部）</b>：房贷贴息开启楼市结构性修复新周期
+        </div></div>
+      </div>
+
+      <!-- 折叠：反方 -->
+      <div class="panel" data-panel>
+        <div class="panel-h" onclick="toggle(this)"><span>⚖️ 反方论点（含时间维度失效点）</span><span class="chev">▾</span></div>
+        <div class="panel-b"><div class="panel-b-in md"><ol>
+          <li><b>AI应用/传媒或只是一日游腾挪</b>：历史传媒行情持续性弱。<span class="time">⏱</span> 需连续 2 周净流入才证真，否则证伪。</li>
+          <li><b>贵金属完全依赖地缘局势</b>：中东缓和则溢价回吐。<span class="time">⏱</span> 地缘窗口以"周"计，不可预测。</li>
+          <li><b>证券涨由座谈会预期驱动，非实质落地</b>：险资举牌为个体行为。<span class="time">⏱</span> 10月政策窗口+三季报扰动，预期易落空。</li>
+          <li><b>半导体减仓是机构级</b>：5日+20日净流出超千亿，反弹多短线非反转。<span class="time">⏱</span> 三季报验证期，业绩无超预期则继续承压。</li>
+          <li><b>指数弱、量能缩量震荡</b>：总评仅 18.82、价值主导，题材狂热能持续多久存疑。<span class="time">⏱</span> 成交额跌破均值则题材熄火。</li>
+          <li><b>外部摩擦升级</b>：美对立讯/富士康发起 337 调查，压制果链估值。<span class="time">⏱</span> 调查周期长，但情绪冲击即时。</li>
+        </ol></div></div>
+      </div>
+
+      <!-- 折叠：信号源 -->
+      <div class="panel" data-panel>
+        <div class="panel-h" onclick="toggle(this)"><span>🔗 信号源清单（7条 · 可点）</span><span class="chev">▾</span></div>
+        <div class="panel-b"><div class="panel-b-in md">
+          - <a href="http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN202610091958349792cab5" target="_blank">新质生产力顶层设计出炉</a> — 腾讯自选股 · 10-09<br>
+          - <a href="http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010162427952ef7b9" target="_blank">中东局势推高油轮运价</a> — 央视财经 · 10-10<br>
+          - <a href="http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010190738b64ffbaa" target="_blank">证监会专家座谈会</a> — 证监会 · 10-10<br>
+          - <a href="http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010151356a46ced7b" target="_blank">苹果折叠屏 iPhone Duo 加单 30%</a> — 证券时报 · 10-10<br>
+          - <a href="http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010175057987fc54f" target="_blank">美国 337 调查 立讯/富士康</a> — 半导体产业纵横 · 10-10<br>
+          - <a href="http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010143225a6c2de72" target="_blank">广州半导体独角兽 IPO 61.57亿</a> — 半导体器件应用网 · 10-10<br>
+          - <a href="http://gu.qq.com/resources/shy/news/detail-v2/index.html#/?id=SN20261010191349987fdd78" target="_blank">PCB 产能紧缺 / 载板国产化</a> — 点火调研 · 10-10
+        </div></div>
+      </div>
+
+    </div>
+
+    <div class="foot">
+      <span class="fspace"></span>
+      <a class="flink" href="https://my.feishu.cn/base/GqZ8bhLL5aThICsG4bGcOnQIn6Z" target="_blank">信号源</a>
+      <a class="flink" href="https://my.feishu.cn/docx/G0YQd4HBQodsOqxxRKCcBRlInwf" target="_blank">完整报告 ↗</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggle(el){el.closest('.panel').classList.toggle('open');}
+</script>
+</body>
+</html>

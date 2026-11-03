@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>结论卡操作区 · 12 式简洁方案</title>
+<style>
+  :root{
+    /* ===== 雾色系（与 lark-card-gallery / hotspot_card_gallery_style 同源）===== */
+    --feishu-blue:#6E92C4; --blue-50:#EAF1F8; --blue-100:#CFE0F0;
+    --red:#C2605C; --red-50:#F7ECEC;
+    --green:#5E9B78; --green-50:#EBF3EE;
+    --orange:#CE8E6B; --orange-50:#F8F0E8;
+    --purple:#9A8BC0; --purple-50:#F1ECF8;
+    --grey-50:#F6F4F0; --grey-100:#EDEAE4; --grey-200:#E1DDD6;
+    --grey-text:#9AA0A6; --text:#383D45; --text-2:#6B7178;
+    --border:#E4E1DC;
+    --up:#C2605C; --down:#5E9B78;   /* 涨红跌绿 */
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:#F5F3EF;color:var(--text);padding:28px 16px 60px;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1240px;margin:0 auto;}
+  header.top{text-align:center;margin-bottom:24px;}
+  header.top h1{font-size:23px;font-weight:700;letter-spacing:.5px;}
+  header.top h1 .dot{color:var(--feishu-blue);}
+  header.top p{font-size:13px;color:var(--grey-text);margin-top:7px;line-height:1.7;}
+  header.top p b{color:var(--text-2);}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:24px;align-items:start;}
+
+  .cell{display:flex;flex-direction:column;gap:10px;}
+  .cell .badge{
+    align-self:flex-start;font-size:12px;font-weight:600;color:var(--feishu-blue);
+    background:var(--blue-50);border:1px solid var(--blue-100);padding:3px 10px;border-radius:6px;
+  }
+  .cell .note{font-size:12px;color:var(--grey-text);line-height:1.65;background:#fff;border:1px solid var(--border);
+    border-radius:8px;padding:8px 11px;}
+  .cell .note b{color:var(--text-2);}
+  .cell .note .flag{color:var(--orange);font-weight:600;}
+
+  /* ===== 结论卡通用外观（内容一致，只换操作区）===== */
+  .card{width:100%;background:#FCFBF9;border-radius:8px;overflow:hidden;
+    box-shadow:0 1px 3px rgba(56,61,69,.10),0 4px 14px rgba(56,61,69,.06);
+    border:1px solid rgba(56,61,69,.06);font-size:13px;position:relative;}
+  .card-bd{padding:12px 13px 13px;display:flex;flex-direction:column;gap:6px;}
+  .clab{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .ctitle{font-size:13.5px;font-weight:600;color:var(--text);cursor:pointer;}
+  a.ctitle{color:var(--feishu-blue);text-decoration:none;}
+  a.ctitle:hover{text-decoration:underline;}
+  .pill{display:inline-block;font-size:10.5px;padding:1px 8px;border-radius:20px;font-weight:600;flex-shrink:0;}
+  .pill.mid{background:var(--orange-50);color:var(--orange);border:1px solid #EBD3C1;}
+  .pill.lo{background:var(--red-50);color:var(--red);border:1px solid #EBCCCC;}
+  .txt{font-size:12.5px;line-height:1.62;color:var(--text);}
+  .txt.intro{color:var(--text-2);font-size:12px;}
+  .md b{font-weight:600;}
+  .up{color:var(--up);font-weight:600;} .down{color:var(--down);font-weight:600;}
+  .muted{color:var(--grey-text);}
+  .views{font-size:11.5px;color:var(--grey-text);white-space:nowrap;cursor:default;}
+  .views .vn{font-weight:600;color:var(--text-2);}
+  .lk{color:var(--feishu-blue);cursor:pointer;text-decoration:none;}
+  .lk:hover{text-decoration:underline;}
+
+  /* ---------- S1 极简文字链 ---------- */
+  .s1 .act{display:flex;align-items:center;gap:0;font-size:11.5px;color:var(--grey-text);margin-top:2px;}
+  .s1 .act .sep{margin:0 7px;color:var(--grey-200);}
+  .s1 .likebtn{background:none;border:none;font:inherit;color:var(--grey-text);cursor:pointer;padding:0;}
+  .s1 .likebtn:hover{color:var(--red);}
+
+  /* ---------- S2 标题置顶 · 底部：来源 + 看/赞/Tier（原标题位改来源，赞/Tier 不动）---------- */
+  .s2 .ctitle{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;min-width:0;}
+  .s2 .act{display:flex;align-items:center;gap:8px;margin-top:5px;}
+  .s2 .src{font-size:11.5px;color:var(--grey-text);}
+  .s2 .right{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto;}
+  .s2 .like{font-size:11.5px;padding:3px 11px;border-radius:20px;cursor:pointer;border:none;
+    font-family:inherit;background:var(--grey-100);color:var(--text-2);transition:.12s;}
+  .s2 .like:hover{background:var(--red-50);color:var(--red);}
+  .s2 .view{font-size:11.5px;padding:3px 11px;border-radius:20px;cursor:default;border:none;
+    font-family:inherit;background:var(--grey-100);color:var(--text-2);white-space:nowrap;}
+  .s2 .pill{flex-shrink:0;}
+
+  /* ---------- S3 单行工具条 ---------- */
+  .s3 .bar{display:flex;align-items:center;justify-content:space-between;
+    border-top:1px solid var(--grey-100);margin-top:5px;padding-top:8px;}
+  .s3 .open{font-size:12px;color:var(--feishu-blue);cursor:pointer;text-decoration:none;font-weight:500;}
+  .s3 .open:hover{text-decoration:underline;}
+  .s3 .rt{display:flex;align-items:center;gap:10px;font-size:11.5px;color:var(--grey-text);}
+  .s3 .likebtn{background:none;border:none;font:inherit;color:var(--grey-text);cursor:pointer;padding:0;}
+  .s3 .likebtn:hover{color:var(--red);}
+
+  /* ---------- S4 胶囊小按钮 ---------- */
+  .s4 .act{display:flex;justify-content:flex-end;gap:6px;margin-top:4px;}
+  .s4 .cap{font-size:11.5px;padding:3px 11px;border-radius:20px;cursor:pointer;border:none;font-family:inherit;transition:.12s;}
+  .s4 .cap.open{background:var(--feishu-blue);color:#fff;}
+  .s4 .cap.open:hover{filter:brightness(1.06);}
+  .s4 .cap.like{background:var(--grey-100);color:var(--text-2);}
+  .s4 .cap.like:hover{background:var(--red-50);color:var(--red);}
+  .s4 .cap.view{background:var(--grey-100);color:var(--text-2);cursor:default;}
+
+  /* ---------- S5 幽灵描边按钮 ---------- */
+  .s5 .act{display:flex;gap:7px;margin-top:4px;}
+  .s5 .gb{font-size:11.5px;padding:4px 12px;border-radius:6px;cursor:pointer;font-family:inherit;
+    background:#fff;border:1px solid var(--border);color:var(--text-2);transition:.12s;}
+  .s5 .gb:hover{border-color:var(--feishu-blue);color:var(--feishu-blue);background:var(--blue-50);}
+  .s5 .gb.view{border-color:var(--border);color:var(--text-2);cursor:default;background:#fff;}
+  .s5 .gb.view:hover{border-color:var(--border);color:var(--text-2);background:#fff;}
+
+  /* ---------- S6 角标集成（正文零干扰）---------- */
+  .s6 .corner-act{position:absolute;top:10px;right:12px;display:flex;align-items:center;gap:5px;}
+  .s6 .pill{margin-right:56px;}
+  .s6 .cab{background:none;border:none;font-size:13px;color:var(--grey-text);cursor:pointer;padding:2px 4px;line-height:1;}
+  .s6 .cab:hover{color:var(--feishu-blue);}
+  .s6 .cab .n{font-size:10.5px;}
+
+  /* ---------- S7 计数徽章 ---------- */
+  .s7 .act{display:flex;align-items:center;gap:8px;margin-top:3px;}
+  .s7 .arrow{font-size:12px;color:var(--feishu-blue);cursor:pointer;text-decoration:none;font-weight:500;}
+  .s7 .arrow:hover{text-decoration:underline;}
+  .s7 .chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-2);
+    background:var(--grey-50);border:1px solid var(--border);border-radius:20px;padding:2px 9px;cursor:pointer;transition:.12s;}
+  .s7 .chip:hover{background:var(--red-50);border-color:#EBCCCC;color:var(--red);}
+  .s7 .chip.view{color:var(--text-2);cursor:default;}
+  .s7 .chip.view:hover{background:var(--grey-50);border-color:var(--border);color:var(--text-2);}
+
+  /* ---------- S8 左色条 + 静默行 ---------- */
+  .s8 .card{border-left:3px solid var(--orange);}
+  .s8.t3{border-left:3px solid var(--red);} .s8 .card.t3{border-left:3px solid var(--red);}
+  .s8 .foot{display:flex;align-items:center;gap:0;font-size:11px;color:var(--grey-text);margin-top:4px;}
+  .s8 .foot .sep{margin:0 6px;color:var(--grey-200);}
+  .s8 .likebtn{background:none;border:none;font:inherit;color:var(--grey-text);cursor:pointer;padding:0;}
+  .s8 .likebtn:hover{color:var(--red);}
+
+  /* ---------- S9 悬浮显现 ---------- */
+  .s9 .act{display:flex;align-items:center;justify-content:space-between;margin-top:2px;
+    opacity:.55;transition:opacity .18s;}
+  .s9 .card:hover .act{opacity:1;}
+  .s9 .src{font-size:11.5px;color:var(--grey-text);}
+  .s9 .rt{display:flex;gap:10px;font-size:11.5px;}
+  .s9 .likebtn,.s9 .cnt{background:none;border:none;font:inherit;color:var(--grey-text);cursor:pointer;padding:0;}
+
+  /* ---------- S10 圆形图标钮 ---------- */
+  .s10 .act{display:flex;justify-content:flex-end;gap:8px;margin-top:4px;}
+  .s10 .rb{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:13px;cursor:pointer;transition:.12s;background:#fff;border:1px solid var(--border);color:var(--text-2);}
+  .s10 .rb:hover{background:var(--blue-50);border-color:var(--feishu-blue);color:var(--feishu-blue);}
+  .s10 .rb.like:hover{background:var(--red-50);border-color:#EBCCCC;color:var(--red);}
+  .s10 .rb.view{color:var(--text-2);cursor:default;}
+  .s10 .rb.view:hover{background:#fff;border-color:var(--border);color:var(--text-2);}
+  .s10 .rb .n{font-size:10px;margin-left:1px;}
+  .s10 .rb .vn{font-size:10px;margin-left:1px;}
+
+  /* ---------- S11 数据行内化 ---------- */
+  .s11 .act{display:flex;align-items:center;gap:0;font-size:11.5px;color:var(--grey-text);margin-top:2px;}
+  .s11 .act .sep{margin:0 7px;color:var(--grey-200);}
+  .s11 .likebtn{background:none;border:none;font:inherit;color:var(--grey-text);cursor:pointer;padding:0;}
+  .s11 .likebtn:hover{color:var(--red);}
+  .s11 .likebtn .tri{font-size:9px;vertical-align:1px;}
+
+  /* ---------- S12 贴底 footer ---------- */
+  .s12 .card{padding-bottom:0;}
+  .s12 .card-bd{padding-bottom:10px;}
+  .s12 .foot{display:flex;align-items:center;justify-content:space-between;
+    background:var(--blue-50);border-top:1px solid var(--blue-100);padding:7px 13px;}
+  .s12 .open{font-size:12px;color:var(--feishu-blue);font-weight:500;cursor:pointer;text-decoration:none;}
+  .s12 .open:hover{text-decoration:underline;}
+  .s12 .likebtn{background:none;border:none;font:inherit;font-size:11.5px;color:var(--text-2);cursor:pointer;padding:0;}
+  .s12 .likebtn:hover{color:var(--red);}
+  .s12 .rt{display:flex;align-items:center;gap:10px;}
+
+  /* ===== 映射说明表 ===== */
+  .map{margin-top:34px;background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .map .mh{padding:13px 18px;background:var(--grey-50);border-bottom:1px solid var(--border);
+    font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .map table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  .map th,.map td{padding:9px 14px;border-bottom:1px solid var(--grey-100);text-align:left;line-height:1.6;vertical-align:top;}
+  .map th{background:var(--grey-50);font-weight:600;color:var(--text-2);white-space:nowrap;}
+  .map tr:last-child td{border-bottom:none;}
+  .tagok{display:inline-block;font-size:11px;font-weight:600;color:var(--green);background:var(--green-50);
+    border:1px solid #C9E0D2;padding:1px 8px;border-radius:20px;}
+  .tagpart{display:inline-block;font-size:11px;font-weight:600;color:var(--orange);background:var(--orange-50);
+    border:1px solid #EBD3C1;padding:1px 8px;border-radius:20px;}
+  .tagno{display:inline-block;font-size:11px;font-weight:600;color:var(--grey-text);background:var(--grey-100);
+    border:1px solid var(--grey-200);padding:1px 8px;border-radius:20px;}
+  footer.ft{text-align:center;font-size:11.5px;color:var(--grey-text);margin-top:26px;line-height:1.7;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1><span class="dot">◆</span> 结论卡操作区 · 12 式简洁方案</h1>
+    <p>针对截图痛点：<b>两个大实心按钮 + 重复计数行，视觉重量压过结论本身</b>。<br>
+    所有方案沿用 output/ 雾色系（dusty blue / 砖红 / 鼠尾草绿 / 陶土橙），涨红跌绿保留。核心原则：<b>链接融进标题、计数融进按钮、来源就是一行小字</b>。</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- S1 -->
+    <div class="cell">
+      <span class="badge">S1 · 极简文字链</span>
+      <div class="card s1"><div class="card-bd">
+        <div class="clab"><a class="ctitle" onclick="cnt(this)">半导体 / 国产算力链（主升→分歧）</a><span class="pill mid">Tier2</span></div>
+        <div class="txt md"><b>结论：</b>电子 <span class="up">+6.06%</span> → 本周 <span class="down">-1.67%</span> 净流出302亿，主升浪末端资金获利了结。</div>
+        <div class="act">东方财富 · 板块资金流<span class="sep">|</span><span class="views">看 <span class="vn">0</span></span><span class="sep">|</span><button class="likebtn" onclick="like(this)">赞 <span>0</span></button></div>
+      </div></div>
+      <div class="note">最激进减法：<b>零按钮</b>。标题即链接（蓝字），来源+赞压成一行灰字。信息密度最高，适合列表里十几条结论连排。</div>
+    </div>
+
+    <!-- S2 -->
+    <div class="cell">
+      <span class="badge">S2 · 标题置顶 · 来源置底</span>
+      <div class="card s2"><div class="card-bd">
+        <div class="clab"><a class="ctitle" onclick="cnt(this)" title="催化为「十五五」全链条攻关、华为昇腾960 NPO">半导体 / 国产算力链（主升→分歧）</a><span class="pill mid">Tier2</span></div>
+        <div class="txt md">电子 <span class="up">+6.06%</span> → 本周 <span class="down">-1.67%</span> 净流出302亿，主升浪末端资金获利了结。</div>
+        <div class="act">
+          <span class="src">东方财富 · 板块资金流</span>
+          <span class="right">
+    <span class="views view">👁 <span class="vn">0</span></span>
+    <button class="like" onclick="like(this)">👍 <span>0</span></button>
+          </span>
+        </div>
+      </div></div>
+      <div class="note">标题（蓝字链接）移到卡片顶部、取代原「结论：」标签行，<b>结论正文保留但去掉「结论：」前缀</b>；底部原标题位改为 <b>S1 式来源灰字</b>，<b>赞 👍 与 Tier 保持原胶囊样式不动</b>，并在 <b>赞左侧新增「👁 阅读数」</b>（眼睛图标计数，随曝光自动累加、无需点击）。标题（蓝字链接）移到卡片顶部、取代原「结论：」标签行，<b>结论正文保留但去掉「结论：」前缀</b>；底部原标题位改为 <b>S1 式来源灰字</b>，<b>Tier 与 S1 一致置于顶部标题行</b>，<b>赞左侧保留「👁 阅读数」</b>（眼睛图标计数，随曝光自动累加、无需点击）。标题带 <code>title</code> 悬浮提示，鼠标悬停显示催化简介信息。</div>
+    </div>
+
+    <!-- S3 -->
+    <div class="cell">
+      <span class="badge">S3 · 单行工具条</span>
+      <div class="card s3"><div class="card-bd">
+        <div class="clab"><a class="ctitle" onclick="cnt(this)">半导体 / 国产算力链（主升→分歧）</a><span class="pill mid">Tier2</span></div>
+        <div class="txt md"><b>结论：</b>电子 <span class="up">+6.06%</span> → 本周 <span class="down">-1.67%</span> 净流出302亿，主升浪末端资金获利了结。</div>
+        <div class="txt intro">简介：催化为「十五五」全链条攻关、华为昇腾960 NPO。数据源：东方财富 板块资金流。</div>
+        <div class="bar"><a class="open" onclick="cnt(this)">打开链接 ↗</a>
+          <span class="rt"><span class="views">👁 <span class="vn">0</span></span><button class="likebtn" onclick="like(this)">👍 <span>0</span></button></span></div>
+      </div></div>
+      <div class="note">保留「打开链接」动词但降级为<b>文字链接</b>，细线分隔，计数只出现一次。<b>最推荐的原生飞书可落地形态</b>（note + md 链接 + 小按钮）。</div>
+    </div>
+
+    <!-- S4 -->
+    <div class="cell">
+      <span class="badge">S4 · 胶囊小按钮</span>
+      <div class="card s4"><div class="card-bd">
+        <div class="clab"><a class="ctitle" onclick="cnt(this)">光模块 / CPO / 1.6T（高位回撤）</a><span class="pill lo">Tier3</span></div>
+        <div class="txt md"><b>结论：</b>通信 <span class="up">+3.75%</span>；中际旭创净利 <span class="up">+242%</span>、订单排至2027，资金高位分歧。</div>
+        <div class="txt intro">简介：1.6T 需求确定性高但短线交易拥挤。数据源：今日头条 热点复盘。</div>
+        <div class="act"><button class="cap open" onclick="cnt(this)">链接 ↗</button><span class="views cap view">👁 <span class="vn">0</span></span><button class="cap like" onclick="like(this)">👍 <span>0</span></button></div>
+      </div></div>
+      <div class="note">保留按钮语义但<b>缩小到胶囊级</b>、右对齐不占满宽。主按钮只留「链接 ↗」两字，按钮高度约一半。</div>
+    </div>
+
+    <!-- S5 -->
+    <div class="cell">
+      <span class="badge">S5 · 幽灵描边按钮</span>
+      <div class="card s5"><div class="card-bd">
+        <div class="clab"><a class="ctitle" onclick="cnt(this)">光模块 / CPO / 1.6T（高位回撤）</a><span class="pill lo">Tier3</span></div>
+        <div class="txt md"><b>结论：</b>通信 <span class="up">+3.75%</span>；中际旭创净利 <span class="up">+242%</span>、订单排至2027，资金高位分歧。</div>
+        <div class="txt intro">简介：1.6T 需求确定性高但短线交易拥挤。数据源：今日头条 热点复盘。</div>
+        <div class="act"><button class="gb" onclick="cnt(this)">🔗 打开链接</button><span class="views gb view">👁 <span class="vn">0</span></span><button class="gb" onclick="like(this)">👍 <span>0</span></button></div>
+      </div></div>
+      <div class="note">描边幽灵按钮替代实心蓝块，<b>白色卡片上不再有两大块色斑</b>，hover 才浮现蓝色。克制且保留点击引导。</div>
+    </div>
+
+    <!-- S6 -->
+    <div class="cell">
+      <span class="badge">S6 · 角标集成（正文零干扰）</span>
+      <div class="card s6"><div class="card-bd">
+        <div class="clab"><a class="ctitle" onclick="cnt(this)">人形机器人 · 特斯拉审厂（持续催化）</a><span class="pill lo">Tier3</span></div>
+        <div class="corner-act"><span class="views">👁 <span class="vn">0</span></span><button class="cab" title="点赞" onclick="like(this)">👍<span class="n"> 0</span></button></div>
+        <div class="txt md"><b>结论：</b>9/17 特斯拉新一轮审厂，2026 预计下线约5万台，订单兑现阶段为活口主线。</div>
+        <div class="txt intro">简介：与地产公积金新政并列唯二持续催化方向。数据源：腾讯新闻。</div>
+      </div></div>
+      <div class="note">操作全部上移到<b>卡片右上角</b>，正文区一行不占。Tier pill 左移让位。卡片最干净的一式，适合「看内容为主、偶尔点开」的读者。</div>
+    </div>
+
+    <!-- S7 -->
+    <div class="cell">
+      <span class="badge">S7 · 计数徽章</span>
+      <div class="card s7"><div class="card-bd">
+        <div class="clab"><a class="ctitle" onclick="cnt(this)">人形机器人 · 特斯拉审厂（持续催化）</a><span class="pill lo">Tier3</span></div>
+        <div class="txt md"><b>结论：</b>9/17 特斯拉新一轮审厂，2026 预计下线约5万台，订单兑现阶段为活口主线。</div>
+        <div class="act"><a class="arrow" onclick="cnt(this)">阅读原文 ↗</a><span class="views chip view">👁 <span class="vn">0</span></span><button class="chip" onclick="like(this)">👍 <span>0</span></button></div>
+      </div></div>
+      <div class="note">赞变成<b>灰底小徽章 chip</b>，链接变成「阅读原文 ↗」。徽章有轻微可供性但不吵，社区产品常用形态。</div>
+    </div>
+
+    <!-- S8 -->
+    <div class="cell">
+      <span class="badge">S8 · 左色条 + 静默行</span>
+      <div class="card s8"><div class="card-bd">
+        <div class="clab"><a class="ctitle" onclick="cnt(this)">半导体 / 国产算力链（主升→分歧）</a><span class="pill mid">Tier2</span></div>
+        <div class="txt md"><b>结论：</b>电子 <span class="up">+6.06%</span> → 本周 <span class="down">-1.67%</span> 净流出302亿，主升浪末端资金获利了结。</div>
+        <div class="foot">东方财富 · 板块资金流<span class="sep">·</span><span class="views">👁 <span class="vn">0</span></span><span class="sep">·</span><button class="likebtn" onclick="like(this)">👍<span> 0</span></button></div>
+      </div></div>
+      <div class="note">Tier 用<b>左缘 3px 色条</b>表达（橙=Tier2、红=Tier3），来源/👁阅读数/赞融为一行 11px 静默灰字。<b>扫读时色条比 pill 更快</b>。</div>
+    </div>
+
+    <!-- S9 -->
+    <div class="cell">
+      <span class="badge">S9 · 悬浮显现</span>
+      <div class="card s9"><div class="card-bd">
+        <div class="clab"><a class="ctitle" onclick="cnt(this)">光模块 / CPO / 1.6T（高位回撤）</a><span class="pill lo">Tier3</span></div>
+        <div class="txt md"><b>结论：</b>通信 <span class="up">+3.75%</span>；中际旭创净利 <span class="up">+242%</span>、订单排至2027，资金高位分歧。</div>
+        <div class="act"><span class="src">数据源：今日头条 热点复盘</span>
+          <span class="rt"><span class="views">👁 <span class="vn">0</span></span><button class="likebtn" onclick="like(this)">👍 <span>0</span></button></span></div>
+      </div></div>
+      <div class="note">操作行默认 55% 透明度，<b>鼠标悬停整卡时才完全显现</b>。<span class="flag">⚠ 飞书原生卡片无 hover，仅网页/文档内嵌可用。</span></div>
+    </div>
+
+    <!-- S10 -->
+    <div class="cell">
+      <span class="badge">S10 · 圆形图标钮</span>
+      <div class="card s10"><div class="card-bd">
+        <div class="clab"><a class="ctitle" onclick="cnt(this)">半导体 / 国产算力链（主升→分歧）</a><span class="pill mid">Tier2</span></div>
+        <div class="txt md"><b>结论：</b>电子 <span class="up">+6.06%</span> → 本周 <span class="down">-1.67%</span> 净流出302亿，主升浪末端资金获利了结。</div>
+        <div class="txt intro">简介：催化为「十五五」全链条攻关、华为昇腾960 NPO。数据源：东方财富。</div>
+        <div class="act"><button class="rb" title="打开链接" onclick="cnt(this)">🔗</button><span class="views rb view">👁<span class="vn">0</span></span><button class="rb like" title="点赞" onclick="like(this)">👍<span class="n">0</span></button></div>
+      </div></div>
+      <div class="note">两枚 28px 圆形描边钮右对齐收尾，<b>几何感强、占面积极小</b>。适合整版偏「仪表盘」气质的看板。</div>
+    </div>
+
+    <!-- S11 -->
+    <div class="cell">
+      <span class="badge">S11 · 数据行内化</span>
+      <div class="card s11"><div class="card-bd">
+        <div class="clab"><a class="ctitle" onclick="cnt(this)">人形机器人 · 特斯拉审厂（持续催化）</a><span class="pill lo">Tier3</span></div>
+        <div class="txt md"><b>结论：</b>9/17 特斯拉新一轮审厂，2026 预计下线约5万台，订单兑现阶段为活口主线。</div>
+        <div class="act">简介：与地产公积金新政并列唯二持续催化<span class="sep">|</span>腾讯新闻<span class="sep">·</span><span class="views">👁 <span class="vn">0</span></span><span class="sep">·</span><button class="likebtn" onclick="like(this)"><span class="tri">▲</span> <span>0</span></button></div>
+      </div></div>
+      <div class="note">把计数行彻底消灭：赞用 <b>▲ 0</b>（论坛式 upvote）并入简介行末。<b>纵向最省空间的一式</b>，信息流密度拉满。</div>
+    </div>
+
+    <!-- S12 -->
+    <div class="cell">
+      <span class="badge">S12 · 贴底 footer</span>
+      <div class="card s12"><div class="card-bd">
+        <div class="clab"><a class="ctitle" onclick="cnt(this)">半导体 / 国产算力链（主升→分歧）</a><span class="pill mid">Tier2</span></div>
+        <div class="txt md"><b>结论：</b>电子 <span class="up">+6.06%</span> → 本周 <span class="down">-1.67%</span> 净流出302亿，主升浪末端资金获利了结。</div>
+        <div class="txt intro">简介：催化为「十五五」全链条攻关、华为昇腾960 NPO。数据源：东方财富 板块资金流。</div>
+      </div>
+      <div class="foot"><a class="open" onclick="cnt(this)">打开链接 ↗</a>
+        <span class="rt"><span class="views">👁 <span class="vn">0</span></span><button class="likebtn" onclick="like(this)">👍 <span>0</span></button></span></div>
+      </div>
+      <div class="note">操作区做成<b>淡蓝贴底 footer</b>（blue-50），与正文用色带分区而非大按钮分区。最有「卡片成品感」，飞书原生用 hr + note 即可近似。</div>
+    </div>
+
+  </div>
+
+  <!-- ===== 飞书原生落地映射 ===== -->
+  <div class="map">
+    <div class="mh">🗺 飞书原生卡片落地映射（哪些能 1:1 实现）</div>
+    <table>
+      <tr><th style="width:150px">方案</th><th style="width:120px">原生可实现</th><th>落地方式</th></tr>
+      <tr><td>S1 / S8 / S11 文字行</td><td><span class="tagok">完全可</span></td><td><code>note</code> 元素 + <code>lark_md</code> 链接 + 回调按钮文字化；来源、👁（阅读数）、赞全并进一行 note。</td></tr>
+      <tr><td>S3 单行工具条</td><td><span class="tagok">完全可</span></td><td><code>hr</code> + <code>lark_md</code>（左链接）+ <code>button</code>(default, 紧凑)（右赞）——<b>推荐默认方案</b>。</td></tr>
+      <tr><td>S4 胶囊 / S5 幽灵</td><td><span class="tagpart">近似可</span></td><td>飞书按钮无胶囊/描边形态，用 <code>default</code> 类型小按钮 + 缩短文案近似；视觉略重。</td></tr>
+      <tr><td>S6 角标 / S7 徽章</td><td><span class="tagpart">近似可</span></td><td>角标可塞进 header 的 <code>title</code> 尾部或 fields 短列；徽章可用 emoji + 文本模拟，无真 chip 组件。</td></tr>
+      <tr><td>S9 悬浮显现</td><td><span class="tagno">不可</span></td><td>飞书卡片不支持 hover 态，仅网页端/内嵌页可用。</td></tr>
+      <tr><td>S10 圆钮 / S12 footer</td><td><span class="tagpart">近似可</span></td><td>圆钮无原生形态；footer 可用 <code>hr</code> + 蓝色 note + 按钮行拼出「色带分区」效果。</td></tr>
+      <tr><td>通用减重原则</td><td><span class="tagok">通用</span></td><td>① 计数只出现一次（融进按钮）② 来源降为 note 灰字 ③ 主按钮文案 ≤ 4 字 ④ 每条结论的操作区高度 ≤ 正文两行。</td></tr>
+    </table>
+  </div>
+
+  <footer class="ft">
+    操作区样式看板 · 输出于 output/lark-action-styles.html · 配色与 output/lark-card-gallery.html 同源（雾色系）<br>
+    <b>👁 = 阅读数</b>（随卡片曝光自动累加、无需点击）；各卡已统一移除「点击」计数，<b>保留原有「打开链接 / 阅读原文」入口</b>。点击标题 / 打开链接 / 赞可试交互反馈；选型后按映射表落到飞书卡片 JSON。
+  </footer>
+</div>
+
+<script>
+function like(btn){var n=btn.querySelector('span');if(n){n.textContent=+n.textContent+1;}btn.style.color='var(--red)';}
+function cnt(el){var card=el.closest('.card');if(!card)return;var cc=card.querySelector('.cc');if(cc){cc.textContent=+cc.textContent+1;}}
+function view(card){var v=card.querySelector('.vn');if(v&&!card.dataset.v){card.dataset.v='1';v.textContent=(+v.textContent+1);}}
+document.querySelectorAll('.card').forEach(function(c){c.addEventListener('mouseenter',function(){view(c);});});
+</script>
+</body>
+</html>

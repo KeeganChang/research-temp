@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lark 卡片样式看板 · 选型预览</title>
+<style>
+  :root{
+    /* ===== 柔和雾色系（低饱和，源自 muted / 莫兰迪配色）===== */
+    --feishu-blue:#6E92C4;     /* dusty blue 主色 */
+    --blue-50:#EAF1F8; --blue-100:#CFE0F0;
+    --red:#C2605C;             /* 柔和砖红（涨） */
+    --red-50:#F7ECEC;
+    --green:#5E9B78;           /* 柔和鼠尾草绿（跌） */
+    --green-50:#EBF3EE;
+    --orange:#CE8E6B;          /* soft terracotta 陶土橙 */
+    --orange-50:#F8F0E8;
+    --purple:#9A8BC0;          /* 柔和薰衣草紫 */
+    --purple-50:#F1ECF8;
+    --grey-50:#F6F4F0; --grey-100:#EDEAE4; --grey-200:#E1DDD6;
+    --grey-text:#9AA0A6; --text:#383D45; --text-2:#6B7178;
+    --border:#E4E1DC;
+    --up:#C2605C; --down:#5E9B78;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:#F5F3EF; color:var(--text); padding:28px 16px 60px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;}
+  header.top{text-align:center;margin-bottom:6px;}
+  header.top h1{font-size:23px;font-weight:700;letter-spacing:.5px;}
+  header.top h1 .dot{color:var(--feishu-blue);}
+  header.top p{font-size:13px;color:var(--grey-text);margin-top:7px;line-height:1.6;}
+
+  .toolbar{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:#fff;border:1px solid var(--border);border-radius:10px;
+    padding:12px 16px;margin:18px 0 22px;flex-wrap:wrap;
+  }
+  .toolbar .left{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .chip{
+    font-size:12px;padding:5px 11px;border-radius:20px;cursor:pointer;
+    background:var(--grey-50);color:var(--text-2);border:1px solid var(--border);
+    transition:.15s;user-select:none;
+  }
+  .chip:hover{background:var(--grey-100);}
+  .chip.active{background:var(--feishu-blue);color:#fff;border-color:var(--feishu-blue);}
+  .toolbar .right{font-size:12px;color:var(--grey-text);}
+  .toolbar .right b{color:var(--feishu-blue);}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:22px;}
+  .cell{display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .cell .pick{
+    width:100%;display:flex;flex-direction:column;align-items:center;gap:9px;
+    border:2px solid transparent;border-radius:14px;padding:10px;cursor:pointer;
+    background:transparent;transition:.18s;
+  }
+  .cell .pick:hover{background:#fff;border-color:var(--grey-200);}
+  .cell .pick.selected{border-color:var(--feishu-blue);background:#fff;box-shadow:0 6px 20px rgba(110,146,196,.22);}
+  .cell .pick .badge{
+    align-self:flex-start;font-size:11px;font-weight:600;color:var(--feishu-blue);
+    background:var(--blue-50);padding:3px 9px;border-radius:6px;
+  }
+  .cell .pick.selected .badge{background:var(--feishu-blue);color:#fff;}
+  .cell .meta{text-align:center;}
+  .cell .meta .name{font-size:14px;font-weight:600;}
+  .cell .meta .scene{font-size:11.5px;color:var(--grey-text);margin-top:3px;line-height:1.5;max-width:300px;}
+  .cell .meta .tags{margin-top:6px;display:flex;gap:5px;justify-content:center;flex-wrap:wrap;}
+  .cell .meta .tags span{font-size:10.5px;color:var(--text-2);background:var(--grey-50);border:1px solid var(--border);padding:1px 7px;border-radius:4px;}
+
+  /* ===== 飞书卡片外观 ===== */
+  .card{
+    width:300px;background:#FCFBF9;border-radius:8px;overflow:hidden;
+    box-shadow:0 1px 3px rgba(56,61,69,.10),0 4px 14px rgba(56,61,69,.06);
+    border:1px solid rgba(56,61,69,.06);font-size:13px;
+  }
+  .card-hd{padding:11px 13px;color:#fff;position:relative;}
+  .card-hd .t{font-size:14.5px;font-weight:600;display:flex;align-items:center;gap:6px;}
+  .card-hd .s{font-size:11px;opacity:.92;margin-top:2px;}
+  .card-hd .corner{position:absolute;top:11px;right:12px;font-size:10.5px;background:rgba(255,255,255,.28);padding:1px 7px;border-radius:4px;}
+  .hd-blue{background:linear-gradient(180deg,#7EA6D4,#6E92C4);}
+  .hd-red{background:linear-gradient(180deg,#D27A75,#C2605C);}
+  .hd-green{background:linear-gradient(180deg,#74A98A,#5E9B78);}
+  .hd-orange{background:linear-gradient(180deg,#DCA17E,#CE8E6B);}
+  .hd-purple{background:linear-gradient(180deg,#AFA1D2,#9A8BC0);}
+  .card-bd{padding:11px 12px 14px;display:flex;flex-direction:column;gap:9px;}
+  .row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;}
+  .row .k{color:var(--text-2);}
+  .row .v{font-weight:600;}
+  .up{color:var(--up);font-weight:600;} .down{color:var(--down);font-weight:600;}
+  .box{border:1px solid var(--blue-100);background:var(--blue-50);border-radius:7px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;}
+  .box .lab{font-size:12px;font-weight:600;color:var(--feishu-blue);}
+  .box.n{border-color:var(--border);background:#fff;}
+  .box.n .lab{color:var(--text-2);}
+  .box .txt{font-size:12.5px;line-height:1.6;color:var(--text);}
+  .md b{font-weight:600;}
+  .hr{height:1px;background:var(--grey-100);}
+  .pill{display:inline-block;font-size:10.5px;padding:1px 8px;border-radius:20px;font-weight:600;}
+  .pill.hi{background:var(--green-50);color:var(--green);border:1px solid #C9E0D2;}
+  .pill.mid{background:var(--orange-50);color:var(--orange);border:1px solid #EBD3C1;}
+  .pill.lo{background:var(--red-50);color:var(--red);border:1px solid #EBCCCC;}
+  .check{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:3px 0;}
+  .check .cb{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;flex-shrink:0;}
+  .check.done .cb{background:var(--feishu-blue);border-color:var(--feishu-blue);}
+  .check.done .ct{color:var(--grey-text);text-decoration:line-through;}
+  .thumb{width:54px;height:54px;border-radius:7px;background:linear-gradient(135deg,#7EA6D4,#9A8BC0);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;}
+  .media{display:flex;gap:10px;align-items:center;}
+  .media .mc{display:flex;flex-direction:column;gap:3px;}
+  .media .mc .mt{font-size:13px;font-weight:600;}
+  .media .mc .ms{font-size:11.5px;color:var(--text-2);line-height:1.5;}
+  .btns{display:flex;gap:8px;margin-top:2px;}
+  .btn{border:none;border-radius:6px;font-size:12.5px;padding:7px 10px;cursor:pointer;font-family:inherit;flex:1;text-align:center;transition:.12s;}
+  .btn.p{background:var(--feishu-blue);color:#fff;} .btn.p:hover{filter:brightness(1.05);}
+  .btn.s{background:var(--grey-100);color:var(--text-2);} .btn.s:hover{background:var(--grey-200);}
+  .btn.w{background:#fff;border:1px solid var(--border);color:var(--text-2);} .btn.w:hover{background:var(--grey-50);}
+
+  .detail{margin-top:30px;background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .detail .dhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:var(--grey-50);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+  .detail .dhead .dt{font-size:15px;font-weight:700;display:flex;align-items:center;gap:9px;}
+  .detail .dhead .dt .n{background:var(--feishu-blue);color:#fff;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;}
+  .detail .dhead .da{font-size:12px;color:var(--grey-text);}
+  .detail .dbody{padding:16px 18px;}
+  .detail .dbody .desc{font-size:13px;color:var(--text-2);line-height:1.7;margin-bottom:12px;}
+  .detail .dbody .desc code{background:var(--grey-100);padding:1px 5px;border-radius:4px;font-size:12px;}
+  .json-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+  .json-head .jt{font-size:12.5px;font-weight:600;color:var(--text-2);}
+  .copy{border:1px solid var(--feishu-blue);background:var(--blue-50);color:var(--feishu-blue);font-size:12px;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:inherit;transition:.12s;}
+  .copy:hover{background:var(--feishu-blue);color:#fff;}
+  .copy.ok{background:var(--green);border-color:var(--green);color:#fff;}
+  pre.json{background:#2B2F36;color:#E6E7EB;border-radius:8px;padding:14px 16px;overflow:auto;font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:12.5px;line-height:1.65;max-height:420px;white-space:pre;}
+  pre.json .k{color:#9CC0E6;} pre.json .s{color:#A9D6B4;} pre.json .b{color:#E6B894;} pre.json .n{color:#E6AEB8;}
+  footer.ft{text-align:center;font-size:11.5px;color:var(--grey-text);margin-top:26px;line-height:1.7;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1><span class="dot">◆</span> Lark 卡片样式看板</h1>
+    <p>飞书 interactive card 6 套样式预览 · 点击任意卡片选中 → 底部查看对应 JSON 并一键复制<br>
+    配色：低饱和雾色系（dusty blue / sage / mauve / soft terracotta）· 涨红跌绿区分保留</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="left">
+      <span class="chip active" data-cat="all">全部</span>
+      <span class="chip" data-cat="info">资讯推送</span>
+      <span class="chip" data-cat="data">数据看板</span>
+      <span class="chip" data-cat="research">研究结论</span>
+      <span class="chip" data-cat="task">任务待办</span>
+      <span class="chip" data-cat="alert">告警通知</span>
+      <span class="chip" data-cat="media">图文混排</span>
+    </div>
+    <div class="right">已选方案：<b id="selName">未选择</b></div>
+  </div>
+
+  <!-- ===== 静态卡片网格（不依赖 JS 渲染）===== -->
+  <div class="grid" id="grid">
+
+    <!-- ① 资讯日报卡 -->
+    <div class="cell" data-cat="info">
+      <div class="pick" data-id="1">
+        <span class="badge">① 资讯日报卡</span>
+        <div class="card">
+          <div class="card-hd hd-blue"><div class="t">📡 行业资讯日报 · 2026-10-08</div><div class="s">喵星妙妙屋 · 资讯流</div><div class="corner">DAILY</div></div>
+          <div class="card-bd">
+            <div class="box"><div class="lab">半导体</div><div class="txt">先进封装产能利用率回升至 <b>92%</b>，HBM 需求超预期，CoWoS 排产能见度延至 Q3。</div></div>
+            <div class="box"><div class="lab">AI 算力</div><div class="txt">北美云厂 capex 上修，国产算力链订单环比 <b>+18%</b>。</div></div>
+            <div class="box n"><div class="lab">锂电</div><div class="txt">动力电池装车量同比 <b>+11%</b>，铁锂份额续创新高。</div></div>
+            <div class="btns"><button class="btn p">查看详情</button><button class="btn s">收藏</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="name">资讯日报卡</div>
+        <div class="scene">日频行业资讯推送（资讯域 SSOT=lark base）。标题+日期+多条摘要+查看详情。</div>
+        <div class="tags"><span>#资讯</span><span>#日报</span><span>#轻量</span></div>
+      </div>
+    </div>
+
+    <!-- ② A股行情速览卡 -->
+    <div class="cell" data-cat="data">
+      <div class="pick" data-id="2">
+        <span class="badge">② A股行情速览卡</span>
+        <div class="card">
+          <div class="card-hd hd-red"><div class="t">📈 A股行情速览 · 2026-10-08</div><div class="s">收盘快照 · 资金流向</div><div class="corner">LIVE</div></div>
+          <div class="card-bd">
+            <div class="row"><span class="k">上证指数</span><span class="v">3,421.6 <span class="up">+1.24%</span></span></div>
+            <div class="row"><span class="k">创业板指</span><span class="v">2,188.3 <span class="up">+2.05%</span></span></div>
+            <div class="row"><span class="k">北证50</span><span class="v">1,012.4 <span class="down">-0.42%</span></span></div>
+            <div class="hr"></div>
+            <div class="box n"><div class="lab">监控触发</div><div class="txt">半导体 ETF 净流入 <b>¥12.3亿</b>（阈值 ¥8亿，已触发 🔔）</div></div>
+            <div class="btns"><button class="btn p">展开明细</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="name">A股行情速览卡</div>
+        <div class="scene">行情/监控指标速览。多指数并排、涨红跌绿、附监控触发标记。</div>
+        <div class="tags"><span>#数据</span><span>#行情</span><span>#涨红跌绿</span></div>
+      </div>
+    </div>
+
+    <!-- ③ 研究结论 Claim 卡 -->
+    <div class="cell" data-cat="research">
+      <div class="pick" data-id="3">
+        <span class="badge">③ 研究结论 Claim 卡</span>
+        <div class="card">
+          <div class="card-hd hd-purple"><div class="t">🔬 研究结论 · P01 半导体链</div><div class="s">claim C-P01-07 · validated</div><div class="corner">CLAIM</div></div>
+          <div class="card-bd">
+            <div class="box n"><div class="lab">结论</div><div class="txt md">先进封装产能瓶颈为 <b>2026 年最确定景气兑现点</b>，CoWoS 供需缺口 Q3 前难收敛。</div></div>
+            <div class="box"><div class="lab">证据</div><div class="txt">台积电法说会 capex 上修 + 国内封测厂稼动率 92% + 四路资金同步净流入。</div></div>
+            <div class="row"><span class="k">置信度</span><span class="pill hi">HIGH 0.86</span></div>
+            <div class="btns"><button class="btn p">查看证据链</button><button class="btn w">反驳</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="name">研究结论 Claim 卡</div>
+        <div class="scene">research-state 结论推送。结论+证据+置信度标签，对应项目状态机 claim。</div>
+        <div class="tags"><span>#研究</span><span>#claim</span><span>#置信度</span></div>
+      </div>
+    </div>
+
+    <!-- ④ 任务待办卡 -->
+    <div class="cell" data-cat="task">
+      <div class="pick" data-id="4">
+        <span class="badge">④ 任务待办卡</span>
+        <div class="card">
+          <div class="card-hd hd-orange"><div class="t">✅ 本周行动项 · P02 美国加密</div><div class="s">queue 待办 · 3/5 完成</div><div class="corner">TODO</div></div>
+          <div class="card-bd">
+            <div class="check done"><div class="cb">✓</div><div class="ct">PEST 国别宏观梳理</div></div>
+            <div class="check done"><div class="cb">✓</div><div class="ct">目标行业边界界定</div></div>
+            <div class="check"><div class="cb"></div><div class="ct">相邻/替代行业图谱</div></div>
+            <div class="check"><div class="cb"></div><div class="ct">主要 players 画像</div></div>
+            <div class="hr"></div>
+            <div class="row"><span class="k">进度</span><span class="v"><span class="up">3/5</span> 60%</span></div>
+            <div class="btns"><button class="btn p">标记完成</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="name">任务待办卡</div>
+        <div class="scene">research 待办队列 / 项目行动项。checklist 勾选 + 进度。</div>
+        <div class="tags"><span>#任务</span><span>#清单</span><span>#队列</span></div>
+      </div>
+    </div>
+
+    <!-- ⑤ 告警通知卡 -->
+    <div class="cell" data-cat="alert">
+      <div class="pick" data-id="5">
+        <span class="badge">⑤ 告警通知卡</span>
+        <div class="card">
+          <div class="card-hd hd-red"><div class="t">🚨 监控告警 · 资金异动</div><div class="s">2026-10-08 14:32</div><div class="corner">ALERT</div></div>
+          <div class="card-bd">
+            <div class="box" style="border-color:#EBCCCC;background:var(--red-50);">
+              <div class="lab" style="color:var(--red);">⚠ 触发条件</div>
+              <div class="txt">宁德时代单笔大宗净流出 <b>¥3.2亿</b>，突破日级阈值 ¥2亿，疑似机构调仓。</div>
+            </div>
+            <div class="row"><span class="k">影响标的</span><span class="v">300750</span></div>
+            <div class="row"><span class="k">建议</span><span class="v">复核 monitor M-P01-03</span></div>
+            <div class="btns"><button class="btn p">立即查看</button><button class="btn w">忽略</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="name">告警通知卡</div>
+        <div class="scene">监控阈值触发 / 异常提醒。强提醒 + 立即处理按钮。</div>
+        <div class="tags"><span>#告警</span><span>#阈值</span><span>#应急</span></div>
+      </div>
+    </div>
+
+    <!-- ⑥ 图文混排卡 -->
+    <div class="cell" data-cat="media">
+      <div class="pick" data-id="6">
+        <span class="badge">⑥ 图文混排卡</span>
+        <div class="card">
+          <div class="card-hd hd-green"><div class="t">📑 研报分享 · CATL 深度</div><div class="s">研究域产出 · v2</div><div class="corner">REPORT</div></div>
+          <div class="card-bd">
+            <div class="media">
+              <div class="thumb">📊</div>
+              <div class="mc">
+                <div class="mt">宁德时代 2018–2025 财务拆解</div>
+                <div class="ms">净现比单季拆解为 162%→118%，相对收益对照揭示赛道资金再分配…</div>
+              </div>
+            </div>
+            <div class="hr"></div>
+            <div class="row"><span class="k">类型</span><span class="v">公司 · 深度</span></div>
+            <div class="row"><span class="k">置信度</span><span class="pill hi">HIGH</span></div>
+            <div class="btns"><button class="btn p">阅读原文</button><button class="btn s">转发</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="name">图文混排卡</div>
+        <div class="scene">研报/文章分享。缩略图+标题+摘要+跳转，适合报告发布。</div>
+        <div class="tags"><span>#图文</span><span>#分享</span><span>#报告</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== 详情面板 ===== -->
+  <div class="detail" id="detail" style="display:none;">
+    <div class="dhead">
+      <div class="dt"><span class="n" id="dNum">1</span><span id="dTitle">方案</span></div>
+      <div class="da" id="dTags"></div>
+    </div>
+    <div class="dbody">
+      <div class="desc" id="dDesc"></div>
+      <div class="json-head">
+        <span class="jt">飞书 Interactive Card JSON（可直接用于 lark-cli / 开放平台）</span>
+        <button class="copy" id="copyBtn" onclick="copyJSON()">复制 JSON</button>
+      </div>
+      <pre class="json" id="jsonView"></pre>
+    </div>
+  </div>
+
+  <footer class="ft">
+    选型看板 · 输出于 output/lark-card-gallery.html · 卡片 JSON 遵循飞书 interactive_card v2.0 schema<br>
+    选中后复制的 JSON 可直接粘贴进飞书卡片搭建器或 lark-cli 发送；字段口径请按实际业务替换占位符。
+  </footer>
+</div>
+
+<script>
+/* ===== 方案元数据（仅用于详情面板 + 筛选，不参与卡片渲染）===== */
+var SCHEMES = {
+  1:{ num:"1", name:"资讯日报卡", tags:"#资讯  #日报  #轻量",
+    desc:"最常用于<code>资讯域</code>日频推送：采集 → lark 卡片 → 存 lark base。结构极简，不进 vault、不做双链、无 claim。header 用蓝色模板，底部主按钮跳转详情页。",
+    json:{ config:{wide_screen_mode:true},
+      header:{template:"blue",title:{tag:"plain_text",content:"📡 行业资讯日报 · 2026-10-08"}},
+      elements:[
+        {tag:"div",text:{tag:"lark_md",content:"**半导体**\n先进封装产能利用率回升至 92%，HBM 需求超预期，CoWoS 排产能见度延至 Q3。"}},
+        {tag:"hr"},
+        {tag:"div",text:{tag:"lark_md",content:"**AI 算力**\n北美云厂 capex 上修，国产算力链订单环比 +18%。"}},
+        {tag:"hr"},
+        {tag:"div",text:{tag:"lark_md",content:"**锂电**\n动力电池装车量同比 +11%，铁锂份额续创新高。"}},
+        {tag:"action",actions:[
+          {tag:"button",text:{tag:"plain_text",content:"查看详情"},type:"primary",url:"https://lark-base.example.com/daily/20261008"},
+          {tag:"button",text:{tag:"plain_text",content:"收藏"},type:"default"}
+        ]}
+      ]
+    }},
+  2:{ num:"2", name:"A股行情速览卡", tags:"#数据  #行情  #涨红跌绿",
+    desc:"数据看板场景，严格遵循<code>涨红跌绿</code>、<code>¥ 货币</code>色规。用 <code>fields</code> 双列布局并排指数，监控触发项单独 <code>box</code> 高亮。header 红色模板契合\"行情上扬\"语义。可直接由 <code>refresh_monitors</code> 回填数值。",
+    json:{ config:{wide_screen_mode:true},
+      header:{template:"red",title:{tag:"plain_text",content:"📈 A股行情速览 · 2026-10-08"}},
+      elements:[
+        {tag:"div",fields:[
+          {is_short:true,text:{tag:"lark_md",content:"**上证指数**\n3421.6  <font color='red'>+1.24%</font>"}},
+          {is_short:true,text:{tag:"lark_md",content:"**创业板指**\n2188.3  <font color='red'>+2.05%</font>"}}
+        ]},
+        {tag:"div",fields:[
+          {is_short:true,text:{tag:"lark_md",content:"**北证50**\n1012.4  <font color='green'>-0.42%</font>"}},
+          {is_short:true,text:{tag:"lark_md",content:"**成交额**\n¥1.12万亿"}}
+        ]},
+        {tag:"hr"},
+        {tag:"div",text:{tag:"lark_md",content:"**🔔 监控触发**  半导体 ETF 净流入 **¥12.3亿**（阈值 ¥8亿）"}},
+        {tag:"action",actions:[
+          {tag:"button",text:{tag:"plain_text",content:"展开明细"},type:"primary",url:"https://neodata.example.com/market/20261008"}
+        ]}
+      ]
+    }},
+  3:{ num:"3", name:"研究结论 Claim 卡", tags:"#研究  #claim  #置信度",
+    desc:"对应研究域<code>research-state.yaml</code> 的 claim 台账。每个 claim 带 <code>evidence</code> + <code>confidence</code> + <code>status</code>，卡片用置信度 pill（HIGH/MID/LOW 三档配色）直观呈现。底部\"反驳\"按钮可回流反方论点，契合项目\"敢亮反方\"铁律。",
+    json:{ config:{wide_screen_mode:true},
+      header:{template:"purple",title:{tag:"plain_text",content:"🔬 研究结论 · P01 半导体链"}},
+      elements:[
+        {tag:"div",text:{tag:"lark_md",content:"**结论**\n先进封装产能瓶颈为 2026 年最确定景气兑现点，CoWoS 供需缺口 Q3 前难收敛。"}},
+        {tag:"div",text:{tag:"lark_md",content:"**证据**\n台积电法说会 capex 上修 + 国内封测厂稼动率 92% + 四路资金同步净流入。"}},
+        {tag:"div",text:{tag:"lark_md",content:"**置信度**  <font color='green'>HIGH 0.86</font>  ·  status: validated"}},
+        {tag:"action",actions:[
+          {tag:"button",text:{tag:"plain_text",content:"查看证据链"},type:"primary",url:"https://vault.example.com/claim/C-P01-07"},
+          {tag:"button",text:{tag:"plain_text",content:"反驳"},type:"danger",value:"rebut_C-P01-07"}
+        ]}
+      ]
+    }},
+  4:{ num:"4", name:"任务待办卡", tags:"#任务  #清单  #队列",
+    desc:"映射 research 状态机的 <code>queue</code> 待办队列（含 <code>depends_on</code>）。飞书原生支持 <code>checkboxes</code> 交互，勾选可直接回写状态机。橙色模板提示\"进行中\"。适合周会行动项跟踪。",
+    json:{ config:{wide_screen_mode:true},
+      header:{template:"orange",title:{tag:"plain_text",content:"✅ 本周行动项 · P02 美国加密"}},
+      elements:[
+        {tag:"checkboxes",elements:[
+          {tag:"checkbox",text:{tag:"plain_text",content:"PEST 国别宏观梳理"},is_checked:true,value:"t1"},
+          {tag:"checkbox",text:{tag:"plain_text",content:"目标行业边界界定"},is_checked:true,value:"t2"},
+          {tag:"checkbox",text:{tag:"plain_text",content:"相邻/替代行业图谱"},is_checked:false,value:"t3"},
+          {tag:"checkbox",text:{tag:"plain_text",content:"主要 players 画像"},is_checked:false,value:"t4"}
+        ]},
+        {tag:"hr"},
+        {tag:"div",text:{tag:"lark_md",content:"**进度**  <font color='red'>3/5</font>  ·  60%"}},
+        {tag:"action",actions:[
+          {tag:"button",text:{tag:"plain_text",content:"标记完成"},type:"primary",value:"mark_done"}
+        ]}
+      ]
+    }},
+  5:{ num:"5", name:"告警通知卡", tags:"#告警  #阈值  #应急",
+    desc:"监控告警场景：当 <code>refresh_monitors</code> 回填值突破 <code>告警阈值</code> 时自动推送。红色模板 + 红色 box 双重视觉强调。按钮直连对应 monitor 的复核入口，形成\"采集→告警→复核\"闭环。",
+    json:{ config:{wide_screen_mode:true},
+      header:{template:"red",title:{tag:"plain_text",content:"🚨 监控告警 · 资金异动"}},
+      elements:[
+        {tag:"div",text:{tag:"lark_md",content:"**⚠ 触发条件**\n宁德时代单笔大宗净流出 **¥3.2亿**，突破日级阈值 ¥2亿，疑似机构调仓。"}},
+        {tag:"div",fields:[
+          {is_short:true,text:{tag:"lark_md",content:"**影响标的**\n300750"}},
+          {is_short:true,text:{tag:"lark_md",content:"**建议**\n复核 M-P01-03"}}
+        ]},
+        {tag:"action",actions:[
+          {tag:"button",text:{tag:"plain_text",content:"立即查看"},type:"primary",url:"https://vault.example.com/monitor/M-P01-03"},
+          {tag:"button",text:{tag:"plain_text",content:"忽略"},type:"default",value:"ignore_alert"}
+        ]}
+      ]
+    }},
+  6:{ num:"6", name:"图文混排卡", tags:"#图文  #分享  #报告",
+    desc:"报告发布/分享场景：左侧缩略图（可换图片 URL），右侧标题+摘要。绿色模板契合\"已验证产出\"。对应 <code>metrics/pubs.yaml</code> 的飞书发布登记。可扩展到图文 + 多条链接列表。",
+    json:{ config:{wide_screen_mode:true},
+      header:{template:"green",title:{tag:"plain_text",content:"📑 研报分享 · CATL 深度"}},
+      elements:[
+        {tag:"div",align:"left",fields:[
+          {is_short:false,text:{tag:"img",image_key:"img_placeholder_key",alt:"封面"}},
+          {is_short:false,text:{tag:"lark_md",content:"**宁德时代 2018–2025 财务拆解**\n净现比单季拆解为 162%→118%，相对收益对照揭示赛道资金再分配。"}}
+        ]},
+        {tag:"hr"},
+        {tag:"div",fields:[
+          {is_short:true,text:{tag:"lark_md",content:"**类型**\n公司·深度"}},
+          {is_short:true,text:{tag:"lark_md",content:"**置信度**  <font color='green'>HIGH</font>"}}
+        ]},
+        {tag:"action",actions:[
+          {tag:"button",text:{tag:"plain_text",content:"阅读原文"},type:"primary",url:"https://vault.example.com/catl-2018-2025"},
+          {tag:"button",text:{tag:"plain_text",content:"转发"},type:"default"}
+        ]}
+      ]
+    }}
+};
+
+/* ===== 高亮 + 详情 ===== */
+function highlight(str){
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"([^"]+)":/g,'<span class="k">"$1"</span>:')
+    .replace(/: "([^"]*)"/g,': <span class="s">"$1"</span>')
+    .replace(/: (true|false|null)/g,': <span class="b">$1</span>')
+    .replace(/: (-?\d+\.?\d*)/g,': <span class="n">$1</span>');
+}
+function selectScheme(id){
+  var s=SCHEMES[id]; if(!s) return;
+  var picks=document.querySelectorAll('.pick');
+  for(var i=0;i<picks.length;i++){ picks[i].classList.toggle('selected', picks[i].getAttribute('data-id')==String(id)); }
+  document.getElementById('selName').textContent=s.name;
+  document.getElementById('detail').style.display='block';
+  document.getElementById('dNum').textContent=s.num;
+  document.getElementById('dTitle').textContent=s.name;
+  document.getElementById('dTags').textContent=s.tags;
+  document.getElementById('dDesc').innerHTML=s.desc;
+  var jsonStr=JSON.stringify(s.json,null,2);
+  var jv=document.getElementById('jsonView');
+  jv.innerHTML=highlight(jsonStr);
+  jv.setAttribute('data-raw',jsonStr);
+  var cb=document.getElementById('copyBtn'); cb.textContent='复制 JSON'; cb.classList.remove('ok');
+  document.getElementById('detail').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function copyJSON(){
+  var raw=document.getElementById('jsonView').getAttribute('data-raw')||'';
+  var btn=document.getElementById('copyBtn');
+  function done(){ btn.textContent='已复制 ✓'; btn.classList.add('ok'); setTimeout(function(){btn.textContent='复制 JSON';btn.classList.remove('ok');},1600); }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(raw).then(done,function(){ fallback(); });
+  } else { fallback(); }
+  function fallback(){ var ta=document.createElement('textarea'); ta.value=raw; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+}
+
+/* ===== 绑定（DOM 就绪后）===== */
+document.addEventListener('DOMContentLoaded',function(){
+  var picks=document.querySelectorAll('.pick');
+  for(var i=0;i<picks.length;i++){
+    (function(p){ p.addEventListener('click',function(){ selectScheme(p.getAttribute('data-id')); }); })(picks[i]);
+  }
+  var chips=document.querySelectorAll('.chip');
+  for(var j=0;j<chips.length;j++){
+    (function(c){
+      c.addEventListener('click',function(){
+        var cat=c.getAttribute('data-cat');
+        for(var k=0;k<chips.length;k++){ chips[k].classList.remove('active'); }
+        c.classList.add('active');
+        var cells=document.querySelectorAll('.cell');
+        for(var m=0;m<cells.length;m++){
+          var show=(cat==='all'||cells[m].getAttribute('data-cat')===cat);
+          cells[m].style.display=show?'':'none';
+        }
+        var picks2=document.querySelectorAll('.pick');
+        for(var n=0;n<picks2.length;n++){ picks2[n].classList.remove('selected'); }
+        document.getElementById('detail').style.display='none';
+        document.getElementById('selName').textContent='未选择';
+      });
+    })(chips[j]);
+  }
+});
+</script>
+</body>
+</html>
