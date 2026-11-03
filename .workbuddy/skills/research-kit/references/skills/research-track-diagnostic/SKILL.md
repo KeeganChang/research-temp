@@ -39,7 +39,7 @@ depends_on: [research-core]
 
 ## 接入
 - 具体框架：belongs_to_track: diagnostic 的 method skill（漏斗诊断 / 健康度 / 归因）。
-- 已有 method：`method-ecommerce-ops`（电商 / 直播电商经营诊断：健康基线对齐 → 渠道 / 流量 / 漏斗 / 货品主播四维拆解 → 根因假设 + 修复优先级矩阵；默认 `enabled: false`，须显式启用）。
+- 已有 method：`method-ecommerce-ops`（电商 / 直播电商经营诊断：健康基线对齐 → 渠道 / 流量 / 漏斗 / 货品主播四维拆解 → 根因假设 + 修复优先级矩阵；按语境按需加载，无契合回退本骨架）。
 - 注意：归因结论须标注「可证伪条件」，防止把相关性当因果。
 
 ## 引用

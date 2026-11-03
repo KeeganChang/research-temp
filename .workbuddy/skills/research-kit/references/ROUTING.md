@@ -60,25 +60,25 @@
 
 - **Track** 决定「推理方向 + 门禁 + 交付形态」（5 种，常驻路由分类）。
 - **method 技能**提供某语境的固化打法（算法 / 口径 / 反方清单），`belongs_to_track` 指向所属 Track，如 `method-topdown`→drill（含 A股 细化）、`method-market-entry`→entry。
-- research-core **仅路由 `enabled: true` 的 method**；Track 骨架本身不参与 enabled 开关。
+- research-core **按语境匹配 belongs_to_track 一致的 method** 加载；Track 骨架本身始终启用。
 
 当前 method 清单（新增/启停须同步本表与 `SKILL.md` 构成表）：
 
-| method | 所属 Track | enabled |
+| method | 所属 Track | 加载方式 |
 |---|---|---|
-| `method-topdown` | drill | false |
-| `method-sector-momentum` | drill | **true**（2026-10-30 显式启用） |
-| `method-market-entry` | entry | false |
-| `method-ecommerce-ops` | diagnostic | false |
-| （inductive / scenario 暂无 method） | — | — |
-- 具体方法默认 `enabled: false`（与「骨架默认启用、具体分析默认不启用」一致），启用即参与路由。
+| `method-topdown` | drill | 语境契合「投资/资产选择（A股 景气链）」时按需加载 |
+| `method-sector-momentum` | drill | 语境契合「行业景气度监测」时按需加载 |
+| `method-market-entry` | entry | 语境契合「市场/平台进入（PEST→players）」时按需加载 |
+| `method-ecommerce-ops` | diagnostic | 语境契合「电商/直播电商经营诊断」时按需加载 |
+| （inductive / scenario 暂无 method） | — | 直接用对应 Track 通用骨架 |
+- 方法**不再用 `enabled` 开关**：按任务语境匹配其 described 领域加载；**无契合 method 即兜底回退通用骨架**，不强行套用领域口径。
 
 ---
 
 ## 六、扩展：新增 Track / method
 
 - **新增一条 Track**：在 `references/skills/` 下建 `research-track-<x>/SKILL.md`，frontmatter 标 `type: track`、`depends_on: [research-core]`；骨架只写「推理方向、问什么、门禁、交付形态」，不绑业务域。`research-core` 按 `project.yaml` 的 `track` 字段（由 G2 动态判定后写入）路由到此。
-- **新增某语境打法**：复制 `references/skills/method-topdown/` 成 `references/skills/<your-method>/`，填 `belongs_to_track` 指向某 Track + `enabled` 开关，门禁自动生效，不改 core。
+- **新增某语境打法**：复制 `references/skills/method-topdown/` 成 `references/skills/<your-method>/`，填 `belongs_to_track` 指向某 Track，门禁自动生效，不改 core。
 - 选线是**动态判定**（见 §二 决策树），不依赖任何写死的登记表；本文件即选线权威。
 
 ## 引用

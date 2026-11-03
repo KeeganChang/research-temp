@@ -53,7 +53,7 @@ TEMPLATE_DIR = "_template"
 ROOT_MARKER = "AGENTS.md"
 # 父项目 P<两位数字>；子 task T<n>[.n]（多级用点号，如 T1.1）
 ID_RE = re.compile(r"^(?:P\d{2}|T\d+(?:\.\d+)*)$")
-# 5 种方法级 Track（与 research-assistant/references/ROUTING.md 一致）。
+# 5 种方法级 Track（与 research-kit/references/ROUTING.md 一致）。
 # 旧值 A/B 已随 2026-10 的 5-Track 重构废弃，不再接受。
 TRACKS = ["drill", "entry", "diagnostic", "inductive", "scenario"]
 TRACK_HELP = (

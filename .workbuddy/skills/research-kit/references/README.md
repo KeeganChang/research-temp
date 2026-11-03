@@ -1,4 +1,4 @@
-# Research Assistant 核心骨架
+# Research Kit 核心骨架
 
 > 把「行业分析 + 经营分析」方法固化为**带门禁的可控调研流程**的**自包含套件（starter kit）**。是单一可信源；并入既有项目只是可选副线。
 >
@@ -22,7 +22,7 @@
 - 编排与模板（默认启用）：
   - `research-core`：编排 + 门禁控制（主入口，所有调研必经）
   - `research-module`：任意框架接入模板（宏观、用户画像、渠道、Cohort 客群…）
-- **method 技能**（某语境的固化打法，`belongs_to_track` 指向某 Track，**均默认不启用**）：
+- **method 技能**（某语境的固化打法，`belongs_to_track` 指向某 Track，**按语境按需加载，无契合回退通用骨架**）：
   - `method-topdown`：景气链（→ drill），含 A股 细化 a1/a2/a3
   - `method-market-entry`：市场进入（→ entry）
   - `method-ecommerce-ops`：电商经营诊断（→ diagnostic）
@@ -39,7 +39,7 @@
 ## 如何采用
 
 **推荐：整体克隆为独立套件（单一真源）**
-- 把 `research-assistant/` 整目录放进你的 `.workbuddy/skills/`（顶层 `SKILL.md` 即加载入口，`references/` 自动随行）。
+- 把 `research-kit/` 整目录放进你的 `.workbuddy/skills/`（顶层 `SKILL.md` 即加载入口，`references/` 自动随行）。
 - 业务框架按 `skills/research-module/` 模板往 `references/skills/` 里加（如 cohort-analysis、channel-analysis），不另建类别。
 
 **可选：并入既有项目**
@@ -53,13 +53,13 @@
 3. 在 `AGENTS.md` 技能路由表登记，并声明 `belongs_to_track`（drill / entry / diagnostic / inductive / scenario）。
 4. 无需改 research-core，门禁自动生效。
 
-## 骨架 / 方法 与默认不启用
+## 骨架 / 方法 与按需加载
 
 套件把「骨架」与「具体方法」分离：
 - **Track 骨架**（`skills/research-track-*`）：只定义推理方向、问题、门禁、交付形态，不绑定任何行业 / 市场。
 - **method 技能**（`skills/method-*`）：某语境的固化打法（算法 / 口径 / 反方清单），`belongs_to_track` 指向某 Track。
 
-**默认不启用约定**：method 的 frontmatter 标 `enabled: false`，research-core 路由时跳过它；用户要启用，把 `enabled` 改为 `true` 即可。
+**按语境按需加载约定**：method 不再用 `enabled` 开关；research-core 按任务语境匹配其 described 领域加载，无契合则回退通用骨架。
 理由：默认启用会把非该语境的任务错误路由到该口径（如把 SaaS 漏斗诊断错误套成电商口径）。
 
 示例：`method-topdown` 提供 四路资金验证 → 六段式产业链+兑现度 → 分子/分母三分法+相对收益 的固化流程（A股 细化见其目录内 a1/a2/a3）。
@@ -74,7 +74,7 @@
 ## 目录结构
 
 ```
-research-assistant/
+research-kit/
 ├── SKILL.md                    # 唯一加载入口（顶层只留它）
 └── references/                 # 其余内容，按需查阅
     ├── AGENTS.md               # 流程图 + 门禁 + 状态机 + 技能路由
@@ -89,9 +89,9 @@ research-assistant/
         ├── research-track-diagnostic/ # Track: 诊断归因
         ├── research-track-inductive/  # Track: 归纳洞察
         ├── research-track-scenario/   # Track: 情景推演
-        ├── method-topdown/            # method: 景气链（→drill，含 a1/a2/a3，默认不启用）
-        ├── method-market-entry/       # method: 市场进入（→entry，默认不启用）
-        ├── method-ecommerce-ops/      # method: 电商经营诊断（→diagnostic，默认不启用）
-        ├── method-sector-momentum/    # method: 行业景气横截面（→drill，默认不启用）
+        ├── method-topdown/            # method: 景气链（→drill，含 a1/a2/a3，按需·语境匹配）
+        ├── method-market-entry/       # method: 市场进入（→entry，按需·语境匹配）
+        ├── method-ecommerce-ops/      # method: 电商经营诊断（→diagnostic，按需·语境匹配）
+        ├── method-sector-momentum/    # method: 行业景气横截面（→drill，按需·语境匹配）
         └── research-module/           # 框架接入模板
 ```

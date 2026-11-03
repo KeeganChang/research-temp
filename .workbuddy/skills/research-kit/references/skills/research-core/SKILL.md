@@ -1,6 +1,6 @@
 ---
 name: research-core
-description: Research Assistant 的编排与门禁控制核心。负责加载上下文、推进阶段、按任务复杂度决定是否回写状态机（状态机为可选复用层，非每轮回写门禁）。任何调研的主入口都必须经过本技能。仅路由 enabled: true 的 method skill；enabled: false 的默认不参与。
+description: Research Kit 的编排与门禁控制核心。负责加载上下文、推进阶段、按任务复杂度决定是否回写状态机（状态机为可选复用层，非每轮回写门禁）。任何调研的主入口都必须经过本技能。按语境匹配 belongs_to_track 一致的 method skill；无契合 method 时回退通用骨架。
 type: orchestration
 version: 1.2
 ---
@@ -39,7 +39,7 @@ version: 1.2
 
 ### Step 3 — 分模块采集（G3）
 - 按所选 Track 加载对应**骨架**技能（research-track-<drill|entry|diagnostic|inductive|scenario>）。
-- **仅路由 `enabled: true` 的 method skill**（如 `method-topdown` 景气链，默认 `enabled: false`）；未启用的默认不参与，除非用户显式启用。
+- **按语境加载 method skill**：G2 选定 Track 后，若任务语境契合某 `method-*` 的 described 领域（belongs_to_track 一致），则加载该 method；**无契合 method 时兜底 = 仅用该 Track 通用骨架**（agent 与用户按骨架 D1–D3 自行定义口径），不加载任何领域 method。
 - 每个业务框架以 `research-module` 模板接入，逐模块执行；每模块产原始证据+数据指针写入 `datasets` 防重复抓数。
 - 资讯 / 新闻类来源：调用 `script/snapshot_url.py` 存**可检索文本快照**（URL / fetched_at / meta / sha256 + `_index.json`），不存截图；快照作为可核查证据，不进正文。
 
@@ -75,7 +75,7 @@ version: 1.2
 
 ## 护栏（硬约束）
 - 不自建框架类别，新框架走 `research-module` 模板接入。
-- 方法技能（method）默认 `enabled: false`，不参与自动路由；启用须显式置 `enabled: true`。
+- 方法技能（method）按语境按需加载，不靠 `enabled` 开关；无契合语境回退通用骨架（兜底）。
 - 不跳过门禁；门禁失败必须显式退回，不得「假装通过」。
 - 所有路径用 `<workspace>/` 占位，密钥不落文档。
 
@@ -83,7 +83,7 @@ version: 1.2
 - 状态机模板：`references/templates/research-state.yaml`（**可选复用层**，非必写）
 - 门禁定义：`references/AGENTS.md`
 - 骨架（5 种 Track）：research-track-drill / -entry / -diagnostic / -inductive / -scenario
-- 方法技能（默认不启用；`method-sector-momentum` 已于 2026-10-30 显式启用）：method-topdown（景气链，→drill）/ method-market-entry（市场进入，→entry）/ method-sector-momentum（行业景气度横截面，→drill，**已启用**）/ method-ecommerce-ops（电商经营诊断，→diagnostic）
+- 方法技能（按语境按需加载，无契合回退通用骨架）：method-topdown（景气链·A股，→drill）/ method-market-entry（市场进入，→entry）/ method-sector-momentum（行业景气度横截面，→drill）/ method-ecommerce-ops（电商经营诊断，→diagnostic）
 - 报告质量评分卡（前置自检 + 后置五维）：`references/report-rubric-v1.md`
 - 交付标准（Lark Doc 为主 / 三段式内联 / Sheet 退 reference / 文件级粒度 / 一次性也推 Doc）：`references/delivery-standard.md`
 - Lark Doc 主交付模板：`references/templates/lark-doc-delivery.md`

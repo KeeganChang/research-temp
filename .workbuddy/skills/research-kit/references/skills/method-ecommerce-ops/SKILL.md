@@ -1,10 +1,9 @@
 ---
 name: method-ecommerce-ops
-description: 电商经营诊断方法技能。是 research-track-diagnostic（诊断归因通用骨架）在「电商 / 直播电商经营」语境的固化打法：健康基线对齐 → 渠道经营对比 → 流量结构 → 转化漏斗 → 货品/主播 → 根因假设与修复优先级。belongs_to_track: diagnostic，默认不启用（enabled: false），须显式启用才参与路由。
+description: 电商经营诊断方法技能。是 research-track-diagnostic（诊断归因通用骨架）在「电商 / 直播电商经营」语境的固化打法：健康基线对齐 → 渠道经营对比 → 流量结构 → 转化漏斗 → 货品/主播 → 根因假设与修复优先级。belongs_to_track: diagnostic，按语境按需加载，无契合语境时回退通用骨架。
 type: method
 version: 1.0
 belongs_to_track: diagnostic
-enabled: false
 depends_on: [research-core, research-track-diagnostic]
 ---
 
@@ -20,9 +19,7 @@ depends_on: [research-core, research-track-diagnostic]
 
 ## 启用方式
 
-- 当前 `enabled: false`：**不参与** research-core 自动路由。
-- 理由：diagnostic 亦用于 SaaS 漏斗、线下门店等非电商场景，默认启用会把非电商任务错误路由到电商口径。
-- 启用：将 frontmatter 的 `enabled` 改为 `true`，本技能即作为 diagnostic 的电商经营诊断打法参与调度。
+- **按语境按需加载**：diagnostic 任务语境契合「电商 / 直播电商经营诊断」时加载；非电商场景（SaaS 漏斗、线下门店）不加载，由 research-core 回退到 diagnostic 通用骨架。
 
 ## 与骨架的映射
 

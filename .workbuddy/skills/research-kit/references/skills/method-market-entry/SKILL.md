@@ -1,10 +1,9 @@
 ---
 name: method-market-entry
-description: 市场进入方法技能。是 research-track-entry（进入测绘）在「市场/平台进入」语境的具体实现：国别PEST→行业→相邻/替代→画像→players。belongs_to_track: entry。enabled: false（具体分析默认不启用），置 true 后参与路由。
+description: 市场进入方法技能。是 research-track-entry（进入测绘）在「市场/平台进入」语境的具体实现：国别PEST→行业→相邻/替代→画像→players。belongs_to_track: entry，按语境按需加载，无契合语境时回退通用骨架。
 type: method
 version: 1.3
 belongs_to_track: entry
-enabled: false
 depends_on: [research-core, research-track-entry]
 ---
 
@@ -12,7 +11,7 @@ depends_on: [research-core, research-track-entry]
 
 > 本技能是 `research-track-entry`（进入测绘**通用骨架**）在**市场/平台进入**语境的固化打法。骨架定义问法/门禁；本技能提供「市场进入怎么跑」。
 >
-> **默认不启用**（`enabled: false`）：具体分析属于可选加固，默认开启会抢通用路由。需要时把 frontmatter 的 `enabled` 改为 `true`，本技能即作为 entry 的实现参与调度——**一行开关，不动骨架**。
+> **按语境按需加载**：entry 任务语境契合「市场/平台进入（PEST → players）」时加载；无契合语境则 research-core 回退到 entry 通用骨架，不加载本技能——**一行开关，不动骨架**。
 
 ## 与骨架的映射
 

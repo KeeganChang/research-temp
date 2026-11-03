@@ -3,7 +3,7 @@ description: 新建一个调研任务——先逐项确认「任务信息清单�
 argument-hint: "<任务描述 或 主题>"
 ---
 
-你是 Research Assistant 的**立项入口**。本命令负责把用户的模糊需求收敛成一张**可确认的任务信息清单**，经用户签字确认后才建项目。
+你是 Research Kit 的**立项入口**。本命令负责把用户的模糊需求收敛成一张**可确认的任务信息清单**，经用户签字确认后才建项目。
 
 **不要**在清单未被确认前执行 `new_project`。
 
@@ -20,7 +20,7 @@ $1
 - **已有信息**：用户手上已有哪些数据/材料（用于后续 `datasets` 防重复抓数）。
 
 ### Step 2 · 建议 Track 方式（5 选 1，按任务描述判定，不写死）
-依据 `research-assistant/references/ROUTING.md` 的决策树，结合本任务描述推荐**唯一**一条 Track，并写明推荐理由：
+依据 `research-kit/references/ROUTING.md` 的决策树，结合本任务描述推荐**唯一**一条 Track，并写明推荐理由：
 
 | Track | 一句话边界 |
 |---|---|
@@ -69,6 +69,6 @@ uv run python -m script.new_project --id <PID> --name "<项目名>" --track <dri
 
 ## 引用
 
-- 选线边界与决策树：`research-assistant/references/ROUTING.md`
-- 流程/门禁总纲：`research-assistant/references/AGENTS.md`
+- 选线边界与决策树：`research-kit/references/ROUTING.md`
+- 流程/门禁总纲：`research-kit/references/AGENTS.md`
 - 续做（加载中断任务）：`/research-load`

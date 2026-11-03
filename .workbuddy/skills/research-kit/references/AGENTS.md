@@ -1,6 +1,6 @@
-# AGENTS.md — Research Assistant 核心骨架
+# AGENTS.md — Research Kit 核心骨架
 
-> 任何模型 / 智能体接入本 Research Assistant，**先读这份**。这是最低限度须知，也是「可控调研流程」的单一可信入口。
+> 任何模型 / 智能体接入本 Research Kit，**先读这份**。这是最低限度须知，也是「可控调研流程」的单一可信入口。
 > 本文件是**产品骨架**，可整体克隆 / 采用；不依赖具体业务域（A股、电商、飞书等），框架以可插拔模块接入。
 >
 > **位置与路径**：本文件位于 `references/` 下，属按需查阅的配置文档；套件顶层只留 `SKILL.md` 入口。
@@ -17,7 +17,7 @@
 1. **不硬编码路径 / 密钥**：用 `<workspace>/` 占位；密钥运行态注入，文档只描述「放哪」。
 2. **门禁优先**：每阶段设有进入 / 退出标准，未过门禁不得进入下一阶段（防半成品交付）。
 3. **主线五选一、不可混跑**：drill（下钻选优）/ entry（进入测绘）/ diagnostic（诊断归因）/ inductive（归纳洞察）/ scenario（情景推演），逻辑错位即作废。选线边界见 `references/ROUTING.md`。
-4. **框架即模块**：行业分析（宏观 / 产业链 / 竞争 / 用户画像 / 市场容量）、经营分析（渠道 / Cohort / 漏斗 / 单元经济 / 健康度）各以独立 skill 模块接入，自带方法论 + 反方论点清单 + 口径登记。具体方法放 `references/skills/method-*/`，默认 `enabled: false`，须显式启用才参与路由。
+4. **框架即模块**：行业分析（宏观 / 产业链 / 竞争 / 用户画像 / 市场容量）、经营分析（渠道 / Cohort / 漏斗 / 单元经济 / 健康度）各以独立 skill 模块接入，自带方法论 + 反方论点清单 + 口径登记。具体方法放 `references/skills/method-*/`，按语境匹配加载，无契合则回退通用骨架。
 5. **结论进状态机（可选）**：claim 走 `open → validated / falsified`，证伪留痕、不删不改。**状态机自 2026-11-02 起降级为可选复用层**——一次性 / 轻量任务不强制；仅月频重跑 / 跨会话续做 / 多人协作才启用。
 6. **先加载、后回写（按需）**：续做旧项目时 `load_context` 加载上下文；收尾**按需**回写 `research-state.yaml`。不回写仅意味本次未进跨会话复用层，不再等于"每次从零开始"——准确性由报告内联引用 + 口径块 + 反方≥5 保障。
 
@@ -33,7 +33,7 @@
 [3 选调研主线] ── drill(下钻) | entry(进入) | diagnostic(诊断) | inductive(归纳) | scenario(推演)
         │          五选一；边界与决策树见 references/ROUTING.md；跨 Track 用父子 task 串起
         │
-[4 分模块证据采集] ── 按所选主线加载对应 骨架 skill；仅路由 enabled 的 method skill
+[4 分模块证据采集] ── 按所选主线加载对应 骨架 skill；按语境匹配加载 method skill（无契合则回退通用骨架）
         │
 [5 阶段门禁 Gate] ── 证据充分？反方≥5条？口径一致？
         │     否 ─────► 回 [4] 补数（带 depends_on 入 queue）
@@ -95,13 +95,13 @@
 | `research-track-diagnostic` | Track **骨架（业务中立）**：诊断归因，逆向·果→因 |
 | `research-track-inductive` | Track **骨架（业务中立）**：归纳洞察，归纳·样本→规律 |
 | `research-track-scenario` | Track **骨架（业务中立）**：情景推演，推演·现在→未来 |
-| `method-topdown` | method 技能：景气链（→ drill），含 A股 细化 a1/a2/a3，**默认不启用** |
-| `method-market-entry` | method 技能：市场进入，→ entry，**默认不启用** |
-| `method-ecommerce-ops` | method 技能：电商经营诊断（→ diagnostic），**默认不启用** |
-| `method-sector-momentum` | method 技能：行业景气度横截面跟踪，资金流 × 月度景气 → 四象限（→ drill），**已启用（enabled: true，2026-10-30）**；下钻标的转 `method-topdown` A3 |
+| `method-topdown` | method 技能：景气链（→ drill），含 A股 细化 a1/a2/a3，**按需·语境匹配** |
+| `method-market-entry` | method 技能：市场进入，→ entry，**按需·语境匹配** |
+| `method-ecommerce-ops` | method 技能：电商经营诊断（→ diagnostic），**按需·语境匹配** |
+| `method-sector-momentum` | method 技能：行业景气度横截面跟踪，资金流 × 月度景气 → 四象限（→ drill），**按需·语境匹配**；下钻标的转 `method-topdown` A3 |
 | `research-module` | 框架接入模板：任意行业 / 经营分析框架按模板接入为模块 |
 
-> **方法技能（method）约定**：具体打法放 `references/skills/method-*/`，frontmatter 标 `enabled: false` 默认不启用；research-core 仅路由 `enabled: true` 的技能。新增打法复制 `references/skills/method-topdown/` 即可，不改 core。
+> **方法技能（method）约定**：具体打法放 `references/skills/method-*/`，按语境匹配加载（不再用 `enabled` 开关），无契合则回退通用骨架；新增打法复制 `references/skills/method-topdown/` 即可，不改 core。
 
 ---
 
@@ -115,6 +115,6 @@
 - **续做中断的任务** → `/research-load`（加载状态机、定位断点、从断点继续）
 - **开始一项调研** → 过 G1 → 选 Track（5 种，边界与决策树见 `references/ROUTING.md`；按任务描述动态判定，不写死）→ 按模块执行 → 过 G4/G5 → 回写
 - **接入一个新框架（如 Cohort 客群分析）** → 复制 `references/skills/research-module` 模板，填方法论 / 反方 / 口径 / 交付物
-- **启用一个具体方法（如 A股 景气链 / 电商经营诊断）** → 将对应 `references/skills/method-*/SKILL.md` 的 `enabled` 改为 `true`，即参与路由
+- **加载一个具体方法（如 A股 景气链 / 电商经营诊断）** → 当任务语境契合其 described 领域时由 research-core 按语境自动加载；无契合语境回退通用骨架
 - **续做旧项目（命令行）** → `load_context --project <PID>`（会自动带上其子 task；archived 项目默认隐藏，显式指定仍可加载，`--all` 全列）
 - **状态机出问题 / 想自检** → `load_context --lint`（**只读**，不改文件）：受控词表（track / claim status）+ 门禁必填（confidence / status / monitor 阈值）+ 悬空引用（parent / evidence / depends_on / dataset 路径）+ 陈旧度。级别 严重 > 警告 > 提示，**有严重项退出码 1**；`--lint --json` 机读；归档项目（`research/_archive/`）一并纳入

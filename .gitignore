@@ -26,7 +26,7 @@ skills/
 .workbuddy/memory/
 
 # 修正(2026-10-30)：上方 skills/ 规则会匹配「任意层级」的同名目录，
-# 导致 .workbuddy/skills/research-assistant/references/skills/（套件内子技能）一并被吞。
+# 导致 .workbuddy/skills/research-kit/references/skills/（套件内子技能）一并被吞。
 # → 显式重新放行 .workbuddy 内的嵌套 skills 目录；顶层第三方 skills/ 仍保持忽略。
 !.workbuddy/**/skills/
 

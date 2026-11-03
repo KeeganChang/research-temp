@@ -1,6 +1,6 @@
 ---
 name: research-module
-description: 框架接入模板。任意行业分析 / 经营分析框架（宏观、用户画像、渠道分析、Cohort 客群分析…）复制本模板即可接入 Research Assistant，自带方法论、反方清单、口径登记与门禁条件。
+description: 框架接入模板。任意行业分析 / 经营分析框架（宏观、用户画像、渠道分析、Cohort 客群分析…）复制本模板即可接入 Research Kit，自带方法论、反方清单、口径登记与门禁条件。
 type: module-template
 version: 1.0
 depends_on: [research-core]

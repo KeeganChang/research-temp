@@ -57,7 +57,7 @@ depends_on: [research-core]
 
 ## 接入
 
-- 具体打法：`belongs_to_track: drill` 的 method skill（如 `method-topdown` 景气链；默认 `enabled: false`，须显式启用）。
+- 具体打法：`belongs_to_track: drill` 的 method skill（如 `method-topdown` 景气链；按语境按需加载，无契合则回退本骨架）。
 
 ## 引用
 

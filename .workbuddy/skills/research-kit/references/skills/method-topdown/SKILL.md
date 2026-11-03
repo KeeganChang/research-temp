@@ -1,10 +1,9 @@
 ---
 name: method-topdown
-description: 景气链方法技能（投资 / 资产选择域）。drill track 的实现：宏观(钱在哪)→行业(谁真赚到钱)→公司(落到标的)，含 A股 细化口径（原 ashare 域已并入）。enabled: false（具体分析默认不启用），置 true 后参与路由。
+description: 景气链方法技能（投资 / 资产选择域）。drill track 的实现：宏观(钱在哪)→行业(谁真赚到钱)→公司(落到标的)，含 A股 细化口径（原 ashare 域已并入）。按语境按需加载（belongs_to_track: drill），无契合语境时回退通用骨架。
 type: method
 version: 1.4
 belongs_to_track: drill
-enabled: false
 depends_on: [research-core, research-track-drill]
 ---
 
@@ -25,8 +24,7 @@ depends_on: [research-core, research-track-drill]
 
 ## 启用
 
-- 当前 `enabled: false`：**不参与** research-core 自动路由（与「骨架默认启用、具体分析默认不启用」一致）。
-- 启用：把 frontmatter 的 `enabled` 改为 `true`，本技能即作为 drill track 的投资域实现被调度。
+- 本技能**按语境按需加载**：当 drill 任务语境契合「投资 / 资产选择（A股 景气链）」时加载；无契合语境则由 research-core 回退到 drill 通用骨架，不加载本技能。
 
 ## 三段与细则文件
 
@@ -59,6 +57,11 @@ depends_on: [research-core, research-track-drill]
 
 - 仅用于「选资产 / 选标的」这类**可比较候选集**场景。
 - 非投资场景（选跨境电商平台、选投放渠道、选细分人群）请直接用 drill 骨架 + 自定口径，**不要硬套财务指标**。
+
+## 交付色规（A股 域）
+
+- 本技能产出 A股 相关图表 / 表格时，**涨红跌绿**（上涨用红色、下跌用绿色），货币用 **¥**。
+- 此色规**仅作用于 A股 语境**；非 A股 场景由对应 method 或 Track 骨架自行约定，不沿用本规则。
 
 ## 引用
 

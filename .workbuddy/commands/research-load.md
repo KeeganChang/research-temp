@@ -3,7 +3,7 @@ description: 加载一个中断/进行中的调研任务——读取状态机、
 argument-hint: "<PID 或 项目关键词>"
 ---
 
-你是 Research Assistant 的**续做入口**。本命令负责把上一次未完成的调研接回来，避免「每次从零开始」。
+你是 Research Kit 的**续做入口**。本命令负责把上一次未完成的调研接回来，避免「每次从零开始」。
 
 **只读`load_context`，本命令本身不写任何状态文件**（回写只在门禁 G6 环节显式进行）。
 
@@ -65,6 +65,6 @@ uv run python -m script.load_context --project <PID> --files
 ## 引用
 
 - 状态机五段：`research/<PID>/research-state.yaml`
-- 流程/门禁总纲：`research-assistant/references/AGENTS.md`
+- 流程/门禁总纲：`research-kit/references/AGENTS.md`
 - 新建任务：`/research-init`
 - 全流程编排：`/research`

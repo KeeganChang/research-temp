@@ -1,11 +1,11 @@
 ---
-name: research-assistant
+name: research-kit
 description: 带门禁的可控调研流程套件（行业分析 + 经营分析）。任何调研的主入口：加载上下文 → 按任务描述在 5 种方法级 Track（drill/entry/diagnostic/inductive/scenario）中动态选一 → 分模块采集 → 过 6 道门禁(G1–G6) → 写状态机。顶层只放本文件；编排、Track 骨架、method 技能与配置文档均在 references/ 下按需查阅。
 type: suite
 version: 2.0
 ---
 
-# Research Assistant 套件（编排入口）
+# Research Kit 套件（编排入口）
 
 把「行业分析 + 经营分析」固化为**带门禁的可控调研流程**。本文件是唯一入口，其余内容**按需到 `references/` 下取用**，不要一次性全读。
 
@@ -19,7 +19,7 @@ version: 2.0
    - **inductive 归纳洞察**（归纳·样本→规律）→ `references/skills/research-track-inductive/`
    - **scenario 情景推演**（推演·现在→未来）→ `references/skills/research-track-scenario/`
 3. **接框架**：每个业务框架（用户画像、渠道分析、Cohort 客群…）走 `references/skills/research-module/` 模板接入，门禁自动生效。
-4. **要具体打法**：按需启用 `references/skills/method-*/`（默认 `enabled: false`，见「硬规矩」）。
+4. **要具体打法**：按语境按需加载 `references/skills/method-*/`（见「硬规矩」与 `references/ROUTING.md` §五）。
 
 ## 何时读哪个文件（按需，勿全读）
 
@@ -34,7 +34,7 @@ version: 2.0
 
 ## 套件内构成
 
-| 路径（相对本目录） | 角色 | 默认启用 |
+| 路径（相对本目录） | 角色 | 启用方式 |
 |---|---|---|
 | `references/skills/research-core/` | 编排 + 6道门禁(G1–G6) + 状态机回写 | 是 |
 | `references/skills/research-track-drill/` | Track 骨架：下钻选优 | 是 |
@@ -43,10 +43,10 @@ version: 2.0
 | `references/skills/research-track-inductive/` | Track 骨架：归纳洞察 | 是 |
 | `references/skills/research-track-scenario/` | Track 骨架：情景推演 | 是 |
 | `references/skills/research-module/` | 任意框架接入模板（含 Cohort 示例） | 是 |
-| `references/skills/method-topdown/` | method：景气链（→drill，含 A股 细化 a1/a2/a3） | **否** |
-| `references/skills/method-market-entry/` | method：市场进入（→entry） | **否** |
-| `references/skills/method-ecommerce-ops/` | method：电商经营诊断（→diagnostic） | **否** |
-| `references/skills/method-sector-momentum/` | method：行业景气度横截面跟踪（→drill） | **是（2026-10-30 启用）** |
+| `references/skills/method-topdown/` | method：景气链（→drill，含 A股 细化 a1/a2/a3） | 按需·语境匹配 |
+| `references/skills/method-market-entry/` | method：市场进入（→entry） | 按需·语境匹配 |
+| `references/skills/method-ecommerce-ops/` | method：电商经营诊断（→diagnostic） | 按需·语境匹配 |
+| `references/skills/method-sector-momentum/` | method：行业景气度横截面跟踪（→drill） | 按需·语境匹配 |
 | `references/AGENTS.md` | 流程图 + 门禁 + 状态机 + 技能路由（配置文档） | — |
 | `references/ROUTING.md` | 5 种 Track 使用边界 + 选线决策树（选线权威） | — |
 | `references/README.md` | 采用 / 接入新框架 / 目录结构 | — |
@@ -55,7 +55,7 @@ version: 2.0
 ## 硬规矩
 
 - **按需取用**：顶层只留本入口；内部文档一律按需读，不要启动时全量加载。
-- **method 默认不启用**：`skills/method-*` 承载具体算法 / 口径 / 反方清单，frontmatter 标 `enabled: false`，不参与自动路由；启用须显式改 `enabled: true`。理由：默认启用会把非该语境的任务错路由到该口径。
+- **method 按语境按需加载**：`skills/method-*` 承载具体算法 / 口径 / 反方清单，**不再用 `enabled` 开关**；按任务语境匹配其 described 领域加载，无契合 method 时回退该 Track 通用骨架（兜底），不强行套用领域口径。
 - **同一项目只选一条 Track**（G2 锁死），不可混跑；跨 Track 用父子 task 串起。
 - **多 task 单方向派生**：子节点只写 `node.parent`，父子关系与汇总由 `load_context` 运行时建图，**不双写、不改父文件**。
 - **不自建框架类别**：新框架走 `research-module` 模板，门禁自动生效。

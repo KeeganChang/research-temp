@@ -8,7 +8,7 @@ depends_on: [research-core]
 
 # research-track-entry — 进入测绘（Entry / Landscape）
 
-> 方法级 Track 之一。只定义问题、门禁、三条通用判别点与交付形态；具体打法由 belongs_to_track: entry 的 method skill 或 enabled domain 提供。
+> 方法级 Track 之一。只定义问题、门禁、三条通用判别点与交付形态；具体打法由 belongs_to_track: entry 的 method skill 按语境按需加载（无契合回退本骨架）。
 
 ## 适用
 目标：判断「能不能进、怎么进、谁在赚」。落点 = **机会区 / 禁区 / 观察哨 + 玩家地图**。推理方向 = **横向铺开**。
@@ -40,7 +40,7 @@ depends_on: [research-core]
 机会区 / 禁区 / 观察哨清单 + 玩家地图（份额 + 护城河 + 商业模式）。回写 `claims` 与 `monitors`。
 
 ## 接入
-- 具体打法：belongs_to_track: entry 的 method skill（如 `track-market-entry`）或 enabled domain。
+- 具体打法：belongs_to_track: entry 的 method skill（如 `method-market-entry`）按语境按需加载（无契合回退本骨架）。
 - 未启用域时，只输出骨架级结论。
 
 ## 引用
