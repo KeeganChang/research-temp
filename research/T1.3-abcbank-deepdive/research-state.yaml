@@ -1,0 +1,98 @@
+# research-state.yaml —— T1.3 农业银行个股深度
+version: 2
+project_id: T1.3
+updated_at: 2026-11-04
+
+node:
+  parent: T1
+  depends_on: []
+
+focus:
+  topic: "农业银行（601288.SH）A3：县域结构作为护城河与集中度的双向论证、拨备姿态、底仓角色的支撑与代价"
+  type: 公司
+  status: active
+  started_at: 2026-11-04
+  rationale: "T1.1 把农行定为确定性底仓但仅有 thesis；补 A3 后五家短名单形成完整对照"
+
+claims:
+  - id: C-T1.3-01
+    statement: >
+      农业银行是大行中唯一「营收加速、利润主动减速」的一家：9M26 营收 +12.48%、归母仅 +7.10%，差 5.38pct 被主动多提的拨备吃掉（不良 1.23%、逾期 1.23%、关注 1.38% 三线同降/持平，拨备余额 10370 亿）。这是「确定性」最硬的财务证据。
+    confidence: high
+    status: validated
+    tags: [银行, 农业银行, 拨备, 盈利质量, 确定性]
+    evidence: research/T1.3-abcbank-deepdive/T1.3-LarkDoc-主交付.md
+    data: research/T1.3-abcbank-deepdive/T1.3-LarkDoc-主交付.md#31
+    derived_from:
+      project: T1
+      claim: C-T1-04
+    counter_arguments:
+      - "时间维度：营收领先由县域+规模驱动，大行下沉竞争加剧则先回落"
+      - "不良上行期「主动多提」会变成「必须多提」，缺口反向扩大"
+      - "中收仅占 10.1%，息差下行时无第二条腿"
+  - id: C-T1.3-02
+    statement: >
+      县域贷款 12 万亿、占境内贷款 41.92%、贡献全行增量过半，同时是护城河与集中度：负债端日均存款 +10.27%、偏离度连续 10 季低于 3% 支撑 NIM 1.28% 率先企稳，但 41.92% 压在单一资产类别上，涉农与地方财政风险不可分散。
+    confidence: medium
+    status: open
+    tags: [银行, 农业银行, 县域, 集中度, 负债成本]
+    evidence: research/T1.3-abcbank-deepdive/T1.3-LarkDoc-主交付.md
+    data: research/T1.3-abcbank-deepdive/T1.3-LarkDoc-主交付.md#32
+    counter_arguments:
+      - "县域网点与客户关系是几十年积累，短期不可复制"
+      - "惠农e贷 2.1 万亿 +15.1%，客群结构仍在优化"
+      - "涉农政策具有逆周期属性，可对冲部分区域性风险"
+      - "未披露县域不良率，集中度对质量的影响缺少直接证据"
+  - id: C-T1.3-03
+    statement: >
+      配置角色为确定性底仓：营收提速 + 三线同降的资产质量 + 大行最厚核心一级 10.90% + 主动多提拨备的财务纪律；代价是弹性不足，ROE 10.68% 虽为大行第一，仍低于城商行梯队。
+    confidence: high
+    status: open
+    tags: [银行, 农业银行, 配置, 底仓]
+    evidence: research/T1.3-abcbank-deepdive/T1.3-LarkDoc-主交付.md
+    data: research/T1.3-abcbank-deepdive/T1.3-LarkDoc-主交付.md#五
+    derived_from:
+      project: T1.1
+      claim: C-T1.1-04
+    counter_arguments:
+      - "板块整体重估时涨幅落后于城商行与股份行"
+      - "股息率 >5% 依赖分红率稳定，核心一级厚但 RWA 扩张会侵蚀空间"
+
+monitors:
+  - id: M-T1.3-01
+    name: "农业银行 年化ROE"
+    last: "10.68%"
+    as_of: 2026-09-30
+    threshold: "跌破 9.5% 告警（大行第一的位置失效）"
+    source: research/T1.3-abcbank-deepdive/T1.3-LarkDoc-主交付.md
+  - id: M-T1.3-02
+    name: "农业银行 不良率"
+    last: "1.23%"
+    as_of: 2026-09-30
+    threshold: "升破 1.35% 告警（三线同降趋势反转）"
+    source: research/T1.3-abcbank-deepdive/T1.3-LarkDoc-主交付.md
+  - id: M-T1.3-03
+    name: "农业银行 拨备覆盖率"
+    last: "289.13%"
+    as_of: 2026-09-30
+    threshold: "连续两期下降且不良率同时上升 → 转为被动释放，重估底仓逻辑"
+    source: research/T1.3-abcbank-deepdive/T1.3-LarkDoc-主交付.md
+
+queue:
+  - id: Q-T1.3-01
+    action: "补农行精确股息率与 PB（本稿沿用 T1 的 >5% 描述，未重取行情）"
+    type: 公司
+    priority: P1
+    depends_on: [C-T1.3-03]
+    status: pending
+  - id: Q-T1.3-02
+    action: "取农行县域贷款不良率（年报附注或投资者交流），验证 41.92% 集中度的质量含义"
+    type: 公司
+    priority: P1
+    depends_on: [C-T1.3-02]
+    status: pending
+
+views: []
+# 未发布飞书：本稿为 A3 补齐的第一版，待用户确认后再按 lark-cli 单向同步
+
+datasets: []

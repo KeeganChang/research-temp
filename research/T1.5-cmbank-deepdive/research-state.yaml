@@ -1,0 +1,87 @@
+# research-state.yaml —— T1.5 招商银行个股深度
+version: 2
+project_id: T1.5
+updated_at: 2026-11-04
+
+node:
+  parent: T1
+  depends_on: []
+
+focus:
+  topic: "招商银行（600036.SH）A3：零售贷款收缩/对公扩张的引擎切换、AUM 变现路径、核心仓定位"
+  type: 公司
+  status: active
+  started_at: 2026-11-04
+  rationale: "9M26 出现零售贷款 -1.28%、公司贷款 +10.59% 的反常结构，需判断「零售银行」身份是否到期"
+
+claims:
+  - id: C-T1.5-01
+    statement: >
+      招行正在把增长引擎从「零售放贷」换成「零售 AUM + 对公投放」双轨：零售贷款 -475.14 亿（-1.28%）、公司贷款 +3404.24 亿（+10.59%），而 AUM +9.52%、财富管理手续费 +13.71%。零售没有失效，失效的是靠零售贷款赚钱这一条。
+    confidence: high
+    status: validated
+    tags: [银行, 招商银行, 引擎切换, 零售, 对公]
+    evidence: research/T1.5-cmbank-deepdive/T1.5-LarkDoc-主交付.md
+    data: research/T1.5-cmbank-deepdive/T1.5-LarkDoc-主交付.md#32
+    derived_from:
+      project: T1.2
+      claim: C-T1.2-03
+    counter_arguments:
+      - "时间维度：需求端不恢复则对公长期补位，零售估值溢价被稀释"
+      - "对公风险权重高于零售，同等规模消耗更多资本"
+      - "AUM +9.52% 但净手续费仅 +4.29%，费率下行稀释规模效应"
+      - "管理层仅称零售风险「边际改善」，非出清"
+  - id: C-T1.5-02
+    statement: >
+      利润增速 2.38% 低于营收 5.34%，差 2.96pct 由「拨备计提较为充分」解释（管理层 2026-11-02 业绩交流会原话）；拨备覆盖率 389.39% 仅 -2.40pct，说明这不是消耗存量缓冲，而是当期多提。
+    confidence: high
+    status: validated
+    tags: [银行, 招商银行, 拨备, 盈利质量]
+    evidence: research/T1.5-cmbank-deepdive/T1.5-LarkDoc-主交付.md
+    data: research/T1.5-cmbank-deepdive/T1.5-LarkDoc-主交付.md#31
+    counter_arguments:
+      - "多提拨备也可能是为零售不良上行预留，非纯主动"
+      - "不良余额 +18.62 亿、覆盖率 -2.40pct，缓冲在小幅变薄"
+  - id: C-T1.5-03
+    statement: >
+      配置角色为核心仓而非弹性仓：五家中唯一同时具备全国分散、零售 AUM 壁垒、最厚核心一级 14.39%；但 ROAE 13.49%（-0.47pct）且处于引擎切换期，弹性不如城商行。
+    confidence: medium
+    status: open
+    tags: [银行, 招商银行, 配置, 核心仓]
+    evidence: research/T1.5-cmbank-deepdive/T1.5-LarkDoc-主交付.md
+    data: research/T1.5-cmbank-deepdive/T1.5-LarkDoc-主交付.md#五
+    counter_arguments:
+      - "对公扩张会加速 RWA，核心一级优势有限"
+      - "NIM 1.82% 同比 -5bp，下行未结束"
+      - "房地产敞口占比升至 4.48%，方向是加"
+
+monitors:
+  - id: M-T1.5-01
+    name: "招商银行 零售贷款余额同比"
+    last: "-1.28%"
+    as_of: 2026-09-30
+    threshold: "连续两期负增长且对公增速回落 → 总规模失速"
+    source: research/T1.5-cmbank-deepdive/T1.5-LarkDoc-主交付.md
+  - id: M-T1.5-02
+    name: "招商银行 净息差"
+    last: "1.82%"
+    as_of: 2026-09-30
+    threshold: "跌破 1.70% 告警"
+    source: research/T1.5-cmbank-deepdive/T1.5-LarkDoc-主交付.md
+  - id: M-T1.5-03
+    name: "招商银行 拨备覆盖率"
+    last: "389.39%"
+    as_of: 2026-09-30
+    threshold: "跌破 350% 且不良率上升 → 由主动多提转为被动消耗"
+    source: research/T1.5-cmbank-deepdive/T1.5-LarkDoc-主交付.md
+
+queue:
+  - id: Q-T1.5-01
+    action: "取招行 RWA 与对公/零售风险权重明细，量化「用对公的量补零售的价」的资本代价"
+    type: 公司
+    priority: P1
+    depends_on: [C-T1.5-01]
+    status: pending
+
+views: []
+datasets: []

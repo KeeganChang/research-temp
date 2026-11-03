@@ -1,0 +1,213 @@
+# research-state.yaml —— T1.2 银行行业框架
+#
+# 设计原则：
+#   1. 只存「可执行的沉淀」——结论(claims)、监控(monitors)、待办(queue)、已归档数据(datasets)，不抄正文。
+#   2. 每条结论必须带 evidence(证据笔记) + data(结构化记录)，可回溯、可审计。
+#   3. status 驱动生命周期：open → validated / falsified，证伪的结论不删。
+#   4. 项目收尾回写这里；下次开场跑 `python -m script.load_context --project <PID>` 加载。
+#   5. 多 task 单方向派生：子节点只写 node.parent；children / depth 不存储，由 load_context 运行时建图。
+#
+# 与门禁的对应（见 research-kit/references/skills/research-core/SKILL.md）：
+#   G4 成稿 → 每条 claim 必须有 evidence↔data 互指；反方论点 ≥5 条（至少 1 条时间维度）
+#   G5 校验 → 每条 claim 必须带 confidence + status（无悬空结论）
+#   G6 回写 → monitors 带 last / as_of / threshold；queue 带 depends_on
+#
+# 约定：路径一律相对 workspace 根，不写绝对路径。
+
+version: 2
+project_id: T1.2
+updated_at: 2026-11-03
+
+# ── 关系层（多 task 用 · 单方向派生）────────────────────────────
+node:
+  parent: T1
+  depends_on: []              # 跨节点依赖；当前仅展示，不做硬阻塞
+
+# ── 当前研究焦点 ──────────────────────────────────────────────
+focus:
+  topic: "银行行业框架：宏观约束 / 赚钱机制 / 竞争格局（补 T1 未覆盖的三块）"
+  type: 行业
+  status: done                 # active | paused | done（本轮已交付，转后续监控）
+  started_at: 2026-11-03
+  rationale: "T1 回答了「为何主推、选谁」，但缺行业机制层——宏观怎么约束、钱怎么赚、谁在赢。补齐后才能判断 T1 主推逻辑的可持续性，并为剩余短名单个股下钻提供筛选框架。"
+
+# ── 结论台账 ──────────────────────────────────────────────────
+claims:
+  - id: C-T1.2-01
+    statement: >
+      2026 年银行面临「价被压、量受限、险在升」三重同时收紧的结构性约束：净息差 1.41% 较监管合意
+      1.8% 低 39bp；贷款余额增速仅 5.2%（M2 +8.0%）且扩表受核心一级资本 10.54% 硬约束；
+      住户贷款前三季度净减 1.03 万亿、零售不良升至 1.76%。这不是周期波动，是长期态。
+    confidence: high
+    status: validated
+    tags: [宏观约束, 低利率, 信贷降速提质, 结构性]
+    evidence: research/T1.2-bank-industry-framework/T1.2-LarkDoc-主交付.md
+    data: research/T1.2-bank-industry-framework/artifacts/search_returns.md#检索-2
+    derived_from:
+      project: T1
+      claim: C-T1-01
+    counter_arguments:
+      - "若财政端大幅加力（特别国债/政策性金融工具）带动企业中长贷重新放量，量受限的前提会被打破。"
+      - "若居民风险偏好回升推动存款活化（活期占比上升），负债成本改善幅度会超预期。"
+      - "住户贷款净减少可能包含提前还贷集中释放的阶段性因素，不等同长期去杠杆。"
+      - "资本约束对大行不成立（建行核心一级 14.39%），约束只对中小行硬。"
+      - "【时间维度】宏观约束的松紧取决于「十五五」开局年政策力度，2027 年财政节奏变化可能改写判断。"
+
+  - id: C-T1.2-02
+    statement: >
+      2026Q2 净息差 1.41% 的 1BP 环比回升，动力来自负债端高息定存到期重定价（挂牌利率降幅超过
+      LPR，且存款重定价滞后于贷款的时间差被追平），而非资产端改善。上市银行口径前三季度仅 1.31%
+      （同比 -1bp）——是「企稳」不是「拐点」，红利边际递减。
+    confidence: high
+    status: validated
+    tags: [净息差, 重定价红利, 负债成本, 口径冲突]
+    evidence: research/T1.2-bank-industry-framework/T1.2-LarkDoc-主交付.md
+    data: research/T1.2-bank-industry-framework/artifacts/search_returns.md#检索-1
+    derived_from:
+      project: T1
+      claim: C-T1-01
+    counter_arguments:
+      - "1bp 在统计上可能只是噪声，不足以支撑「企稳」判断。"
+      - "若资产端因反内卷整治而稳住定价，息差可能不只是企稳而是真实回升。"
+      - "存款定期化使负债成本下降慢于预期，红利释放可能比测算更持久（反向风险）。"
+      - "监管口径（全行业 1.41%）与上市银行口径（1.31%）差 10bp，说明非上市中小行更弱，行业均值掩盖尾部。"
+      - "【时间维度】交行披露下半年重定价贡献仅「三成多」，2027 年红利耗尽后可能二次探底。"
+
+  - id: C-T1.2-03
+    statement: >
+      2026H1 上市银行收入结构为利息净收入 70.78% / 中收 13.18% / 其他非息约 16%。中收占比不升反降、
+      首次跌破 14%（去年同期 14%），且前三季度净手续费增速 -1.6%（2025 年来首次转负）——「财富管理
+      第二曲线」在存款搬家最猛的年份仍未接住息差缺口。未来分化由非息能力而非息差决定。
+    confidence: high
+    status: validated
+    tags: [收入结构, 中收, 财富管理, 第二曲线]
+    evidence: research/T1.2-bank-industry-framework/T1.2-LarkDoc-主交付.md
+    data: research/T1.2-bank-industry-framework/artifacts/search_returns.md#检索-3
+    derived_from:
+      project: T1
+      claim: C-T1-02
+    counter_arguments:
+      - "中收占比下降部分源于分母（利息净收入）因规模扩张而变大，不代表中收绝对额下降。"
+      - "其他非息（债市投资收益 +13.8%）已部分替代中收，只看手续费会低估非息转型进度。"
+      - "中收口径含银行卡/结算等被费率下调挤压的传统项，剔除后财富类中收实际在增长（宁波 +53.9%）。"
+      - "资本市场若在 2027 年走强，代销与资管收入可能集中释放，占比会快速回升。"
+      - "【时间维度】财富管理是抗波动而非爆发式增长，用单年占比判断「接不住」可能过早。"
+
+  - id: C-T1.2-04
+    statement: >
+      竞争格局已固化为「头部吃肉、腰部细分、尾部出清」：国有大行凭最低负债成本（普惠小微可报 3.0%）
+      重新扩张份额；股份行被大行下沉与互联网夹击、ROE 均值 8.39% 垫底；城商行命运由区域 β 决定
+      （长三角优、东北西北弱，行业不良 1.87% 高于均值）；农商行进入兼并重组常态化。
+      大行与中小行 1.5pct 的小微利率差由负债成本决定，不可通过努力弥补。
+    confidence: high
+    status: validated
+    tags: [竞争格局, 梯队固化, 大行下沉, 区域分化]
+    evidence: research/T1.2-bank-industry-framework/T1.2-LarkDoc-主交付.md
+    data: research/T1.2-bank-industry-framework/artifacts/search_returns.md#检索-6
+    derived_from:
+      project: T1
+      claim: C-T1-03
+    counter_arguments:
+      - "利率差可通过差异化客群（大行做不了的复杂小微）部分规避，不是绝对宿命。"
+      - "大行下沉受资本与风险成本约束，普惠不良破 5% 后可能主动收缩，给中小行留出空间。"
+      - "区域 β 判断可能低估优质城商行的经营 α（杭州 ROE 17.74% 远超同区域同业）。"
+      - "农商行兼并重组是政策推动，不必然意味着单体银行失去生存空间。"
+      - "【时间维度】梯队固化是当前态，若利率市场化进一步深化或出现大规模风险事件，格局可能重排。"
+
+  - id: C-T1.2-05
+    statement: >
+      银行利润表正从「存贷利差主导」转向「利差 + 中收 + 公允价值」三元结构。因此「选银行」的实质
+      是三选三：选成本结构（负债端）、选区域（资产端 β）、选中收能力（客群质量）。这构成对 T1
+      「银行为唯一主推」的条件性支持——主推可持续性取决于息差能否守住 1.4% 与中收能否接棒。
+    confidence: medium
+    status: open
+    tags: [判断, 三元结构, 选股框架, 与T1衔接]
+    evidence: research/T1.2-bank-industry-framework/T1.2-LarkDoc-主交付.md
+    data: research/T1.2-bank-industry-framework/artifacts/search_returns.md
+    derived_from:
+      project: T1
+      claim: C-T1-04
+    next_action: Q-T1.2-02
+    counter_arguments:
+      - "「三元结构」是行业整体叙事，个体银行差异极大，用行业框架选个股可能失真。"
+      - "公允价值收益波动极大且不可持续，把它列为结构之一可能高估其战略意义。"
+      - "三选三框架未纳入估值维度，成本/区域/中收都好的银行可能已被充分定价（如招行）。"
+      - "「守住 1.4%」缺乏理论依据，息差均衡水平取决于资产收益率与负债成本的动态，不是固定阈值。"
+      - "【时间维度】若 2027 年降息落地，1.4% 大概率守不住，则本判断的前置条件失效。"
+
+# ── 监控指标（带上次观测值 + 告警阈值）────────────────────────
+monitors:
+  - id: M-T1.2-01
+    name: "商业银行净息差（监管口径·全行业）"
+    last: "1.41%"
+    as_of: 2026-06-30
+    threshold: "跌破 1.35% 或连续两季环比转负 → 「企稳」判断失效，主推逻辑需复核"
+    source: "金融监管总局 2026Q2 监管指标 / research/T1.2-bank-industry-framework/artifacts/search_returns.md"
+
+  - id: M-T1.2-02
+    name: "上市银行中收占营收比（42 家合计）"
+    last: "13.18%"
+    as_of: 2026-06-30
+    threshold: "跌破 13% → 第二曲线彻底失效；回升至 15% 以上 → 转型见效"
+    source: "WIND / 中国经济信息网 2026-09-24"
+
+  - id: M-T1.2-03
+    name: "大行 vs 中小行 普惠小微新发放利率差"
+    last: "约 1.5pct（大行 3.0% / 中小行 4.5%+）"
+    as_of: 2026-07-31
+    threshold: "收窄至 1.0pct 内 → 下沉挤压缓解；扩大至 2.0pct → 中小行生存危机"
+    source: "董希淼专栏 / 中国经营报 2026-07"
+
+  - id: M-T1.2-04
+    name: "上市银行零售贷款不良率（32 家样本）"
+    last: "1.76%"
+    as_of: 2025-12-31
+    threshold: "升破 2.0% → 零售风险从「出清」转为「恶化」，零售转型叙事破产"
+    source: "中国银河 2026 中期策略 / 2026-06-11"
+
+  - id: M-T1.2-05
+    name: "住户贷款季度增量"
+    last: "-1.03 万亿（前三季度累计）"
+    as_of: 2026-09-30
+    threshold: "转正 → 居民信贷需求回暖，零售放贷模式可重启；继续扩大负值 → 去杠杆加深"
+    source: "人民银行 2026 前三季度金融统计 / 2026-10-15"
+
+# ── 下一步动作队列 ────────────────────────────────────────────
+queue:
+  - id: Q-T1.2-01
+    action: "2026 年报 / 2027Q1 出来后复核「重定价红利递减」：观察 NIM 是否二次探底、存款成本压降余量"
+    type: 行业
+    priority: P1
+    depends_on: [C-T1.2-02]
+    status: pending
+    output: research/T1.2-bank-industry-framework/research-state.yaml
+
+  - id: Q-T1.2-02
+    action: "补 T1 短名单剩余 4 家个股深度（农行优先）：T1.1 结论称「杭州弹性α + 农行底仓」组合优于单押，但底仓腿未做，结论无法闭环"
+    type: 公司
+    priority: P1
+    depends_on: [C-T1.2-05, C-T1-03]
+    status: pending
+    output: research/T1.3-agri-bank-deepdive/
+
+  - id: Q-T1.2-03
+    action: "中收专项：逐行对比财富管理 AUM 与中收转化率，验证「非息能力决定分化」是否成立"
+    type: 行业
+    priority: P2
+    depends_on: [C-T1.2-03]
+    status: pending
+    output: research/T1.2-bank-industry-framework/
+
+# ── 已归档结构化记录索引（避免下次重复抓数）────────────────────
+datasets:
+  - path: research/T1.2-bank-industry-framework/artifacts/search_returns.md
+    covers: "7 轮检索的原始返回摘要：宏观/信贷、净息差双口径、收入结构与中收、竞争格局、Q3 监管指标、大行下沉、化债与零售风险"
+    as_of: 2026-11-03
+
+# ── 交付物登记 ────────────────────────────────────────────────
+views:
+  - type: lark_doc
+    title: "T1.2 · 银行行业框架：宏观背景 / 业务逻辑 / 竞品分析（2026-11-03）— 主交付"
+    token: docx/EjkJdmfMVopdLPxKQi6csb7tndf
+    url: https://gcnyro8kdjoa.feishu.cn/docx/EjkJdmfMVopdLPxKQi6csb7tndf
+    pushed_at: 2026-11-03

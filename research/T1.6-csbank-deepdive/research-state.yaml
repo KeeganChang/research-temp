@@ -1,0 +1,84 @@
+# research-state.yaml —— T1.6 常熟银行个股深度
+version: 2
+project_id: T1.6
+updated_at: 2026-11-04
+
+node:
+  parent: T1
+  depends_on: []
+
+focus:
+  topic: "常熟银行（601128.SH）A3：最高息差与营收转负的背离、拨备释放的可继续性、小微 α 的边界"
+  type: 公司
+  status: active
+  started_at: 2026-11-04
+  rationale: "9M26 NIM 2.48%→2.42%、拨备 432%→406.24%、Q3 单季营收 -0.71%，三项同时变化，需判断是否为让利的最后一公里"
+
+claims:
+  - id: C-T1.6-01
+    statement: >
+      常熟是五家样本中第一个出现营收负增长的：Q3 单季营收 29.69 亿元（-0.71%），而 9M 归母 +8.02% 高于营收 +3.81%，差额来源可量化为成本收入比 -4.55pct（可持续）与拨备覆盖率 -45.01pct（一次性）。
+    confidence: high
+    status: validated
+    tags: [银行, 常熟银行, 营收负增长, 拨备释放, 成本收入比]
+    evidence: research/T1.6-csbank-deepdive/T1.6-LarkDoc-主交付.md
+    data: research/T1.6-csbank-deepdive/T1.6-LarkDoc-主交付.md#31
+    counter_arguments:
+      - "时间维度：若 2027 年 NIM 按 -11bp/年收窄，全年营收转负只是时间问题"
+      - "拨备一年 -45pct，两年内或逼近 320% 一线，以拨备换利润的选项消失"
+      - "成本收入比 31.11% 已接近极限，继续压降空间有限"
+  - id: C-T1.6-02
+    statement: >
+      NIM 2.42% 仍为全样本最高（招行 1.82% 的 1.33 倍），但降幅 11bp 大于同业，且高息差来自资产端小微定价（个人经营贷占贷款 34.99%）而非负债端（活期占比仅 19.81%）。护城河与脆弱点是同一件事。
+    confidence: high
+    status: validated
+    tags: [银行, 常熟银行, 净息差, 小微, 单一敞口]
+    evidence: research/T1.6-csbank-deepdive/T1.6-LarkDoc-主交付.md
+    data: research/T1.6-csbank-deepdive/T1.6-LarkDoc-主交付.md#32
+    counter_arguments:
+      - "大行普惠下沉（3.0%）与中小行（4.5%+）价差压缩，常熟首当其冲"
+      - "个人经营贷 34.99% 是最大单一敞口，区域小微风险即全行风险"
+      - "小微客群黏性与风控模型构成短期壁垒"
+  - id: C-T1.6-03
+    statement: >
+      配置角色为小微 α（卫星仓，非核心）：体量最小（4286 亿）、拨备在释放、营收已负增长，三条都不支持持有型底仓；其价值在于息差弹性，而弹性需要营收增长配合，目前不成立。
+    confidence: medium
+    status: open
+    tags: [银行, 常熟银行, 配置, 卫星仓]
+    evidence: research/T1.6-csbank-deepdive/T1.6-LarkDoc-主交付.md
+    data: research/T1.6-csbank-deepdive/T1.6-LarkDoc-主交付.md#五
+    counter_arguments:
+      - "若小微价格战缓和，最高息差会重新体现为弹性"
+      - "资本充足率 13.20% 虽低，但核心一级 11.92% 高于农行"
+      - "交行 9.01% 持股可能带来协同（负债、科技、牌照）"
+
+monitors:
+  - id: M-T1.6-01
+    name: "常熟银行 单季营收同比"
+    last: "-0.71%"
+    as_of: 2026-09-30
+    threshold: "连续两季负增长 → 从「切换期」判定为「收缩期」"
+    source: research/T1.6-csbank-deepdive/T1.6-LarkDoc-主交付.md
+  - id: M-T1.6-02
+    name: "常熟银行 拨备覆盖率"
+    last: "406.24%"
+    as_of: 2026-09-30
+    threshold: "跌破 350% 告警（释放空间接近耗尽）"
+    source: research/T1.6-csbank-deepdive/T1.6-LarkDoc-主交付.md
+  - id: M-T1.6-03
+    name: "常熟银行 净息差"
+    last: "2.42%"
+    as_of: 2026-09-30
+    threshold: "跌破 2.20% → 小微定价优势被证伪"
+    source: research/T1.6-csbank-deepdive/T1.6-LarkDoc-主交付.md
+
+queue:
+  - id: Q-T1.6-01
+    action: "取常熟个人经营贷不良率与关注率（季报未分项披露，需年报附注或投资者交流）"
+    type: 公司
+    priority: P1
+    depends_on: [C-T1.6-02]
+    status: pending
+
+views: []
+datasets: []

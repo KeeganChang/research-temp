@@ -1,0 +1,91 @@
+# research-state.yaml —— T1.4 成都银行个股深度
+version: 2
+project_id: T1.4
+updated_at: 2026-11-04
+
+node:
+  parent: T1
+  depends_on: []
+
+focus:
+  topic: "成都银行（601838.SH）A3：单一引擎结构（利息净收入占 91.81%）、拨备逆势加厚、高股息可持续性"
+  type: 公司
+  status: active
+  started_at: 2026-11-04
+  rationale: "T1 短名单三个数字（不良 0.68%、拨备 426%、ROE 14.98%）均在极端位置，需验证是否为区域红利的一次性兑现"
+
+claims:
+  - id: C-T1.4-01
+    statement: >
+      成都银行是全样本最极端的单一引擎结构：利息净收入 179.10 亿元占营业收入 91.81%（招行非息占 36.05%、杭州利息净收入占 74.1%）。息差或规模任一侧走弱都无对冲项，这是它最大的结构性脆弱点。
+    confidence: high
+    status: validated
+    tags: [银行, 成都银行, 收入结构, 单一引擎]
+    evidence: research/T1.4-cdbank-deepdive/T1.4-LarkDoc-主交付.md
+    data: research/T1.4-cdbank-deepdive/T1.4-LarkDoc-主交付.md#31
+    counter_arguments:
+      - "区域对公定价能力强，利息净收入本身质量高"
+      - "存款占负债 77.02%，负债成本优势可能长期存在"
+      - "中收基数极低，反而意味着未来提升空间大"
+  - id: C-T1.4-02
+    statement: >
+      拨备覆盖率 448.06%，较上年末 +21.89pct，方向是「加厚」而非释放；营收 +9.84% 与归母 +4.48% 的 5.36pct 差额即由此产生。与常熟（-45.01pct，释放）构成方向相反的对照。
+    confidence: high
+    status: validated
+    tags: [银行, 成都银行, 拨备, 利润增速]
+    evidence: research/T1.4-cdbank-deepdive/T1.4-LarkDoc-主交付.md
+    data: research/T1.4-cdbank-deepdive/T1.4-LarkDoc-主交付.md#33
+    counter_arguments:
+      - "448% 已接近行业极值，继续提升空间有限"
+      - "若某年停止多提，利润增速会因会计效应虚高"
+      - "T1 记 426%（H1）已过期，需在 rollup 更新"
+  - id: C-T1.4-03
+    statement: >
+      贷款 +4.44% 与利息净收入 +21.6% 的差额无法用规模解释，候选原因是负债成本改善；但 NIM 披露值未取到，按 A5 纪律标为待确认，不用营收增速反推。
+    confidence: low
+    status: open
+    tags: [银行, 成都银行, 净息差, 待确认]
+    evidence: research/T1.4-cdbank-deepdive/T1.4-LarkDoc-主交付.md
+    data: research/T1.4-cdbank-deepdive/T1.4-LarkDoc-主交付.md#32
+    next_action: Q-T1.4-01
+    counter_arguments:
+      - "可能来自资产端定价提升而非负债成本"
+      - "可能含一次性因素（如债券收益、冲回）"
+      - "单季（Q3 营收 +22.59%）异常值可能扭曲累计判断"
+
+monitors:
+  - id: M-T1.4-01
+    name: "成都银行 拨备覆盖率"
+    last: "448.06%"
+    as_of: 2026-09-30
+    threshold: "跌破 400% 告警（安全垫由加厚转释放）"
+    source: research/T1.4-cdbank-deepdive/T1.4-LarkDoc-主交付.md
+  - id: M-T1.4-02
+    name: "成都银行 不良率"
+    last: "0.68%"
+    as_of: 2026-09-30
+    threshold: "升破 0.85% 告警（全行业最低档地位动摇）"
+    source: research/T1.4-cdbank-deepdive/T1.4-LarkDoc-主交付.md
+  - id: M-T1.4-03
+    name: "成都银行 股息率TTM"
+    last: "7.14%"
+    as_of: 2026-11-03
+    threshold: "跌破 5.5% 或分红率下调 → 高股息逻辑重估"
+    source: research/T1.4-cdbank-deepdive/T1.4-LarkDoc-主交付.md
+
+queue:
+  - id: Q-T1.4-01
+    action: "取成都银行 9M26 NIM 披露值（季报正文或半年报明细），验证 +21.6% 利息净收入的来源分解"
+    type: 公司
+    priority: P0
+    depends_on: [C-T1.4-03]
+    status: pending
+  - id: Q-T1.4-02
+    action: "补 PB（需 9M26 每股净资产，现有 Q1 数据已过期）"
+    type: 公司
+    priority: P2
+    depends_on: [C-T1.4-01]
+    status: pending
+
+views: []
+datasets: []
