@@ -159,3 +159,7 @@ datasets:
   - path: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
     covers: "PEST 四维 + 相邻替代行业 + 监管三档 的结构化数据点（含期间/来源/Tier）"
     as_of: 2026-09-24
+
+# ── 呈现层视图（已发布到 lark 的交付物 · 非 SSOT；字段口径见 _template）──────
+# 未发布到 lark 就保持空数组，发布后按 kind/title/url/token/role/sync_direction/pushed_at 登记。
+views: []

@@ -6,7 +6,7 @@ load_context.py — 研究上下文加载器（跨会话记忆的读取端 · v3
 用途
 ----
 每次调研开场先跑这个脚本，把上次沉淀的结论 / 监控指标 / 待办 / 已归档数据集
-一次性载入，避免"每次调研都从零开始"。
+/ 已发布视图（views）一次性载入，避免"每次调研都从零开始"。
 
     python -m script.load_context --list                # 列出所有调研项目（含父/子与 rollup）
     python -m script.load_context                       # 加载全部项目（含 _shared 方法论）
@@ -38,6 +38,21 @@ load_context.py — 研究上下文加载器（跨会话记忆的读取端 · v3
         父节点自身的 active/done 不参与聚合，避免陈旧手填值掩盖真实进度。
     node.depends_on 当前仅作展示，不做硬阻塞。
     无 node 块的老项目一律视为顶层节点（向后兼容）。
+
+呈现层视图 views（单一 schema）
+--------------------------------
+    `research-state.yaml` 的 `views` 登记已发布到 lark 的交付物，字段固定：
+        kind          lark_doc | lark_sheet | lark_slides（必填）
+        title         视图标题（必填）
+        url           http(s) 链接（必填，唯一可点入口）
+        token         lark 对象裸 token，不带 `docx/` `sheets/` 前缀（类型由 kind 表达）
+        role          在交付链里的角色：人读主交付 / 复杂计算附件 …
+        sync_direction 只接受 `local_to_lark`（lark 不是 SSOT，反向回写一律改本地再重推）
+        generated_by  生成方式（lark-cli / 脚本名）
+        pushed_at     最近推送日期，用于判断视图是否过期
+        tabs          仅 lark_sheet：页签清单
+        note          补充说明（同步步骤 / 降级理由）
+    `--lint` 会对旧字段名（type / document_id / spreadsheet_token）直接报 ERROR。
 
 设计约束（与项目铁律一致）
 --------------------------
@@ -89,6 +104,21 @@ ROOT_MARKER = "AGENTS.md"
 VALID_TRACKS = ("drill", "entry", "diagnostic", "inductive", "scenario")
 CLAIM_STATUS = ("open", "validated", "falsified")
 STATE_SEGMENTS = ("focus", "claims", "monitors", "queue", "datasets")
+
+# ── views（呈现层视图）口径 ───────────────────────────────────
+# 2026-11-04 统一：state 里只允许下面这一套字段名，旧写法由 lint 报错推动迁移。
+#   kind / title / url / token / role / sync_direction / generated_by / pushed_at / tabs / note
+# 铁律：lark 不是 SSOT —— sync_direction 只接受单向 local_to_lark。
+VIEW_KINDS = ("lark_doc", "lark_sheet", "lark_slides")
+VIEW_SYNC = ("local_to_lark",)
+VIEW_REQUIRED = ("kind", "title", "url")
+# 旧字段 → 现行字段（出现即报 ERROR，附迁移提示，避免三套写法继续扩散）
+VIEW_LEGACY_KEYS = {
+    "type": "kind",
+    "document_id": "token",
+    "spreadsheet_token": "token",
+    "doc_id": "token",
+}
 STALE_DAYS = 90  # E3：命中率成熟期默认 90 天，超此未更新给提示
 
 
@@ -425,6 +455,39 @@ def render_project_md(p: dict, root: Path, only: str | None, show_files: bool,
         L.append(f"  - 覆盖: {d.get('covers', '—')}  (as_of {d.get('as_of', '?')})")
     L.append("")
 
+    views = st.get("views") or []
+    if views or p["id"] != SHARED_ID:  # _shared 是方法论层，无交付视图，空则不渲染
+        L.append(f"### 呈现层视图（{len(views)} 个，lark 非 SSOT · 单向同步）")
+        if not views:
+            L.append("- （空：未发布到 lark，交付物仅在本地）")
+        for v in views:
+            v = v if isinstance(v, dict) else {}
+            kind = v.get("kind") or "?"
+            L.append(f"- **[{kind}]** {v.get('title') or '—'}")
+            if v.get("url"):
+                L.append(f"  - url: {v['url']}")
+            if v.get("token"):
+                L.append(f"  - token: `{v['token']}`")
+            extras = []
+            if v.get("role"):
+                extras.append(f"角色={v['role']}")
+            if v.get("sync_direction"):
+                extras.append(f"同步={v['sync_direction']}")
+            if v.get("pushed_at"):
+                extras.append(f"推送={v['pushed_at']}")
+            if v.get("generated_by"):
+                extras.append(f"生成={v['generated_by']}")
+            if extras:
+                L.append(f"  - {' · '.join(extras)}")
+            if v.get("tabs"):
+                tabs = v["tabs"]
+                tab_txt = ", ".join(str(t) for t in tabs) if isinstance(tabs, list) else str(tabs)
+                L.append(f"  - tabs: {tab_txt}")
+            if v.get("note"):
+                for line in fmt_block("备注", v["note"], indent=2):
+                    L.append(line)
+        L.append("")
+
     if show_files:
         L.append("### 该项目证据文件")
         ev = []
@@ -508,6 +571,7 @@ def project_json(p: dict, only: str | None,
         "monitors": st.get("monitors") or [],
         "queue": [q for q in (st.get("queue") or []) if q.get("status") != "done"],
         "datasets": st.get("datasets") or [],
+        "views": st.get("views") or [],
     }
     if forest and roll:
         nd = node_of(p)
@@ -539,6 +603,18 @@ def render_json(projects: list[dict], shared: dict | None, only: str | None, leg
 # ── 状态机自检（--lint，只读）──────────────────────────────────
 def _blank(v) -> bool:
     return v is None or (isinstance(v, str) and not v.strip())
+
+
+def _ref_exists(root: Path, ref: str) -> bool:
+    """引用路径是否存在。允许 `path.md#锚点` 形式：锚点只用于定位章节，不参与文件检查。
+
+    历史写法里 claim 的 evidence/data 常带 `#3.2` `#五` 这类锚点，直接用
+    `Path.exists()` 会把锚点当成文件名的一部分 → 误报 REF_DANGLING。
+    """
+    raw = str(ref).strip().split("#", 1)[0].strip()
+    if not raw:
+        return True
+    return (root / raw.replace("\\", "/")).exists()
 
 
 def _as_date(v):
@@ -611,7 +687,7 @@ def lint_projects(projects: list[dict], root: Path, forest: dict) -> list[dict]:
             add("WARN", pid, "STATE_MISSING", "缺 research-state.yaml")
             continue
 
-        # —— 状态机六段
+        # —— 状态机五段（views 为可选呈现层，单独校验，缺失不告警）
         for seg in STATE_SEGMENTS:
             if seg not in st:
                 add("WARN", pid, "SEG_MISSING", f"research-state.yaml 缺 `{seg}` 段")
@@ -629,7 +705,7 @@ def lint_projects(projects: list[dict], root: Path, forest: dict) -> list[dict]:
                     f"claim {cid} status={c.get('status')!r} 不在 {list(CLAIM_STATUS)}")
             for key in ("evidence", "data"):
                 v = c.get(key)
-                if v and not (root / str(v)).exists():
+                if v and not _ref_exists(root, v):
                     add("ERROR", pid, "REF_DANGLING",
                         f"claim {cid} 的 {key} 指向不存在的文件：{v}")
 
@@ -652,6 +728,46 @@ def lint_projects(projects: list[dict], root: Path, forest: dict) -> list[dict]:
         for d in st.get("datasets") or []:
             if d.get("path") and not (root / str(d["path"])).exists():
                 add("WARN", pid, "DATA_MISSING", f"dataset 路径不存在：{d['path']}")
+
+        # —— views（呈现层视图）：单一 schema + 单向同步，防止三套写法扩散
+        raw_views = st.get("views", [])
+        if raw_views is not None and not isinstance(raw_views, list):
+            add("ERROR", pid, "VIEW_NOT_LIST",
+                f"views 必须是列表（当前为 {type(raw_views).__name__}，单个视图也要写成 `- kind: ...`）")
+            raw_views = []
+        for v in raw_views:
+            if not isinstance(v, dict):
+                add("ERROR", pid, "VIEW_NOT_MAP", f"views 条目必须是映射（当前：{v!r}）")
+                continue
+            label = v.get("title") or v.get("url") or "?"
+            for old, new in VIEW_LEGACY_KEYS.items():
+                if old in v:
+                    add("ERROR", pid, "VIEW_LEGACY_KEY",
+                        f"view {label} 用了旧字段 `{old}`，已统一为 `{new}`（见 templates/research-state.yaml）")
+            for f in VIEW_REQUIRED:
+                if _blank(v.get(f)):
+                    add("ERROR", pid, "VIEW_INCOMPLETE", f"view {label} 缺 `{f}`（必填 {list(VIEW_REQUIRED)}）")
+            kind = str(v.get("kind") or "").strip()
+            if kind and kind not in VIEW_KINDS:
+                add("ERROR", pid, "VIEW_BAD_KIND",
+                    f"view {label} kind={kind!r} 不在受控词表 {list(VIEW_KINDS)}")
+            url = str(v.get("url") or "").strip()
+            if url and not url.startswith(("http://", "https://")):
+                add("ERROR", pid, "VIEW_BAD_URL", f"view {label} url 不是 http(s) 链接：{url!r}")
+            tok = str(v.get("token") or "").strip()
+            if "/" in tok:
+                add("ERROR", pid, "VIEW_TOKEN_PREFIX",
+                    f"view {label} token={tok!r} 带了类型前缀；token 只存裸值（{kind or 'kind'} 已表达类型）")
+            sd = str(v.get("sync_direction") or "").strip()
+            if not sd:
+                add("WARN", pid, "VIEW_NO_SYNC",
+                    f"view {label} 缺 sync_direction（应为 {VIEW_SYNC[0]}）")
+            elif sd not in VIEW_SYNC:
+                add("ERROR", pid, "VIEW_SYNC_REVERSE",
+                    f"view {label} sync_direction={sd!r}；只允许单向 {list(VIEW_SYNC)}"
+                    "（lark 不是 SSOT，回写一律改本地再重推）")
+            if _blank(v.get("pushed_at")):
+                add("WARN", pid, "VIEW_NO_PUSHED", f"view {label} 缺 pushed_at（无法判断视图是否过期）")
 
         # —— 关系层
         nd = node_of(p)

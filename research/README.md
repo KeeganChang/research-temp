@@ -15,7 +15,7 @@ research/
 ├── README.md                 # 本文件
 ├── _template/                # 新项目从这里复制（script.new_project 自动做）
 │   ├── project.yaml          #   项目元信息：目标 / 边界 / 交付物
-│   └── research-state.yaml   #   状态机骨架：focus / claims / monitors / queue / datasets
+│   └── research-state.yaml   #   状态机骨架：focus / claims / monitors / queue / datasets / views
 ├── _shared/                  # 跨项目方法论沉淀（不属于任何单个项目）
 │   ├── project.yaml
 │   └── research-state.yaml

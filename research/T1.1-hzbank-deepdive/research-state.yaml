@@ -146,8 +146,11 @@ views:
   - kind: lark_doc
     title: "T1.1 · 杭州银行个股深度（A3）— 主交付"
     url: "https://gcnyro8kdjoa.feishu.cn/docx/Y8aPdj64XoeN5tx6TVScSmTinbg"
+    token: "Y8aPdj64XoeN5tx6TVScSmTinbg"
+    role: "人读主交付（A3 公司级深度：ROE 驱动分解 + 资产质量 + 估值）"
     generated_by: "lark-cli docs +create --doc-format markdown"
-    sync_direction: "local → lark（单向，Doc 为主交付）"
+    sync_direction: local_to_lark
+    pushed_at: 2026-11-03
 
 # ── 已归档结构化记录索引（避免下次重复抓数）────────────────────
 datasets: []

@@ -215,17 +215,19 @@ views:
   - kind: lark_doc
     title: "P06 · A股行业景气度横截面（2026-10-30）— 主交付"
     url: "https://gcnyro8kdjoa.feishu.cn/docx/RO46dM29Ro9xbWxuLwccq28Zndd"
-    document_id: "RO46dM29Ro9xbWxuLwccq28Zndd"
+    token: "RO46dM29Ro9xbWxuLwccq28Zndd"
     role: "人读主交付（口径块 + 内联引用 + 末尾 reference）；复杂计算 Sheet 挂在其 reference 段"
     generated_by: "本地 markdown 重组（证据链精简方案 v1.1 §4.5）"
-    sync_direction: "local → lark（单向）"
+    sync_direction: local_to_lark
+    pushed_at: 2026-11-02
   - kind: lark_sheet
     title: "P06 A股行业景气度 · 证据链 2026-10-30"
     url: "https://gcnyro8kdjoa.feishu.cn/sheets/PP4asTZZThkKUXtURutcahCYnNf"
-    spreadsheet_token: "PP4asTZZThkKUXtURutcahCYnNf"
+    token: "PP4asTZZThkKUXtURutcahCYnNf"
     tabs: [00_概览, 01_口径, 02_数据源, 03_计算方式, 04_结论与证据, 05_监控与失效, 06_待办与缺口]
     generated_by: script/gen_evidence_sheet.py
-    sync_direction: "local → lark（单向）"
+    sync_direction: local_to_lark
+    pushed_at: 2026-11-02
     role: "复杂计算附件（四象限/相关矩阵可复算视图），挂在 Lark Doc 末尾 reference 段"
     note: >
       交付形态（2026-11-02 定）：Lark Doc 为主、Sheet 入 reference。

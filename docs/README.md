@@ -41,7 +41,7 @@
    - 没有就 `new_project.py` 建一个；
    - 调研产出先落 `output/`，确认后移 `archive/raw/<子类>/` 并写 frontmatter；
    - `validate_frontmatter.py` 校验通过；
-   - 把结论回写该项目的 `research-state.yaml`（focus / claims / monitors / queue / datasets）；
+   - 把结论回写该项目的 `research-state.yaml`（focus / claims / monitors / queue / datasets；发布到 lark 的交付物登记在 `views`）；
    - 走 `wiki-skill` 整理进 `archive/wiki/`。
 5. 卡住按第 4 节查对应文档。
 

@@ -123,7 +123,7 @@
 | 层 | 位置 | 存什么 |
 |----|------|--------|
 | 全局受控词表 | `config/types.yaml` `config/tags.yaml` | 分类与标签（跨项目共用，不随项目走） |
-| **项目状态机** | `research/<PID>-<slug>/research-state.yaml` | 该项目的 focus / claims / monitors / queue / datasets |
+| **项目状态机** | `research/<PID>-<slug>/research-state.yaml` | 该项目的 focus / claims / monitors / queue / datasets / views（`views` = 已发布 lark 交付物的唯一登记处，单向 local→lark） |
 | 项目元信息 | `research/<PID>-<slug>/project.yaml` | 驱动问题 / scope_in / scope_out / 交付物 |
 | **跨项目方法论** | `research/_shared/research-state.yaml` | 换个项目还能用的判别规则（带 `derived_from` 溯源） |
 

@@ -126,9 +126,11 @@ views:
   - kind: lark_doc
     title: "T1 · A股银行行业深度（2026-11-03）— 主交付"
     url: "https://gcnyro8kdjoa.feishu.cn/docx/LXC5dbKW2oKWSAxWXqNcHU45ned"
-    document_id: "LXC5dbKW2oKWSAxWXqNcHU45ned"
+    token: "LXC5dbKW2oKWSAxWXqNcHU45ned"
+    role: "人读主交付（行业概览 + 竞争格局 + 估值对比 + 主推归因）"
     generated_by: "lark-cli docs +create --doc-format markdown"
-    sync_direction: "local → lark（单向）"
+    sync_direction: local_to_lark
+    pushed_at: 2026-11-03
     note: >
       复杂计算未单列 Sheet（本 task 无四象限/相关矩阵类复算，直接内联 Doc）。
       本地源：research/T1-bank-deepdive/T1-LarkDoc-主交付.md。

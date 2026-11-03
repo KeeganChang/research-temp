@@ -185,3 +185,7 @@ datasets:
   - path: archive/raw/公司/20260919_公司_美国加密与衍生品主要玩家_v1.csv
     covers: COIN/HOOD/BLSH 行情与 2025 财年财务对照、COIN/HOOD/Circle/CME 季度经营数据、估值倍数、风险项
     as_of: 2026-09-19
+
+# ── 呈现层视图（已发布到 lark 的交付物 · 非 SSOT；字段口径见 _template）──────
+# 未发布到 lark 就保持空数组，发布后按 kind/title/url/token/role/sync_direction/pushed_at 登记。
+views: []

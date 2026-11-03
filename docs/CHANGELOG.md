@@ -4,6 +4,27 @@
 >
 > **2026-10-30 注**：`docs/` 已收敛为 **README / ARCHITECTURE / CHANGELOG / ROADMAP** 四个文件。原 `prototype/` 设计稿（01–09 + README）并入 `ROADMAP.md` §设计演进史；旧文件（含 MILESTONE / PROGRESS / SCENARIO / TODO / DESIGN）移至 `.workbuddy/_trash/2026-10-30-docs-consolidation/`，**可逆恢复**。历史条目中对旧路径的引用保留原文不改写，以免损伤变更记录本身。
 
+## 2026-11-04 · `views` 字段口径统一 + `load_context` 真正读它（配置债清理）
+
+**背景**：`research-state.yaml` 的 `views`（已发布到 lark 的交付物登记）自 11-01 引入后长出**三套写法**：P06/T1/T1.1 用 `kind` + `document_id`/`spreadsheet_token`，T1.2 用 `type` + `token: docx/…` + `pushed_at`，T1.3–T1.6 为 `[]`；且 `script/load_context.py` **完全不读该字段**（md / `--json` / `--lint` 均无）。结果是状态机里写着"发布到哪了"，但开场加载看不见，等于写了不生效的台账；模板里也没有这一段，新项目只能自创第四套写法。
+
+**定 schema**（`references/templates/research-state.yaml` + `research/_template/` 同步）
+- 固定九字段：`kind`（`lark_doc` / `lark_sheet` / `lark_slides`）、`title`、`url`、`token`、`role`、`sync_direction`、`generated_by`、`pushed_at`，加 `lark_sheet` 专用 `tabs` 与自由文本 `note`。
+- **`token` 只存裸值**，不带 `docx/` / `sheets/` 前缀——类型已由 `kind` 表达，前缀属重复编码，两处漂移必错一处。
+- **`sync_direction` 是枚举不是散文**：只接受 `local_to_lark`。原写法 `"local → lark（单向，Doc 为主交付）"` 把语义混在括号里，机器读不出方向，也就无法校验"lark 不是 SSOT"。
+- **`pushed_at` 从"只有 T1.2 有"升为标准字段**：缺它就无法判断视图是否落后于本地稿。
+
+**`load_context.py` 补齐读取端**
+- md 渲染新增 `### 呈现层视图（N 个，lark 非 SSOT · 单向同步）`，逐条给 kind / title / url / token / 角色 / 推送日期 / tabs；空数组渲染为"未发布到 lark，交付物仅在本地"，不留空白歧义。
+- `--json` 每条项目输出 `views` 字段。
+- `--lint` 新增 8 条校验：`VIEW_NOT_LIST` / `VIEW_NOT_MAP` / `VIEW_LEGACY_KEY`（旧字段名 `type`/`document_id`/`spreadsheet_token`/`doc_id` 直接 ERROR 并给出新名）/ `VIEW_INCOMPLETE` / `VIEW_BAD_KIND` / `VIEW_BAD_URL` / `VIEW_TOKEN_PREFIX`（token 带 `/`）/ `VIEW_SYNC_REVERSE`（非单向）/ `VIEW_NO_SYNC`、`VIEW_NO_PUSHED`（WARN）。
+
+**数据迁移**：P06（2 条：doc + sheet）、T1、T1.1、T1.2 共 5 条视图全部改为单一写法并补 `token` / `pushed_at` / `sync_direction`；T1.3–T1.6 保持 `[]`（未发布），不再自创空段注释。
+
+**顺带修掉一个假警报（暴露于本次 lint 全量跑）**：claim 的 `evidence`/`data` 常写成 `xxx.md#3.2` 带章节锚点，而校验用 `Path.exists()` 把锚点当文件名 → **20 条 REF_DANGLING 全是误报**（文件都在）。新增 `_ref_exists()`：先按 `#` 截断再判存在性。修后全量自检 `严重 0 · 警告 1`（余 1 条为 P06 `verify_numbers.py` 确实缺失）。
+
+**文档同步**：kit `AGENTS.md`（状态机字段行）、kit `README.md`、`research/README.md`、`docs/ARCHITECTURE.md`（状态机行）、`docs/README.md`（回写清单）、`research-core/SKILL.md`（Step 0 读取 + Step 6 回写）。
+
 ## 2026-11-04（修订）· 两份横切规则的「一般性表述」审查：把断言收窄到证据能支撑的范围
 
 **背景**：上一节入库的两份规则，`derived_from` 写清了来源（银行一例 + 套件结构一例），但**正文把证据强度丢了**——全部写成通用规律。用「表述的覆盖范围是否超过证据的覆盖范围」逐条过，查出 11 处，其中 5 处会直接误导执行。原则：结论方向不动，只补限定、撤规律、分开阶段。

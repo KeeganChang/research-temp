@@ -13,7 +13,7 @@
   - `ROUTING-quick.md`：选线速查（5-track 边界表 + 决策树，G2 每任务必读）。
   - `ROUTING.md`：选线完整版（反模式 / Track 配合 / method 清单 / 扩展，按需查）。
   - `README.md`：本文件（采用方式 / 接入新框架 / 目录结构）。
-  - `templates/research-state.yaml`：跨会话状态机模板（node 关系层 + focus/claims/monitors/queue/datasets）。
+  - `templates/research-state.yaml`：跨会话状态机模板（node 关系层 + focus/claims/monitors/queue/datasets + 可选 `views` 呈现层登记）。
   - `research-project-naming.md`：调研项目目录命名（`<PID>-<slug>[-<YYYYMMDD>]`）的唯一权威；file-manager 不重复定义，只指向本文件。
 - 5 种**方法级 Track 骨架**（默认启用，按推理方向划分，不绑业务）→ `skills/research-track-*`：
   - `research-track-drill`：下钻选优（演绎·总→分）

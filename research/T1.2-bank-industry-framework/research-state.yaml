@@ -204,10 +204,13 @@ datasets:
     covers: "7 轮检索的原始返回摘要：宏观/信贷、净息差双口径、收入结构与中收、竞争格局、Q3 监管指标、大行下沉、化债与零售风险"
     as_of: 2026-11-03
 
-# ── 交付物登记 ────────────────────────────────────────────────
+# ── 呈现层视图（非 SSOT；字段口径见 templates/research-state.yaml）──────
 views:
-  - type: lark_doc
+  - kind: lark_doc
     title: "T1.2 · 银行行业框架：宏观背景 / 业务逻辑 / 竞品分析（2026-11-03）— 主交付"
-    token: docx/EjkJdmfMVopdLPxKQi6csb7tndf
     url: https://gcnyro8kdjoa.feishu.cn/docx/EjkJdmfMVopdLPxKQi6csb7tndf
+    token: "EjkJdmfMVopdLPxKQi6csb7tndf"
+    role: "人读主交付（行业框架：宏观 / 业务逻辑 / 竞品）"
+    generated_by: "lark-cli docs +create --doc-format markdown"
+    sync_direction: local_to_lark
     pushed_at: 2026-11-03

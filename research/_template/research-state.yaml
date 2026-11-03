@@ -77,3 +77,26 @@ datasets: []
 #  - path: archive/raw/行业/xxx.csv   # load_context 会校验此路径是否存在
 #    covers: ""                       # 覆盖内容说明
 #    as_of: 2026-09-19
+
+# ── 呈现层视图（已发布到 lark 的交付物 · 非 SSOT）──────────────
+# 单一 schema（2026-11-04 统一；改字段须同步 script/load_context.py 的 VIEW_* 校验）：
+#   kind            lark_doc | lark_sheet | lark_slides（必填）
+#   title           视图标题（必填）
+#   url             http(s) 链接（必填；唯一可点入口）
+#   token           lark 对象裸 token，不带 docx/ sheets/ 前缀（类型已由 kind 表达）
+#   role            交付链角色：人读主交付 / 复杂计算附件 …
+#   sync_direction  只写 local_to_lark（lark 不是 SSOT；要改内容 = 改本地再重推）
+#   generated_by    生成方式（lark-cli 命令 / 脚本名）
+#   pushed_at       最近推送日期（缺此 lint 给 WARN）
+#   tabs            仅 lark_sheet：页签清单
+#   note            补充说明（重新同步步骤 / 不单列 Sheet 的理由）
+# 未发布到 lark 就保持 `views: []`，不要留半截条目。
+views: []
+#  - kind: lark_doc
+#    title: "P00 · <主题> — 主交付"
+#    url: "https://<tenant>.feishu.cn/docx/<token>"
+#    token: "<裸 token>"
+#    role: "人读主交付（口径块 + 内联引用 + 末尾 reference）"
+#    generated_by: "lark-cli docs +create --doc-format markdown"
+#    sync_direction: local_to_lark
+#    pushed_at: 2026-09-19

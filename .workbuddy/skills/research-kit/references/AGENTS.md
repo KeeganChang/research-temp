@@ -28,7 +28,7 @@
 |------|------|
 | 编排 + 6 道门禁（G1–G6）+ 交付门禁 G_rubric + 状态机回写 | `references/skills/research-core/SKILL.md` |
 | 5 种 Track 使用边界 + 选线决策树 | `references/ROUTING-quick.md` |
-| 状态机字段模板（六段：node / focus / claims / monitors / queue / datasets） | `references/templates/research-state.yaml` |
+| 状态机字段模板（五段：node / focus / claims / monitors / queue / datasets + 可选 `views` 呈现层） | `references/templates/research-state.yaml` |
 | 交付形态与载体分层（`output_target`: local / lark / workbuddy_library） | `references/delivery-standard.md` |
 | 交付前自检清单（rubric 前置 10 条 + 后置五维） | `references/report-rubric-v1.md` |
 | **研究粒度**（task 切分判据 / 扇出轴白名单 / 饱和判据 / join / 申万映射） | `references/granularity.md` |

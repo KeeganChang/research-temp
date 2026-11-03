@@ -16,7 +16,7 @@ version: 1.2
 ## 执行流程（严格按门禁推进）
 
 ### Step 0 — 定位项目
-- 若为续做：`load_context --project <PID>` 读取 `focus / claims / monitors / queue / datasets`。
+- 若为续做：`load_context --project <PID>` 读取 `focus / claims / monitors / queue / datasets / views`（`views` = 上次发布到 lark 的交付物，含 url/token/pushed_at，据此判断是否要重推）。
 - 若为新建：`new_project --id <PID> --name "..." --track <drill|entry|diagnostic|inductive|scenario>`，生成 `research/<PID>-<slug>/` 及 `research-state.yaml`。track 值由 G2 按 `references/ROUTING-quick.md` 决策树动态确定，**不预置、不写死**。
 - 建子 task：`new_project --parent <父PID>`，只需在新节点写 `node.parent`，**不改父文件**。
 - **门禁 G1 未过不得进入 Step 1。**
@@ -75,7 +75,8 @@ version: 1.2
 
 ### Step 6 — 回写（可选 · 状态机为复用层，非门禁）
 - **状态机自 2026-11-02 起降级为可选复用层**（见证据链精简方案 v1.1 §3.4）：一次性 / 轻量任务**不强制**回写；仅**月频重跑 / 跨会话续做 / 多人协作**才启用项目层与 `research-state.yaml`。
-- 启用时：更新 `research-state.yaml`：focus / claims / monitors（带阈值）/ queue / datasets。
+- 启用时：更新 `research-state.yaml`：focus / claims / monitors（带阈值）/ queue / datasets；发布到 lark 的交付物登记进 `views`。
+  - `views` 字段固定为 `kind / title / url / token / role / sync_direction / generated_by / pushed_at`（+ sheet 的 `tabs`、`note`）：`token` 存裸值不带 `docx/` 前缀，`sync_direction` 只写 `local_to_lark`。`load_context --lint` 会对旧字段名（`type` / `document_id` / `spreadsheet_token`）报 ERROR。
   - 多 task 项目：只回写**本节点**的 `research-state.yaml`，父节点的汇总由 `load_context` 按 `node.parent` 运行时派生，不手写。
   - `monitors` 须设 `last` 观测值与 `as_of`，触发阈值时生成 `queue` 条目。
 - **准确性保障由「报告内联引用 + 口径块 + 反方≥5」承担**，不依赖状态机；因此**未回写不再等于"未完成"**，仅意味本次结论未登记进跨会话复用层。
