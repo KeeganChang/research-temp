@@ -31,6 +31,7 @@ version: 2.0
 | 采用本套件 / 接入新框架 / 目录说明 | `references/README.md` |
 | 新建项目的状态机文件长什么样 | `references/templates/research-state.yaml` |
 | 某语境的具体算法与口径 | `references/skills/method-*/SKILL.md` |
+| 产出 HTML 交付 / 渲染（output_target=html） | `references/skills/research-html/SKILL.md` |
 
 ## 套件内构成
 
@@ -43,6 +44,7 @@ version: 2.0
 | `references/skills/research-track-inductive/` | Track 骨架：归纳洞察 | 是 |
 | `references/skills/research-track-scenario/` | Track 骨架：情景推演 | 是 |
 | `references/skills/research-module/` | 任意框架接入模板（含 Cohort 示例） | 是 |
+| `references/skills/research-html/` | HTML 交付渲染（合并自 frontend-design，output_target=html） | 按需·output_target=html |
 | `references/skills/method-topdown/` | method：景气链（→drill，含 A股 细化 a1/a2/a3） | 按需·语境匹配 |
 | `references/skills/method-market-entry/` | method：市场进入（→entry） | 按需·语境匹配 |
 | `references/skills/method-ecommerce-ops/` | method：电商经营诊断（→diagnostic） | 按需·语境匹配 |

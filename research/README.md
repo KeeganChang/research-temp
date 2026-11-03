@@ -43,6 +43,9 @@ research/
 5. **项目发现靠扫描**：没有 `index.yaml`，`python -m script.load_context` 扫 `research/*/project.yaml` 得到清单，
    避免注册表与项目文件两处漂移。
 
+> **目录命名的唯一权威**：`<PID>-<slug>[-<YYYYMMDD>]` 的完整规范（引用键、可改名性、子 task 派生、结论/监控 ID）见
+> `research-kit/references/research-project-naming.md`；本层只保留与上述职责相关的简要约定。
+
 ## 常用命令
 
 ```bash
@@ -50,5 +53,5 @@ python -m script.load_context --list                 # 列出所有项目
 python -m script.load_context                        # 加载全部（含 _shared 方法论）
 python -m script.load_context --project P02          # 只加载美国加密项目
 python -m script.load_context --project P02 --json   # 机读
-python -m script.new_project --id P03 --name "日本加密准入" --track B   # 从模板新建
+python -m script.new_project --id P03 --name "日本加密准入" --track entry   # 从模板新建
 ```

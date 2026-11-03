@@ -4,7 +4,7 @@ title: 交付标准（Delivery Standard）
 type: config
 derived_from: 证据链精简方案 v1.1 §4.5 + §8 Q1/Q2
 applies_to: 所有 research-kit 产出（一次性 / 月频 / 跨会话）
-output_target: lark   # 可选：local（本地 md）/ lark（飞书 Doc+Sheet）/ workbuddy_library（资料库，未测试）
+output_target: lark   # 可选：local（本地 md）/ lark（飞书 Doc+Sheet）/ html（自包含单页报告）/ workbuddy_library（资料库，未测试）
 ---
 
 # 交付标准（Delivery Standard）
@@ -21,10 +21,12 @@ output_target: lark   # 可选：local（本地 md）/ lark（飞书 Doc+Sheet�
 |---|---|---|---|
 | `local` | 本地 markdown 文件（落 `output/` 或项目目录） | `templates/local-delivery.md` | 纯本地，无外部依赖 |
 | `lark` | 飞书 **Doc + Sheet**（lark-cli 推送） | `templates/lark-doc-delivery.md` | 人读 + 复杂计算视图；单向呈现，本地 SSOT 不反向写 |
+| `html` | **自包含单页 HTML 报告**（落 `output/`） | `templates/html-delivery.html` + `references/skills/research-html/` | 内嵌 CSS、离线可读、可打印/导出 PDF；渲染能力由 research-html 子技能（合并自 frontend-design）提供 |
 | `workbuddy_library` | WorkBuddy **资料库**上传（未测试） | `templates/local-delivery.md` | 复用 local 模板生成的 md，再上传资料库；链路尚未实测 |
 
 - 切换输出目标 = 改本文件 frontmatter 的 `output_target` 一行，**不动**模板与门禁。
 - 无论哪个目标，**三段式（口径块 → 内联引用 → Reference）与 rubric 门禁不变**（准确性保障与载体解耦）。
+- `html` 目标**不引入外部依赖**（字体走系统栈、无 CDN）；交付文件须满足 `references/report-rubric-v1.md` 的 G_rubric 前置清单，与 lark/local 同标准。
 
 ## 1. 载体分层（§4.5）
 

@@ -1,8 +1,8 @@
 ---
 name: method-ecommerce-ops
-description: 电商经营诊断方法技能。是 research-track-diagnostic（诊断归因通用骨架）在「电商 / 直播电商经营」语境的固化打法：健康基线对齐 → 渠道经营对比 → 流量结构 → 转化漏斗 → 货品/主播 → 根因假设与修复优先级。belongs_to_track: diagnostic，按语境按需加载，无契合语境时回退通用骨架。
+description: 电商经营诊断方法技能。是 research-track-diagnostic（诊断归因通用骨架）在「电商 / 直播电商经营」语境的固化打法：健康基线对齐 → 渠道经营对比 → 流量结构 → 转化漏斗 → 货品/主播 → 根因假设与修复优先级；含「大促战报诊断与复盘」专项（campaign-diagnostic.md）。belongs_to_track: diagnostic，按语境按需加载，无契合语境时回退通用骨架。
 type: method
-version: 1.0
+version: 1.1
 belongs_to_track: diagnostic
 depends_on: [research-core, research-track-diagnostic]
 ---
@@ -84,6 +84,16 @@ depends_on: [research-core, research-track-diagnostic]
 - 若多渠道并存，须给**跨渠道资源再分配建议**（把预算从低 ROI 渠道挪向高 ROI 渠道，而非单纯加总预算）。
 - 交付：全部结论落 `research-state.yaml` 的 `claims`；异常指标（自然占比 / ROI / GPM / 漏点率）回写 `monitors` 带阈值。
 
+### M6 大促专项诊断（对应 DG1–DG4，复用 M2–M5 + R1–R2）
+
+> 大促后复盘诊断：**已有一次大促完整数据，找为什么没达/超额达成、哪环节出问题**。
+> 本模块不另起炉灶，100% 复用上方 M2–M5 + R1–R2，只叠加**大促特有的口径畸变与归因坑**。
+> 详细打法（输入契约、七步诊断法、口径坑、反方清单）见 **`campaign-diagnostic.md`**。
+
+- **七步**：① 战报 vs 目标（分平台/分款类算达成率）→ ② 分渠道 ROI + 毛利瀑布回填（多券叠加是否击穿红线）→ ③ 货品结构健康度（引流/利润占比）→ ④ 流量结构复盘（蓄水 vs 爆发畸变校正）→ ⑤ 直播净贡献（退款后净 GMV、主播单点依赖）→ ⑥ 退货归因树（保质期/描述不符/物流/低价预期）→ ⑦ 复盘产出（3 经验 + 3 改进 + 回写 monitors）。
+- **大促特有口径坑**（G4 必登记）：跨期定金尾款、T+30 退货滞后、直播退款虚高、多券叠加击穿毛利、跨平台比价拖价盘。
+- **门禁**：T+7 战报不可作最终结论（退货滞后），须跟 T+30；GMV 须折算退款后净口径方可对比。
+
 ---
 
 ## 关键口径（须在 G4 登记）
@@ -107,15 +117,19 @@ depends_on: [research-core, research-track-diagnostic]
 4. **外生冲击误判为内部问题**：大促节点、平台算法调整、季节性因素。
 5. **修复副作用**：砍投放可提 ROI 但砸 GMV 规模；冲自然占比需牺牲短期转化——修复动作自身也有代价。
 
+> **大促专项反方（G4 强制 ≥5，含 1 条时间维度）见 `campaign-diagnostic.md` §五**：GMV 涨≠健康（可能击穿毛利）、返场稀释主促、直播 GMV 含退款虚高、跨期口径失真，以及「大促 ROI 在平稳期失效」的时间维度反方。
+
 ## 交付物
 
 - 分渠道根因诊断书（含证据链）+ 跨渠道资源再分配建议。
 - 修复优先级矩阵（影响 × 成本）+ P0/P1/P2 行动清单。
-- 结论落 `claims`；异常指标回写 `monitors`（带阈值告警），满足防复发要求。
+- **大促诊断专项**（触发 M6 时）：分平台/分款类战报诊断书 + 货品结构健康度 + 直播净贡献 + 退货归因树 + 3 经验/3 改进复盘。
+- 结论落 `claims`；异常指标（自然占比 / ROI / GPM / 漏点率 / **净毛利红线 / T+30 退货率阈值**）回写 `monitors`（带阈值告警），满足防复发要求。
 
 ## 边界
 
 - 仅用于「**已有电商经营对象，找为什么偏离目标**」的诊断。
+- **大促诊断（M6）= 本方法的子集**：已有一次大促完整数据、找为什么没达/超额达成、哪环节出问题 → 走本方法（触发 M6）。**大促策划 / 执行（货品矩阵、定价架构、蓄水节奏、直播排期、私域）不属本研究方法**——那是经营执行 playbook，见独立运营 playbook（如 `output/ecommerce-campaign-playbook.md`），不要把它塞进 diagnostic 变成「diagnostic 变 execution」反模式。
 - 若是「进不进某电商平台 / 新市场」→ `entry`；「选哪个平台 / 渠道最优」→ `drill`；二者不可与本 Track 混跑（见 references/ROUTING.md §三 反模式：**diagnostic 变 drill** —— 把经营诊断跑成下钻选优，只给最优环节却不定位根因）。
 - 本技能负责**分析方法与结论**；报告渲染 / 可视化产出不在本技能职责范围（交付走 `output/` 约定）。
 
@@ -123,4 +137,5 @@ depends_on: [research-core, research-track-diagnostic]
 
 - 通用骨架：`research-track-diagnostic`（DG1–DG4 门禁）
 - 编排：`research-core`（G1–G6）
+- 大促专项打法：`campaign-diagnostic.md`（M6 七步诊断法、口径坑、反方清单）
 - 选线边界：`references/ROUTING.md`（决策树，diagnostic 优先级最高）

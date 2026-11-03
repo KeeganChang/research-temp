@@ -42,20 +42,9 @@
 
 ## 调研项目目录命名（research/）
 
-一个业务调研 = 一个项目目录：
+调研项目目录命名属于 research-kit 职责，**本文件不重复定义**。规范（`<PID>-<slug>[-<YYYYMMDD>]`、引用键、可改名性、子 task 派生、结论/监控 ID）的唯一权威见 `research-kit/references/research-project-naming.md`。
 
-```
-research/<PID>-<slug>[-<YYYYMMDD>]/
-```
-
-| 部分 | 含义 | 示例 |
-|------|------|------|
-| `<PID>` | 项目 ID（`P`+两位数字），跨文件稳定引用键 | `P03` |
-| `<slug>` | 英文短横线人读后缀，由 `--name` 拉丁字符派生或 `--slug` 覆盖 | `cn-chip` / `pest` / `us-crypto` |
-| `[-<YYYYMMDD>]` | 可选日期后缀，仅观察类 / 快照型项目带 | `P01-hotspot-20260919` |
-
-- `<PID>` 是 frontmatter `project: P03` 与 `research-state.yaml` 的引用键；目录改名不影响引用。
-- 创建：`python -m script.new_project --id Pxx --name "..." --track A|B [--slug xxx]`（统一 `python -m` 模块式，详见 AGENTS.md 铁律 #9）。
+- 创建：`python -m script.new_project --id Pxx --name "..." --track <drill|entry|diagnostic|inductive|scenario> [--slug xxx]`（统一 `python -m` 模块式，详见 AGENTS.md 铁律 #8）。
 
 ## frontmatter 字段
 

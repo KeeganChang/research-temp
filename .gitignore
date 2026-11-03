@@ -1,6 +1,7 @@
-# ===== 版本控制策略（2026-09-19 确认）=====
-# git 仅用于「开发项目」(script/)。本地知识库(archive/ memory/ docs/)的更新
-# 靠 docs/CHANGELOG.md + 每日 .workbuddy/memory/ 记录，不入库。
+# ===== 版本控制策略 =====
+# 入库范围（2026-11-03 调整）：开发项目 script/ + 设计/治理文档 docs/ + 项目级配置 .workbuddy/
+#   （skills / commands / 配置）。本地知识库 archive/ config/ data/ 与 workspace 级 memory/、以及
+#   .workbuddy/memory/（按日日志）、.workbuddy/_trash/（可逆删除回收站）不入库，靠 CHANGELOG + 每日 memory 记录。
 
 # 忽略根下一切
 /*
@@ -33,8 +34,13 @@ skills/
 # 开发产物
 script/__pycache__/
 
-# ===== 2026-11-03：本项目研究交付物入库（推送 research-temp 范围）=====
-# 放行研究项目与交付报告；其余个人目录（archive/ memory/ config/ data/ docs/）仍按 09-19 策略忽略。
+# ===== 2026-11-03：设计文档 docs/ 与项目配置 .workbuddy 入库 =====
+# 设计/治理文档（README/ARCHITECTURE/CHANGELOG/ROADMAP）作为配置纳入版本控制；
+# 项目级 skills / commands / 配置随 .workbuddy 入库。
+!/docs/
+# .workbuddy 内不入库部分：按日日志 memory/ 与可逆删除回收站 _trash/
+.workbuddy/_trash/
+# 研究交付物入库（与 docs/.workbuddy 同批）
 !/research/
 !/output/
 # research/ 内的可逆删除目录不入库（若日后出现）

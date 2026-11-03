@@ -49,18 +49,12 @@ description: 本地知识库的目录结构、文件命名、frontmatter 规范�
 
 ### 2.2 调研项目目录命名（research/）
 
-一个业务调研 = 一个项目目录，格式：
+调研项目的目录命名属于 research-kit 的职责范围，**本 skill 不重复定义**。规范（`<PID>-<slug>[-<YYYYMMDD>]`、引用键、可改名性、子 task 单方向派生、结论/监控/待办 ID）的唯一权威见
+`research-kit/references/research-project-naming.md`。
 
-```
-research/<PID>-<slug>[-<YYYYMMDD>]/
-```
-
-- **`<PID>`**：项目 ID，`P` + 两位数字（如 `P03`）。**是跨文件稳定引用键**——笔记 frontmatter 写 `project: P03`、状态机 `research-state.yaml` 互相引用都靠它；**改名 / 换 slug 不影响引用**。
-- **`<slug>`**：英文短横线人读后缀，由 `--name` 的拉丁字符自动派生（`slugify`：去非字母数字、转小写、截断 24 位），或显式 `--slug xxx` 覆盖。例：`P04-pest`（名含 "PEST" 被保留）、`P02-us-crypto`、`P03-cn-chip`（手动指定）。
-- **`[-<YYYYMMDD>]`**：可选日期后缀，**仅观察类 / 快照型项目**带（如 `P01-hotspot-20260919`），常青主题不加（如 `P02-us-crypto`）。
-- 创建命令（统一 `python -m` 模块式，详见 AGENTS.md 铁律 #9）：
-  `python -m script.new_project --id P03 --name "芯片行业深度" --track A [--slug cn-chip-20260904]`
-- ⚠️ 目录名是"人读标签"，**可改名不影响 PID 引用**（如 `P03-project` → `P03-cn-chip-20260904` 零断链，内部只用 ID 互指）。
+- 一个业务调研 = 一个项目目录，不同调研互不污染。
+- 创建入口（统一 `python -m` 模块式，详见 AGENTS.md 铁律 #8）：
+  `python -m script.new_project --id P03 --name "..." --track <drill|entry|diagnostic|inductive|scenario> [--slug xxx]`
 
 ## 三、frontmatter（研究笔记强制）
 

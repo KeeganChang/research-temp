@@ -69,7 +69,7 @@
 | `method-topdown` | drill | 语境契合「投资/资产选择（A股 景气链）」时按需加载 |
 | `method-sector-momentum` | drill | 语境契合「行业景气度监测」时按需加载 |
 | `method-market-entry` | entry | 语境契合「市场/平台进入（PEST→players）」时按需加载 |
-| `method-ecommerce-ops` | diagnostic | 语境契合「电商/直播电商经营诊断」时按需加载 |
+| `method-ecommerce-ops` | diagnostic | 语境契合「电商/直播电商经营诊断（含大促战报诊断与复盘）」时按需加载 |
 | （inductive / scenario 暂无 method） | — | 直接用对应 Track 通用骨架 |
 - 方法**不再用 `enabled` 开关**：按任务语境匹配其 described 领域加载；**无契合 method 即兜底回退通用骨架**，不强行套用领域口径。
 

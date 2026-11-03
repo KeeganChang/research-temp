@@ -13,6 +13,7 @@
   - `ROUTING.md`：5 种 Track 的使用边界与选线决策树（G2 依据，选线权威，不写死）。
   - `README.md`：本文件（采用方式 / 接入新框架 / 目录结构）。
   - `templates/research-state.yaml`：跨会话状态机模板（node 关系层 + focus/claims/monitors/queue/datasets）。
+  - `research-project-naming.md`：调研项目目录命名（`<PID>-<slug>[-<YYYYMMDD>]`）的唯一权威；file-manager 不重复定义，只指向本文件。
 - 5 种**方法级 Track 骨架**（默认启用，按推理方向划分，不绑业务）→ `skills/research-track-*`：
   - `research-track-drill`：下钻选优（演绎·总→分）
   - `research-track-entry`：进入测绘（横向·context→players）
@@ -82,6 +83,7 @@ research-kit/
     ├── README.md               # 本文件
     ├── templates/
     │   └── research-state.yaml # 状态机模板（含 node 关系层）
+    ├── research-project-naming.md  # 调研项目目录命名（唯一权威）
     └── skills/
         ├── research-core/             # 编排 + 门禁控制
         ├── research-track-drill/      # Track: 下钻选优

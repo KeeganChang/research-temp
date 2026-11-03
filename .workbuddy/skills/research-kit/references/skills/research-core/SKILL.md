@@ -85,5 +85,6 @@ version: 1.2
 - 骨架（5 种 Track）：research-track-drill / -entry / -diagnostic / -inductive / -scenario
 - 方法技能（按语境按需加载，无契合回退通用骨架）：method-topdown（景气链·A股，→drill）/ method-market-entry（市场进入，→entry）/ method-sector-momentum（行业景气度横截面，→drill）/ method-ecommerce-ops（电商经营诊断，→diagnostic）
 - 报告质量评分卡（前置自检 + 后置五维）：`references/report-rubric-v1.md`
-- 交付标准（Lark Doc 为主 / 三段式内联 / Sheet 退 reference / 文件级粒度 / 一次性也推 Doc）：`references/delivery-standard.md`
+- 交付标准（Lark Doc 为主 / 三段式内联 / Sheet 退 reference / 文件级粒度 / 一次性也推 Doc / html 自包含报告）：`references/delivery-standard.md`
 - Lark Doc 主交付模板：`references/templates/lark-doc-delivery.md`
+- HTML 交付渲染（output_target=html，合并自 frontend-design）：`references/skills/research-html/SKILL.md` + 模板 `references/templates/html-delivery.html`

@@ -48,16 +48,10 @@
 
 ### 3.1 调研项目目录命名（research/）
 
-归档文件之上，还有一个**项目层**目录（承载状态机与驱动问题）：
+调研项目目录命名属于 research-kit 职责，**本手册不重复定义**，规范唯一权威见 `research-kit/references/research-project-naming.md`（格式 `research/<PID>-<slug>[-<YYYYMMDD>]/`、引用键、可改名性、子 task 派生、结论/监控 ID）。
 
-```
-research/<PID>-<slug>[-<YYYYMMDD>]/
-```
-
-- `<PID>`（如 `P03`）是跨文件稳定引用键（笔记 frontmatter `project: P03`、状态机互指），改名不影响引用。
-- `<slug>` 是英文短横线人读后缀：由 `--name` 的拉丁字符自动派生，或 `--slug` 手动指定（如 `cn-chip`、`pest`、`us-crypto`）。
-- `[-<YYYYMMDD>]` 可选，仅**观察类 / 快照型**项目带（如 `P01-hotspot-20260919`）。
-- 创建：`python -m script.new_project --id Pxx --name "..." --track A|B [--slug xxx]`
+- 一个业务调研 = 一个项目目录，不同调研互不污染。
+- 创建：`python -m script.new_project --id Pxx --name "..." --track <drill|entry|diagnostic|inductive|scenario> [--slug xxx]`（统一 `python -m` 模块式，详见 AGENTS.md 铁律 #8）
 
 ---
 
@@ -83,7 +77,7 @@ reason: 宁德时代 Q3 财报，含动力电池产能数据  # 选填，分类�
 `资讯` · `行业` · `公司` · `热点` · `宏观` · `个人配置`
 
 - `structure=structured` 建议带 `data_file:` 指向同目录 csv/json/sqlite（数据源留痕）。
-- 校验命令（落盘前跑一遍）：`python -m script.validate_frontmatter <文件或目录>`（运行 script/ 一律 `python -m` 模块式，详见 AGENTS.md 铁律 #9）
+- 校验命令（落盘前跑一遍）：`python -m script.validate_frontmatter <文件或目录>`（运行 script/ 一律 `python -m` 模块式，详见 AGENTS.md 铁律 #8）
 
 ---
 
