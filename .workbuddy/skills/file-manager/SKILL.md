@@ -22,7 +22,7 @@ description: 本地知识库的目录结构、文件命名、frontmatter 规范�
 ├── secrets/                   # 开发用 API 密钥（飞书/MCP 等），不入库
 ├── .env                       # 项目运行密钥（与 secrets/ 不冲突）
 ├── script/                    # 脚本（validate_frontmatter.py 等），git 跟踪
-├── docs/                      # 设计文档 README/MILESTONE/PROGRESS/CHANGELOG/SCENARIO/TODO
+├── docs/                      # 设计文档 README/ARCHITECTURE/CHANGELOG/ROADMAP
 └── .workbuddy/
     ├── skills/                # 项目级 skills（本 skill + wiki-skill）
     └── memory/                # 按日 md（YYYY-MM-DD.md）

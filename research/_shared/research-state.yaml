@@ -1,0 +1,70 @@
+# _shared · 跨项目方法论沉淀 —— 状态机
+#
+# 存放"换个项目还能用"的方法论结论。每条带 derived_from 溯源到产生它的项目与原结论 ID。
+# 由 config/research-state.yaml（v1 单文件）于 2026-09-19 拆分迁移而来：
+#   C-20260919-16 ← P01（CATL 重估）
+#   C-20260919-17 ← P01（三维打分）
+#   C-20260919-24 ← P02（Track B 首跑）
+#
+# 约定：路径一律相对 workspace 根；新结论 ID 用 C-SHARED-<nn>。
+
+version: 2
+project_id: _shared
+updated_at: 2026-09-19
+
+focus:
+  topic: 可复用的调研判别规则
+  type: 个人配置               # 受控 6 类之一，见 config/types.yaml
+  status: active
+  started_at: 2026-09-19
+  rationale: >
+    方法论散在各项目里会随项目结束一起沉睡。单独存一层，任何项目开场都能加载到。
+
+claims:
+  - id: C-20260919-16
+    statement: >
+      **方法论**：当「高现金流 + 低估值」与「负现金流 + 高估值」同时存在于同一市场时，
+      驱动变量不是基本面，而是**资金的故事偏好**。宁德 16.44x PE 提供 139% 净现比和 602 亿
+      真现金，而盈利弱一个数量级、经营现金流为负（-4.28 亿）的 AI 芯片标的享受约 195x 估值。
+      推论：判断轮动应盯**资金的边际流向**而非静态估值差——前者有推力，后者可能长期不回归。
+    confidence: medium            # 基于单日横截面，需更长时间序列验证
+    status: open
+    tags: [方法论, 估值, 资金流向, 风格切换]
+    derived_from: {project: P01, claim: C-20260919-14}
+    evidence: archive/raw/公司/20260919_公司_宁德时代-资金面撤离重估_v1.md
+    data: archive/raw/公司/20260919_公司_宁德时代-资金面撤离重估_v1.csv
+    next_action: null
+
+  - id: C-20260919-17
+    statement: >
+      **方法论**：A 股重资产制造业中，「收入增速 + 订单指引」必须配上「净现比 + 合同负债」
+      才能使用。只依据前者会把资金引向"账面富贵"标的。此外净现比对周期底部/扩张期公司不公平
+      （如中文存储、海光备货期），打分体系系统性偏向成熟期资产，可能低估扩张期赔率。
+    confidence: medium            # 主观打分，权重依赖"2027 capex 骤降"的判断
+    status: open
+    tags: [方法论, 净现比, 合同负债, 打分局限]
+    derived_from: {project: P01, claim: C-20260919-11}
+    evidence: archive/raw/行业/20260919_行业_半导体细分赛道三维打分_v1.md
+    data: archive/raw/行业/20260919_行业_半导体细分赛道三维打分_v1.csv
+    next_action: null
+
+  - id: C-20260919-24
+    statement: >
+      **方法论（Track B 通用）**：做特定国家/行业的市场进入调研时，
+      ① **准入优先于需求**——先问合不合法（美国 CFD 是全禁，照搬欧洲打法是零到一的错误）；
+      ② **被禁品类要追"需求重定向的承接方"**——它们往往拿到合规溢价与定价权；
+      ③ **渗透率必须拆成 `客单价 × 频次`**——高渗透 + 低客单价 ≠ 大市场；
+      ④ **区分 β 与 α**（稳定币=利率β、交易所=行情β、清算所≈α）；
+      ⑤ **同涨同跌 = 假分散**（COIN/HOOD/BLSH/IBIT 同日 +6%~12%，定价同一 β）。
+    confidence: high
+    status: open
+    tags: [方法论, TrackB, 准入, 需求重定向, 客单价]
+    derived_from: {project: P02, claim: C-20260919-19}
+    evidence: archive/raw/行业/20260919_行业_美国加密资产市场进入调研_v1.md
+    data: archive/raw/公司/20260919_公司_美国加密与衍生品主要玩家_v1.csv
+    next_action: null
+
+# 监控/队列/数据集：方法论层不承载待办与数据索引，留空
+monitors: []
+queue: []
+datasets: []

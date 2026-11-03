@@ -1,0 +1,33 @@
+# 项目元信息模板 —— 复制后填写（勿在 _template 上直接改）
+#
+# 这里回答"这个项目到底要解决什么问题、边界在哪"，
+# 结论/监控/待办一律写进同目录的 research-state.yaml，不写在这里。
+
+id: P00                       # P<两位数字>（父项目）或 T<n>[.n]（子 task），与目录名前缀一致
+name: "（一句话项目名）"
+track: drill                  # 5 选 1：drill | entry | diagnostic | inductive | scenario
+                              # （G2 依据任务描述按 ROUTING.md 决策树判定，不写死）
+status: active                # active | paused | done | archived
+created_at: 2026-09-19
+updated_at: 2026-09-19
+
+# 驱动问题：这个项目最终要回答的那一个问题（必须可判定）
+question: >
+  （例：候选的 4 个跨境电商平台里，哪个渠道经济性最优、值得优先投入？）
+
+# 边界：写清楚"不做什么"比写"做什么"更能防跑偏
+scope_in:
+  - "（例：北美主流第三方电商平台，共 4 个）"
+scope_out:
+  - "（例：不涉及自营独立站、不做单平台佣金谈判策略）"
+
+# 交付物：项目结束时应该有哪几份东西
+deliverables:
+  - "（例：平台优选短名单 + 度量对比表）"
+  - "（例：关键指标监控表，带告警阈值）"
+
+skills: [research-core]
+owner: "（填负责人）"
+
+notes: >
+  （踩坑 / 前置判断 / 本项目特有的硬规矩）
