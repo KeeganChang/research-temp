@@ -16,7 +16,7 @@
 #   4. 项目收尾回写这里；下次开场跑 `python -m script.load_context --project <PID>` 加载。
 #   5. 多 task 单方向派生：子节点只写 node.parent；children / depth 由 load_context 运行时建图。
 #
-# 与门禁的对应（见根 AGENTS.md）：
+# 与门禁的对应（见 references/skills/research-core/SKILL.md）：
 #   G4 成稿 → 每条 claim 必须有 evidence↔data 互指；反方论点 ≥5 条（至少 1 条时间维度）
 #   G5 校验 → 每条 claim 必须带 confidence + status（无悬空结论）
 #   G6 回写 → monitors 带 last / as_of / threshold；queue 带 depends_on

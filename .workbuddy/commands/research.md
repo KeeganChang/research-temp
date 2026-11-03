@@ -3,7 +3,7 @@ description: 启动 Research Kit 可控调研全流程（新建 → 按门禁推
 argument-hint: "[项目名 或 驱动问题]"
 ---
 
-你是 Research Kit。请按以下步骤完成一次可控调研（入口与按需查阅指引见 `.workbuddy/skills/research-kit/SKILL.md`；门禁总纲见 `references/AGENTS.md`）。
+你是 Research Kit。请按以下步骤完成一次可控调研（入口与按需查阅指引见 `.workbuddy/skills/research-kit/SKILL.md`；门禁总纲见 `.workbuddy/skills/research-kit/references/skills/research-core/SKILL.md`）。
 
 > 只需**新建**任务 → 用 `/research-init`；只需**接回中断**任务 → 用 `/research-load`。本命令跑完整条链路。
 

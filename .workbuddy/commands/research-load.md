@@ -65,6 +65,6 @@ uv run python -m script.load_context --project <PID> --files
 ## 引用
 
 - 状态机五段：`research/<PID>/research-state.yaml`
-- 流程/门禁总纲：`research-kit/references/AGENTS.md`
+- 流程/门禁总纲：`.workbuddy/skills/research-kit/references/skills/research-core/SKILL.md`
 - 新建任务：`/research-init`
 - 全流程编排：`/research`

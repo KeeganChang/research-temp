@@ -27,7 +27,7 @@ version: 2.0
 |---|---|
 | 跑一次调研 / 门禁细节 / 状态机回写 | `references/skills/research-core/SKILL.md` |
 | 判断该走哪条 Track | `references/ROUTING.md`（选线权威） |
-| 看完整流程图 + G1–G6 定义 + 技能路由表 | `references/AGENTS.md` |
+| 看完整流程图 + G1–G6 门禁定义 + 技能路由 | `references/skills/research-core/SKILL.md` |
 | 采用本套件 / 接入新框架 / 目录说明 | `references/README.md` |
 | 新建项目的状态机文件长什么样 | `references/templates/research-state.yaml` |
 | 某语境的具体算法与口径 | `references/skills/method-*/SKILL.md` |
@@ -47,7 +47,7 @@ version: 2.0
 | `references/skills/method-market-entry/` | method：市场进入（→entry） | 按需·语境匹配 |
 | `references/skills/method-ecommerce-ops/` | method：电商经营诊断（→diagnostic） | 按需·语境匹配 |
 | `references/skills/method-sector-momentum/` | method：行业景气度横截面跟踪（→drill） | 按需·语境匹配 |
-| `references/AGENTS.md` | 流程图 + 门禁 + 状态机 + 技能路由（配置文档） | — |
+| `references/AGENTS.md` | 核心原则（铁律）+ 配置与规范入口指针（详细定义在各专文件） | — |
 | `references/ROUTING.md` | 5 种 Track 使用边界 + 选线决策树（选线权威） | — |
 | `references/README.md` | 采用 / 接入新框架 / 目录结构 | — |
 | `references/templates/research-state.yaml` | 状态机模板（含 node 关系层） | — |
@@ -69,7 +69,7 @@ version: 2.0
 
 ## 引用
 
-- 流程与门禁：`references/AGENTS.md`
+- 流程与门禁（G1–G6 + G_rubric）：`references/skills/research-core/SKILL.md`（AGENTS.md 只列原则与入口）
 - 选线边界与决策：`references/ROUTING.md`
 - 状态机：`references/templates/research-state.yaml`
 - 编排细节：`references/skills/research-core/SKILL.md`

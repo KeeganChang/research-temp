@@ -81,7 +81,7 @@ version: 1.2
 
 ## 引用
 - 状态机模板：`references/templates/research-state.yaml`（**可选复用层**，非必写）
-- 门禁定义：`references/AGENTS.md`
+- 门禁定义：本文件 Step 1–6（G1–G6 + 交付门禁 G_rubric）
 - 骨架（5 种 Track）：research-track-drill / -entry / -diagnostic / -inductive / -scenario
 - 方法技能（按语境按需加载，无契合回退通用骨架）：method-topdown（景气链·A股，→drill）/ method-market-entry（市场进入，→entry）/ method-sector-momentum（行业景气度横截面，→drill）/ method-ecommerce-ops（电商经营诊断，→diagnostic）
 - 报告质量评分卡（前置自检 + 后置五维）：`references/report-rubric-v1.md`

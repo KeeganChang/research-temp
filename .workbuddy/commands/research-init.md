@@ -70,5 +70,5 @@ uv run python -m script.new_project --id <PID> --name "<项目名>" --track <dri
 ## 引用
 
 - 选线边界与决策树：`research-kit/references/ROUTING.md`
-- 流程/门禁总纲：`research-kit/references/AGENTS.md`
+- 流程/门禁总纲：`.workbuddy/skills/research-kit/references/skills/research-core/SKILL.md`
 - 续做（加载中断任务）：`/research-load`

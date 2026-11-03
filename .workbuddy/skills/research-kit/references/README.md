@@ -9,7 +9,7 @@
 
 - 顶层 `SKILL.md`：唯一加载入口（怎么开始、何时读哪个文件、硬规矩）。
 - 配置文档（本目录内）：
-  - `AGENTS.md`：可控调研流程图 + 6 道阶段门禁（G1–G6）+ 状态机定义 + 技能路由。
+  - `AGENTS.md`：核心原则（铁律）+ 配置与规范入口指针（流程图/门禁/状态机/路由的详细定义见 research-core 与各专文件）。
   - `ROUTING.md`：5 种 Track 的使用边界与选线决策树（G2 依据，选线权威，不写死）。
   - `README.md`：本文件（采用方式 / 接入新框架 / 目录结构）。
   - `templates/research-state.yaml`：跨会话状态机模板（node 关系层 + focus/claims/monitors/queue/datasets）。
@@ -31,7 +31,7 @@
 
 ## 为什么「可控」
 
-三层控制机制（详见 `AGENTS.md`）：
+三层控制机制（详见 `references/skills/research-core/SKILL.md`）：
 1. **结构控制**：5 种 Track 由 G2 单选其一、不可混跑；Track 内部模块有固定上下游，防逻辑错位。
 2. **门禁控制**：每阶段进/出标准，含「反方≥5条 + 口径登记」，防半成品与确认偏误。
 3. **状态机控制**：claim 走 open→validated/falsified（证伪留痕），监控带阈值告警，防结论漂移与每次从零开始。
@@ -43,14 +43,14 @@
 - 业务框架按 `skills/research-module/` 模板往 `references/skills/` 里加（如 cohort-analysis、channel-analysis），不另建类别。
 
 **可选：并入既有项目**
-- 仅当你已有自己的 `AGENTS.md` 且不愿引入独立套件时，才把本套件的「铁律 / 流程图 / 门禁 / 状态机」段落 merge 进你的 `AGENTS.md`。
+- 仅当你已有自己的 `AGENTS.md` 且不愿引入独立套件时，才把本套件的「铁律」段落 merge 进你的 `AGENTS.md`（其余规范按 research-core / templates 等各自采用，避免双份逻辑）。
 - ⚠️ 注意：并入会造成双份逻辑，需自行保证后续只在一处维护（违背 SSOT）。
 
 ## 如何接入一个新框架（如 Cohort 客群分析）
 
 1. 复制 `references/skills/research-module/` → `references/skills/cohort-analysis/`。
 2. 按模板填：核心问题 / 输入口径 / 处理 SOP / 反方≥5 / 交付物 / 模块门禁。
-3. 在 `AGENTS.md` 技能路由表登记，并声明 `belongs_to_track`（drill / entry / diagnostic / inductive / scenario）。
+3. 在 `references/skills/research-core/SKILL.md` 的方法技能清单登记，并声明 `belongs_to_track`（drill / entry / diagnostic / inductive / scenario）；同步在 `references/AGENTS.md` 的 method 列表补一行。
 4. 无需改 research-core，门禁自动生效。
 
 ## 骨架 / 方法 与按需加载
@@ -77,7 +77,7 @@
 research-kit/
 ├── SKILL.md                    # 唯一加载入口（顶层只留它）
 └── references/                 # 其余内容，按需查阅
-    ├── AGENTS.md               # 流程图 + 门禁 + 状态机 + 技能路由
+    ├── AGENTS.md               # 核心原则（铁律）+ 配置与规范入口指针
     ├── ROUTING.md              # 5 种 Track 使用边界 + 选线决策树（选线权威）
     ├── README.md               # 本文件
     ├── templates/

@@ -1,6 +1,6 @@
 # ROUTING.md — 5 种 Track 的使用边界与选线决策
 
-> 本文件回答「用户这个问题，该走哪条 Track」。配套 `references/AGENTS.md`（流程/门禁）；各 Track 的具体定义见 `references/skills/research-track-*/`。**选线不写死**——直接按任务描述套本决策树判定，不依赖任何登记表。
+> 本文件回答「用户这个问题，该走哪条 Track」。流程与门禁见 `references/skills/research-core/SKILL.md`；各 Track 的具体定义见 `references/skills/research-track-*/`。**选线不写死**——直接按任务描述套本决策树判定，不依赖任何登记表。
 > 选线发生在门禁 **G2**；选错主线 = 逻辑错位 = 结论作废。
 >
 > **位置与路径**：本文件位于 `references/` 下；文中路径**相对套件根目录**书写。
@@ -83,4 +83,4 @@
 
 ## 引用
 
-- 流程与门禁：`references/AGENTS.md` ｜ 编排：`references/skills/research-core/SKILL.md`
+- 流程与门禁：`references/skills/research-core/SKILL.md` ｜ 编排：`references/skills/research-core/SKILL.md`
