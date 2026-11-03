@@ -199,9 +199,9 @@ datasets:
     covers: "回跑计算脚本（资金流提取 + 景气度计算 + 相关矩阵 + 四象限），可复算"
     as_of: 2026-10-30
 
-  - path: research/P06-sector-momentum-20261030/artifacts/sector_monthly/verify_numbers.py
-    covers: "数字溯源校验脚本：叙述手写数字 vs analysis_v2.json 比对 + 宏观断言出处×引用双向检查 + 数据源独立性复核"
-    as_of: 2026-10-30
+  # verify_numbers.py（数字溯源校验脚本）已于 2026-11-02 主动归档：
+  # 呈现层改由脚本生成后，该独立校验降级为可选自检、不再作门禁 → 不再作为 dataset 登记，
+  # 也不要把 `covers` 里那套四层校验当成现存可复用资产（只在 .workbuddy/_trash/2026-11-02-redundant/ 留档）。
 
   - path: research/P06-sector-momentum-20261030/artifacts/sector_monthly/industry_momentum_lines.html
     covers: "景气度走势折线图（横轴相对月份 × 纵轴景气度，12 行业；归一化/环比双模式 + 图例开关 + hover 数值）"

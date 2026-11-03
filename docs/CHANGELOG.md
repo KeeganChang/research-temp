@@ -21,7 +21,11 @@
 
 **数据迁移**：P06（2 条：doc + sheet）、T1、T1.1、T1.2 共 5 条视图全部改为单一写法并补 `token` / `pushed_at` / `sync_direction`；T1.3–T1.6 保持 `[]`（未发布），不再自创空段注释。
 
-**顺带修掉一个假警报（暴露于本次 lint 全量跑）**：claim 的 `evidence`/`data` 常写成 `xxx.md#3.2` 带章节锚点，而校验用 `Path.exists()` 把锚点当文件名 → **20 条 REF_DANGLING 全是误报**（文件都在）。新增 `_ref_exists()`：先按 `#` 截断再判存在性。修后全量自检 `严重 0 · 警告 1`（余 1 条为 P06 `verify_numbers.py` 确实缺失）。
+**顺带修掉一个假警报（暴露于本次 lint 全量跑）**：claim 的 `evidence`/`data` 常写成 `xxx.md#3.2` 带章节锚点，而校验用 `Path.exists()` 把锚点当文件名 → **20 条 REF_DANGLING 全是误报**（文件都在）。新增 `_ref_exists()`：先按 `#` 截断再判存在性。
+
+**清掉唯一一条真警告**：P06 的 `datasets` 仍登记 `verify_numbers.py`，而该脚本 2026-11-02 已被主动归档（"独立校验降级为可选自检、不做门禁"）——**文件删了、登记没撤**。删除该条目并留注释说明归档原因与 `_trash` 位置，防止后人照 `covers` 描述又补一个回来。全量自检现为 **严重 0 / 警告 0 / 提示 0**。
+
+**遗留口径（未改）**：`datasets` 段同时登记了 `rerun_v2.py` 这类复算脚本，而该段语义是"已归档结构化记录（防重复抓数）"。脚本是**方法**不是**数据**，是否拆出独立 `scripts` 段待定——暂按现状保留，避免动一次口径又牵动 5 个旧项目。
 
 **文档同步**：kit `AGENTS.md`（状态机字段行）、kit `README.md`、`research/README.md`、`docs/ARCHITECTURE.md`（状态机行）、`docs/README.md`（回写清单）、`research-core/SKILL.md`（Step 0 读取 + Step 6 回写）。
 
