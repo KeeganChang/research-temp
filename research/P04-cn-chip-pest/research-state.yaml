@@ -1,0 +1,161 @@
+version: 2
+project_id: P04
+updated_at: 2026-09-24
+
+# ── 当前研究焦点 ──────────────────────────────────────────────
+focus:
+  topic: "国内芯片行业 PEST 环境分析（Track B 市场进入视角）"
+  type: 行业
+  status: active
+  started_at: 2026-09-24
+  rationale: >
+    与 P03（Track A 景气度选标的）互补：用 PEST 四透镜 + Track B 的"被禁品类→需求重定向→承接方溢价"
+    判别点，把 P03 的国产化三级梯队上升为结构化环境图谱，回答"环境允不允许进、需求被谁承接"。
+
+# ── 结论台账 ──────────────────────────────────────────────────
+claims:
+  - id: C-P04-01
+    statement: >
+      国内芯片产业处于"外部管制高压 × 内部举国体制托底 × AI 需求拉动"三重力量挤出的窗口期：
+      准入端被海外卡脖子，但需求被管制逼出国产化重定向（合规溢价+订单+资本三重红利）。
+    confidence: high
+    status: open
+    tags: [PEST, 国产化, 窗口期]
+    evidence: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.md
+    data: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
+
+  - id: C-P04-02
+    statement: >
+      管制形成"被禁品类→需求重定向→承接方溢价"结构：国产设备/材料验证加速、Chiplet/先进封装换道、
+      RISC-V 规避授权、第三代半导体换道；承接方拿到合规溢价+政策入口+资本入口+订单倾斜。
+    confidence: high
+    status: open
+    tags: [TrackB, 需求重定向, 承接方溢价]
+    evidence: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.md
+    data: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
+
+  - id: C-P04-03
+    statement: >
+      设备国产化率 2024≈21% → 2026E 26% → 2028E 43%，为六环节最陡斜率，是国产化主线。
+    confidence: high
+    status: open
+    tags: [设备, 国产化率, 斜率]
+    evidence: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.md
+    data: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
+
+  - id: C-P04-04
+    statement: >
+      材料国产化率口径冲突（中银15%整体/新浪45%2026E/SEMI China40%），共识为晶圆材料<15%、封装<30%，
+      EUV 光刻胶/高端硅片仍进口；必须并列不取平均。
+    confidence: medium
+    status: open
+    tags: [材料, 口径冲突, 国产化率]
+    evidence: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.md
+    data: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
+
+  - id: C-P04-05
+    statement: >
+      EUV 光刻机、EDA 工具链、HBM 量产代差、先进封装 Interposer/混合键合材料为硬禁区，
+      决定国产化的真实天花板（能走多高而非多快）。
+    confidence: high
+    status: open
+    tags: [卡脖子, 禁区, EUV, EDA]
+    evidence: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.md
+    data: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
+
+  - id: C-P04-06
+    statement: >
+      中国半导体市场规模口径冲突：Omdia 2026E 8120.8 亿美元(+92.9%) 与 中国半导体行业协会 2025 销售收入
+      1.7 万亿元差约 3 倍（疑含 AI 整机广义口径），须并列不平均，以协会口径为锚。
+    confidence: high
+    status: open
+    tags: [口径陷阱, 市场规模]
+    evidence: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.md
+    data: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
+
+  - id: C-P04-07
+    statement: >
+      设计企业平均研发强度 15%(2025) 低于国际头部 25%，海外专利诉讼败诉率 60%，
+      创新后劲与 IP 布局是国产替代的隐性短板。
+    confidence: medium
+    status: open
+    tags: [研发强度, 专利, 短板]
+    evidence: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.md
+    data: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
+
+# ── 监控指标（带上次观测值 + 告警阈值）────────────────────────
+monitors:
+  - id: M-P04-01
+    name: "美国对华半导体出口管制走向"
+    last: "MATCH 法案 2026-04-02 生效；日本 2026-05-29 管制"
+    as_of: 2026-09-24
+    threshold: "2026-11 中期选举后再收紧/松动为关键观察点"
+    source: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
+
+  - id: M-P04-02
+    name: "半导体设备国产化率"
+    last: "21%（2024）→ 26%（2026E）→ 43%（2028E）"
+    as_of: 2026-09-24
+    threshold: "若 2026 实际 < 26% 或 2028 达不成 43%，斜率假设需下调"
+    source: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
+
+  - id: M-P04-03
+    name: "半导体材料国产化率口径收敛"
+    last: "15% / 45% / 40% 三口径并存"
+    as_of: 2026-09-24
+    threshold: "需验证真实值；若趋向 15% 则材料仍为最弱环节"
+    source: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
+
+  - id: M-P04-04
+    name: "大基金三期实际投放节奏"
+    last: "注册资本 3440 亿，已通过子基金投出（拓荆键科/安捷利美维等）"
+    as_of: 2026-09-24
+    threshold: "投放放缓 → 国产替代 β 退潮"
+    source: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
+
+  - id: M-P04-05
+    name: "2027 云厂商 Capex 增速"
+    last: "穆迪预警 2027 自由现金流收缩、Capex 由三位数降至两位数"
+    as_of: 2026-09-24
+    threshold: "若 2027 Capex 实质降速，算力/存储芯片需求回落，反向冲击国产供应链"
+    source: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
+
+# ── 下一步动作队列 ────────────────────────────────────────────
+queue:
+  - id: Q-P04-01
+    action: "落到单只标的（长鑫科技/北方华创/长电科技）→ `method-topdown` a3 公司段（drill ③）"
+    type: 公司
+    priority: P1
+    depends_on: [C-P04-01, C-P04-03]
+    status: pending
+    output: archive/raw/公司/
+
+  - id: Q-P04-02
+    action: "验证材料国产化率真实口径（15% vs 45% vs 40%）"
+    type: 行业
+    priority: P1
+    depends_on: [C-P04-04]
+    status: pending
+    output: archive/raw/行业/
+
+  - id: Q-P04-03
+    action: "跟踪 2026-11 美中期选举后出口管制走向"
+    type: 宏观
+    priority: P1
+    depends_on: [M-P04-01]
+    status: pending
+    output: archive/raw/宏观/
+
+  - id: Q-P04-04
+    action: "监控 2027 云厂商 Capex 降速信号（穆迪预警）"
+    type: 宏观
+    priority: P2
+    depends_on: [M-P04-05]
+    status: pending
+    output: archive/raw/宏观/
+
+# ── 已归档结构化记录索引（避免下次重复抓数）────────────────────
+datasets:
+  - path: archive/raw/行业/20260924_行业_国内芯片行业PEST_v1.csv
+    covers: "PEST 四维 + 相邻替代行业 + 监管三档 的结构化数据点（含期间/来源/Tier）"
+    as_of: 2026-09-24

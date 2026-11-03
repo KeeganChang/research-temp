@@ -45,3 +45,10 @@ script/__pycache__/
 !/output/
 # research/ 内的可逆删除目录不入库（若日后出现）
 research/**/_trash/
+
+# ===== 2026-11-04：交付目录内的「非交付物」显式排除 =====
+# 运行时凭据 / 会话性产物：飞书登录二维码属一次性凭据，不得入库
+output/*_auth_qr.png
+# PPT 工具链中间日志与临时母版测试产物（可由 slides/ 重建）
+**/.slidep/
+*_tmp_*.pptx

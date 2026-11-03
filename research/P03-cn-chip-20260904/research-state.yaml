@@ -1,0 +1,131 @@
+version: 2
+project_id: P03
+updated_at: 2026-09-24
+
+# ── 当前研究焦点 ──────────────────────────────────────────────
+focus:
+  topic: "芯片全价值链（设计/EDA→制造→设备→材料→封测→存储）2026 超级周期的兑现度分层与国产化水位"
+  type: 行业
+  status: active
+  started_at: 2026-09-24
+  rationale: "P01 已对 AI 算力链切片做兑现度排序，本项补齐完整价值链并强化'国产化水位 + 卡脖子'维度；上游承 C-20260919-01（电子/半导体为热钱最集中行业）"
+
+# ── 结论台账 ──────────────────────────────────────────────────
+claims:
+  - id: C-P03-01
+    statement: "芯片行业 2026 为 AI 单点拉动的'非典型超级周期'：价涨非量涨（2026年5月半导体 ASP +16.7% 而单位出货量环比持平），产业链内部极度分化"
+    confidence: high
+    status: validated
+    tags: [半导体, 周期, AI]
+    evidence: archive/raw/行业/20260924_行业_芯片行业深度_v1.md
+    data: archive/raw/行业/20260924_行业_芯片行业深度_v1.csv
+    next_action: Q-P03-01
+  - id: C-P03-02
+    statement: "兑现是分层的：存储(DRAM)/设备是真兑现，先进封装是半兑现（订单排到明年但产能爬坡中），EDA/光刻机是未兑现（卡脖子）"
+    confidence: high
+    status: open
+    tags: [兑现度, 分化]
+    evidence: archive/raw/行业/20260924_行业_芯片行业深度_v1.md
+    data: archive/raw/行业/20260924_行业_芯片行业深度_v1.csv
+  - id: C-P03-03
+    statement: "国产化三级梯队：第一梯队=成熟制程代工/传统封测/清洗设备/DRAM原厂(国产化率70%+或全球领先)；第二梯队=刻蚀/沉积/CMP/先进封装(27-40%)；第三梯队=EDA/光刻机/涂胶显影/离子注入/HBM(个位数~20%)"
+    confidence: high
+    status: open
+    tags: [国产替代, 卡脖子]
+    evidence: archive/raw/行业/20260924_行业_芯片行业深度_v1.md
+    data: archive/raw/行业/20260924_行业_芯片行业深度_v1.csv
+  - id: C-P03-04
+    statement: "设备整体国产化率 2024 ~18% → 2026E ~30%（中信）；成熟制程28nm+已达70%；光刻机/涂胶显影/离子注入仍个位数~20%；刻蚀37%(中微+北方华创占国产95%)"
+    confidence: high
+    status: open
+    tags: [设备, 国产化率]
+    evidence: archive/raw/行业/20260924_行业_芯片行业深度_v1.md
+    data: archive/raw/行业/20260924_行业_芯片行业深度_v1.csv
+    next_action: Q-P03-05
+  - id: C-P03-05
+    statement: "最大反噬风险在 2027 年云厂商 Capex 增速从三位数掉到两位数（穆迪预警自由现金流收缩、2027 数据中心投资逼近万亿），而非需求消失；观测锚=四大云厂商 Capex 同比跌破+30%"
+    confidence: medium
+    status: open
+    tags: [反噬, 资本开支]
+    evidence: archive/raw/行业/20260924_行业_芯片行业深度_v1.md
+    next_action: Q-P03-01
+  - id: C-P03-06
+    statement: "日本 2026-05-29 修订《外汇及外贸法》新增~20大类管制，覆盖 Chiplet/3D堆叠/CoWoS/TSV 全链条设备，逐案许可、驳回率70-80%——先进封装国产替代存在'设备天花板'"
+    confidence: high
+    status: open
+    tags: [地缘, 出口管制]
+    evidence: archive/raw/行业/20260924_行业_芯片行业深度_v1.md
+    next_action: Q-P03-03
+
+# ── 监控指标（带上次观测值 + 告警阈值）────────────────────────
+monitors:
+  - id: M-P03-01
+    name: "北美四大云厂商 Capex 同比增速"
+    last: "+81% (2026Q1)"
+    as_of: 2026-09-24
+    threshold: "跌破 +30% 触发反噬预警"
+    source: archive/raw/行业/20260924_行业_芯片行业深度_v1.md
+  - id: M-P03-02
+    name: "HBM 产能缺口"
+    last: "50%-60%（产能锁定至2027）"
+    as_of: 2026-09-24
+    threshold: "缺口收窄至 <20% 预示供需松动"
+    source: TrendForce（见报告 §1.2）
+  - id: M-P03-03
+    name: "设备整体国产化率"
+    last: "~30% (2026E，2024 ~18%)"
+    as_of: 2026-09-24
+    threshold: "2026 末能否达 30%（刻蚀能否破 40%）"
+    source: 中信证券/伯恩斯坦（见报告 §2、§4）
+  - id: M-P03-04
+    name: "DRAM 合约价季涨幅"
+    last: "Q3 预估 +13%~18%（TrendForce）"
+    as_of: 2026-09-24
+    threshold: "转负即价格重估反转信号"
+    source: TrendForce（见报告 §8）
+  - id: M-P03-05
+    name: "长鑫科技存货 / 经营性现金流"
+    last: "H1 营收+873% 但 B 面存货高企、现金流吃紧"
+    as_of: 2026-09-24
+    threshold: "存货/应收增速持续 > 营收增速即恶化"
+    source: archive/raw/行业/20260924_行业_芯片行业深度_v1.md
+
+# ── 下一步动作队列 ────────────────────────────────────────────
+queue:
+  - id: Q-P03-01
+    action: "跟踪北美四大云厂商 2026Q3 Capex 同比增速是否跌破 +30%（反噬第一观测锚）"
+    type: 行业
+    priority: P0
+    depends_on: [C-P03-01, C-P03-05]
+    status: pending
+    output: archive/raw/行业/20260924_行业_芯片行业深度_v1.md
+  - id: Q-P03-02
+    action: "验证长鑫科技 2026Q3 存货/经营性现金流是否恶化（B 面验证）"
+    type: 公司
+    priority: P1
+    depends_on: [C-P03-02]
+    status: pending
+  - id: Q-P03-03
+    action: "核查日本 2026-05-29 管制清单执行力度——CoWoS/TSV 设备对华审批驳回率是否维持 70-80%"
+    type: 宏观
+    priority: P1
+    depends_on: [C-P03-06]
+    status: pending
+  - id: Q-P03-04
+    action: "复核先进封装国产产能实际爬坡（长电年底 3000 片/月、通富 6000-7000 片）是否达预期"
+    type: 行业
+    priority: P1
+    depends_on: [C-P03-02]
+    status: pending
+  - id: Q-P03-05
+    action: "跟踪设备国产化率 2026 末能否达 30%（刻蚀能否破 40%）"
+    type: 行业
+    priority: P2
+    depends_on: [C-P03-04]
+    status: pending
+
+# ── 已归档结构化记录索引（避免下次重复抓数）────────────────────
+datasets:
+  - path: archive/raw/行业/20260924_行业_芯片行业深度_v1.csv
+    covers: "A股芯片玩家 2026H1 财务 + 设备国产化率分年"
+    as_of: 2026-09-24

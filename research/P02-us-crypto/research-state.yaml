@@ -1,0 +1,187 @@
+# P02 · 美国加密资产市场进入调研 —— 项目状态机
+#
+# 由 config/research-state.yaml（v1 单文件）于 2026-09-19 拆分迁移而来。
+# 迁移范围内：Track B 相关 claims C-20260919-18~23、monitors M-08~M-11、queue Q-20260919-05~07。
+# 跨项目方法论（C-20260919-24）已提升至 research/_shared/research-state.yaml。
+# 旧 ID 一律保留不改号，避免与 archive/ 笔记、CHANGELOG 中的引用断链。
+#
+# 约定：路径一律相对 workspace 根；新结论 ID 用 C-P02-<nn>。
+
+version: 2
+project_id: P02
+updated_at: 2026-09-19
+
+# ── 当前研究焦点 ──────────────────────────────────────────────
+focus:
+  topic: 美国加密资产（监管准入 → 价值链收租层 → 用户客单价 → 玩家格局）
+  type: 行业                   # 受控 6 类之一，见 config/types.yaml
+  status: active               # active | paused | done
+  started_at: 2026-09-19
+  rationale: >
+    Track B 首个案例：验证「特定国家 + 特定行业的市场进入」这套流程能否跑通。
+    五段（国别PEST → 行业 → 相邻/替代 → 用户画像 → players）已各产出一篇笔记；
+    当前卡在二手财务口径核实（Robinhood 现金流、稳定币/BTC ETF 三处口径冲突）。
+
+# ── 结论台账 ──────────────────────────────────────────────────
+# confidence: high | medium | low
+# status: open(待验证) | validated(已验证) | falsified(已证伪)
+claims:
+  - id: C-20260919-18
+    statement: >
+      美国加密监管是「稳定币已立法、市场结构未立法」的半成品：GENIUS Act 2025-07-18 已生效
+      （1:1 储备 + 月度披露 + 禁止付息），SEC/CFTC 联合解释 33-11412（2026-03-17）已给出五分类；
+      但 **CLARITY Act 在 2026-09 参议院程序性投票中未达 60 票失败**（众院 2025-07 过、
+      参院银行委 2026-05-14 以 15-9 过）。合规成本是浮动目标。
+    confidence: high
+    status: open
+    tags: [监管, 美国, CLARITY Act, GENIUS Act, 准入]
+    evidence: archive/raw/宏观/20260919_宏观_美国宏观与PEST基线_v1.md
+    data: archive/raw/宏观/20260919_宏观_美国宏观与PEST基线_v1.csv
+    next_action: Q-20260919-06
+
+  - id: C-20260919-19
+    statement: >
+      **美国零售 CFD 是结构性空白，而非需求缺失**：依据 CEA §2(c)(2)(D)（Dodd-Frank 新增）
+      与 §2(e)，非「合格合约参与者」（ECP，可自由支配投资 >1000 万美元）不得参与场外杠杆交易，
+      除非在指定合约市场成交。需求被重定向至三条路径：CME 微型期货、期权/保证金/杠杆 ETF、
+      **预测市场（Kalshi 是唯一 CFTC 注册 DCM）**。承接方因此获得合规溢价 + 机构入口 + 定价权
+      ——CME 加密业务 GAAP 经营利润率 65%，远高于任何原生交易所。
+    confidence: high
+    status: open
+    tags: [CFD, 需求重定向, 监管, Kalshi, CME, 结构空白]
+    evidence: archive/raw/行业/20260919_行业_美国加密资产市场进入调研_v1.md
+    data: archive/raw/行业/20260919_行业_美国加密资产市场进入调研_v1.csv
+    next_action: Q-20260919-07
+
+  - id: C-20260919-20
+    statement: >
+      稳定币是唯一跑通的收租层，但收的是**利率 β 而非经营 α**：商业模式 =
+      收 1 美元 → 买 4-5% 短债 → 吃利差，行业年化利息收入约 90 亿美元。
+      Circle Q2 因利率下行收入减少 5590 万美元；股价自 IPO 峰值 189.92 跌至约 62.78（**-67%**）；
+      叠加 Coinbase+BlackRock 于 2026-06 宣布 **Open USD**（当日 -16~17%）——**规模与利率两端同时受压**。
+      另：USDT+USDC 占供给 85%+，且 Tether 2026 年 1-2 月首次销毁 65 亿枚。
+    confidence: high
+    status: open
+    tags: [稳定币, 利率beta, Circle, 集中度, Open USD]
+    evidence: archive/raw/行业/20260919_行业_美国加密资产市场进入调研_v1.md
+    data: archive/raw/行业/20260919_行业_美国加密资产市场进入调研_v1.csv
+    next_action: Q-20260919-06
+
+  - id: C-20260919-21
+    statement: >
+      美国加密用户已大众化但**客单价极低**：6700 万人持有（每 4 个成人 1 个，年增 1200 万），
+      90% 计划来年加仓，**但计划加仓者中过半只打算买 ≤$5,000**。
+      画像从"科技男性"变为"南部 + 建筑/制造（21% > 科技 18%）+ 23% 家庭收入 <7.5 万"。
+      → `市场 = 持有率(25%) × 客单价(低) × 频次(高)` = **小额高频，不是大额配置**。
+      → **靠 AUM 收管理费跑不通；能赚钱的是订阅 + 交叉销售 + 高频小额价差。**
+    confidence: medium          # NCA 为在线自我报告样本，仅覆盖已持有者
+    status: open
+    tags: [用户画像, 客单价, 小额高频, NCA调查]
+    evidence: archive/raw/行业/20260919_行业_美国加密资产市场进入调研_v1.md
+    data: archive/raw/行业/20260919_行业_美国加密资产市场进入调研_v1.csv
+    next_action: Q-P02-02
+
+  - id: C-20260919-22
+    statement: >
+      玩家分化的根因是商业模式，不是执行力：**Robinhood 市值 1077 亿 = Coinbase 512 亿的 2 倍以上**，
+      而年化收入接近（52.4 亿 vs 48.8 亿）。差异来自 ROE 22.01% vs 10.05%、净利率 41.80% vs 17.55%、
+      Beta 2.34 vs 3.35。HOOD 加密收入 -38% 却靠 Gold 订阅（430 万，+36%）+ 期权 + 利息 +
+      预测市场把总营收做到 +32%；COIN 深度更深（平台资产 2459 亿、MTU 760 万）但**费用占年化收入 88%**，
+      2026 EPS 预期被砍 -44%（0.395→0.222）。
+    confidence: medium          # 美股财务为二手转引，未经 10-K 原文核对
+    status: open
+    tags: [Coinbase, Robinhood, 商业模式, 经营杠杆, 估值]
+    evidence: archive/raw/公司/20260919_公司_美国加密与衍生品主要玩家_v1.md
+    data: archive/raw/公司/20260919_公司_美国加密与衍生品主要玩家_v1.csv
+    next_action: Q-20260919-05
+
+  - id: C-20260919-23
+    statement: >
+      **"机构持续进场"叙事需要修正**：IBIT 于 2026-03 以 26 个月突破 500 亿 AUM（ETF 史上最快）、
+      机构持仓占比从 ~20% 升至 60%+，但 **Q2 2026 是整个现货 BTC ETF 品类连续第三个季度净流出**；
+      AUM 仍在增长是因为**价格升值掩盖了赎回**（与普通股票 ETF 牛市情形相同，**不代表新增需求**）。
+    confidence: medium          # ETF 总量有 890/1050/1200 亿三种口径
+    status: open
+    tags: [BTC ETF, IBIT, 资金流, 叙事修正]
+    evidence: archive/raw/公司/20260919_公司_美国加密与衍生品主要玩家_v1.md
+    data: archive/raw/公司/20260919_公司_美国加密与衍生品主要玩家_v1.csv
+    next_action: Q-20260919-06
+
+# ── 监控指标（带上次观测值 + 告警阈值）────────────────────────
+monitors:
+  - id: M-08
+    name: CLARITY Act 参议院进展（美国市场结构立法）
+    last: "2026-09 程序性投票未达 60 票，失败"
+    as_of: 2026-09-19
+    threshold: 通过 → 合规成本可测算，机构资金加速；再度失败 → 继续"半成品"状态
+    source: archive/raw/宏观/20260919_宏观_美国宏观与PEST基线_v1.csv
+
+  - id: M-09
+    name: USDC 流通量 / Circle 季度收入（利率 β 观察哨）
+    last: "USDC 770 亿（+28% YoY）；Circle Q1 营收 6.94 亿（+20%）"
+    as_of: 2026-09-19
+    threshold: 流通量增速 < 利率下行幅度 → 收入绝对值转负
+    source: archive/raw/行业/20260919_行业_美国加密资产市场进入调研_v1.csv
+
+  - id: M-10
+    name: 美国现货 BTC ETF 季度净流入
+    last: "2026Q2 连续第三个季度净流出；AUM 增长靠升值掩盖赎回"
+    as_of: 2026-09-19
+    threshold: 连续四季度净流出 → "机构持续进场"叙事证伪
+    source: archive/raw/公司/20260919_公司_美国加密与衍生品主要玩家_v1.csv
+
+  - id: M-11
+    name: Robinhood 经营活动现金流（口径待核实）
+    last: "2025 财年 -33.70 亿（与净利 +18.83 亿背离）"
+    as_of: 2026-09-19
+    threshold: 查 10-K 原表；若为真实经营流出 → "高质量增长"不成立
+    source: archive/raw/公司/20260919_公司_美国加密与衍生品主要玩家_v1.csv
+
+# ── 下一步动作队列 ────────────────────────────────────────────
+queue:
+  - id: Q-20260919-05
+    action: 核实 Robinhood 经营活动现金流口径（查 10-K 现金流量表原文），确认"高质量增长"是否成立
+    type: 公司
+    priority: P0
+    depends_on: [C-20260919-22]
+    status: pending
+
+  - id: Q-20260919-06
+    action: 口径核实三件套：稳定币总规模(230/310/320B)、IBIT AUM(46.5/50/54B)、BTC ETF 总量(89/105/120B)；并补 Census 家庭收入中位数与人口结构原始数据
+    type: 宏观
+    priority: P1
+    depends_on: [C-20260919-18, C-20260919-20, C-20260919-23]
+    status: pending
+
+  - id: Q-20260919-07
+    action: 跨境监管对照——日本 / 欧盟加密与衍生品准入差异（验证"需求重定向"是否为美国独有现象）
+    type: 行业
+    priority: P2
+    depends_on: [C-20260919-19]
+    status: pending
+
+  - id: Q-P02-01
+    action: 补齐未上市/基础设施层玩家（Circle 已上市需补最新季报、CME 加密业务拆分、Kalshi 估值与合规状态）
+    type: 公司
+    priority: P1
+    depends_on: [C-20260919-19, C-20260919-20]
+    status: pending
+
+  - id: Q-P02-02
+    action: 用户画像补强：找 Census / Fed SHED 原始数据替换 NCA 自我报告样本，重算客单价×频次
+    type: 行业
+    priority: P2
+    depends_on: [C-20260919-21]
+    status: pending
+
+# ── 已归档结构化记录索引（避免下次重复抓数）────────────────────
+datasets:
+  - path: archive/raw/宏观/20260919_宏观_美国宏观与PEST基线_v1.csv
+    covers: 美国 GDP/人均/收入/通胀/就业/基尼 + 监管五档 + 社会渗透率 + 稳定币支付规模
+    as_of: 2026-09-19
+  - path: archive/raw/行业/20260919_行业_美国加密资产市场进入调研_v1.csv
+    covers: 稳定币双寡头对照、CFD 禁令与重定向承接方、Kalshi/Polymarket/CME 微型期货、用户画像七维度 + 客单价拆解
+    as_of: 2026-09-19
+  - path: archive/raw/公司/20260919_公司_美国加密与衍生品主要玩家_v1.csv
+    covers: COIN/HOOD/BLSH 行情与 2025 财年财务对照、COIN/HOOD/Circle/CME 季度经营数据、估值倍数、风险项
+    as_of: 2026-09-19

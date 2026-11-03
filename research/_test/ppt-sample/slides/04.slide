@@ -1,0 +1,18 @@
+<Slide style={{ width: '1280px', height: '720px', background: '#FFFFFF', padding: '60px' }}>
+  <Text style={{ fontSize: 32, color: '#193B5B', fontWeight: 'bold' }}>2. 现金流质量</Text>
+  <Box style={{ width: '100%', height: '1px', background: '#E7ECF0', marginTop: 12, marginBottom: 24 }} />
+
+  <Box style={{ border: '1px solid #D5D9DF', borderRadius: 6, padding: 20, background: '#FFFFFF' }}>
+    <Text style={{ fontSize: 15, color: '#193B5B', fontWeight: 'bold', marginBottom: 12 }}>净现比与资本开支覆盖</Text>
+    <Text style={{ fontSize: 19, color: '#242D36', lineHeight: 1.6 }}>
+      样本企业净现比中位数 <span style={{ color: '#D8382E', fontWeight: 'bold' }}>1.12</span><span style={{ color: '#7896B2', fontSize: 13, fontStyle: 'italic' }}>　源：catl_cashflow_q3.json · 2026-10-31</span>；经营现金流覆盖资本开支倍数 1.4x，较 2025 同期（0.9x）<strong>明显改善</strong>，印证景气回升的现金含量，而非纯账面收入扩张。
+    </Text>
+  </Box>
+
+  <Box style={{ marginTop: 24, padding: '16px 18px', background: '#193B5B', borderRadius: 6 }}>
+    <Text style={{ fontSize: 15, color: '#B07D1F', fontWeight: 'bold', marginBottom: 8 }}>核心结论</Text>
+    <Text style={{ fontSize: 19, color: '#FFFFFF', lineHeight: 1.6 }}>
+      现金流质量与营收回升同向，景气修复"含金量"较高；后续需跟踪资本开支强度是否侵蚀自由现金流。
+    </Text>
+  </Box>
+</Slide>
