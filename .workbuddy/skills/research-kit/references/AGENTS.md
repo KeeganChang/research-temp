@@ -30,7 +30,9 @@
 | 5 种 Track 使用边界 + 选线决策树 | `references/ROUTING-quick.md` |
 | 状态机字段模板（六段：node / focus / claims / monitors / queue / datasets） | `references/templates/research-state.yaml` |
 | 交付形态与载体分层（`output_target`: local / lark / workbuddy_library） | `references/delivery-standard.md` |
-| 交付前自检清单（rubric 前置 7 条 + 后置五维） | `references/report-rubric-v1.md` |
+| 交付前自检清单（rubric 前置 10 条 + 后置五维） | `references/report-rubric-v1.md` |
+| **研究粒度**（task 切分判据 / 扇出轴白名单 / 饱和判据 / join / 申万映射） | `references/granularity.md` |
+| **取数纪律**（一手>二手>聚合 / E1–E5 真实错例 / A1–A5 硬动作） | `references/data-integrity.md` |
 | 框架接入模板（新增模块） | `references/skills/research-module/` |
 | 套件采用 / 目录说明 | `references/README.md` |
 | 顶层编排入口 | `SKILL.md`（本目录上层） |

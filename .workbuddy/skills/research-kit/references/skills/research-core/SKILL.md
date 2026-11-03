@@ -22,10 +22,11 @@ version: 1.2
 - **门禁 G1 未过不得进入 Step 1。**
 
 ### Step 1 — 立项门禁 G1
-校验三件套：
+校验三件套 + 一项结构判定：
 1. 驱动问题（可量化、可证伪）
 2. `scope_in` / `scope_out`（边界）
 3. 交付物形态（报告 / 表格 / 卡片）
+4. **扇出边界**（涉及多对象 / 多层级时必填）：按 `references/granularity.md` §1 四条判据判定「拆成并列 task」还是「task 内循环」；扇出轴须在白名单内（对象 / 子行业 / 情景），**禁止按层级或章节扇出**。判定结果写进 `project.yaml` 的 notes（写清扇出单位与理由），不在 `track` 字段里体现。
 
 不满足 → 退回向用户澄清，不推进。
 
@@ -42,12 +43,15 @@ version: 1.2
 - **按语境加载 method skill**：G2 选定 Track 后，若任务语境契合某 `method-*` 的 described 领域（belongs_to_track 一致），则加载该 method；**无契合 method 时兜底 = 仅用该 Track 通用骨架**（agent 与用户按骨架 D1–D3 自行定义口径），不加载任何领域 method。
 - 每个业务框架以 `research-module` 模板接入，逐模块执行；每模块产原始证据+数据指针写入 `datasets` 防重复抓数。
 - 资讯 / 新闻类来源：调用 `script/snapshot_url.py` 存**可检索文本快照**（URL / fetched_at / meta / sha256 + `_index.json`），不存截图；快照作为可核查证据，不进正文。
+- **采集时即登记来源层级**（`primary` 一手披露 / `secondary` 二手转述 / `aggregator` 聚合表），不留到成稿再补——层级的唯一用途是冲突时定优先级，见 `references/data-integrity.md` §0。
+- **多对象扇出时**：每个对象 task 只写自己的事实与证据，共享 question 池由父级在扇出声明阶段一次性下发；终止用**饱和判据**（边际新增有效事实 < 1 且缺口为空），不用计数门槛，见 `references/granularity.md` §4。
 
 ### Step 4 — 成稿门禁 G4
 逐项核查（任一不满足 → 回 Step 3 补数，带 `depends_on` 入 `queue`）：
 - [ ] 反方论点 ≥ 5 条（且至少 1 条为时间维度）
 - [ ] 关键口径已登记（单位 / 口径冲突处理）
 - [ ] 每条 claim 与证据可互指（evidence ↔ data 指针）
+- [ ] **取数纪律 A1–A5 已过**（`references/data-integrity.md` §2）：同比双年并列、比率拆分子分母、引用落到章节、关键数字回一手、多口径并列不合成
 
 ### Step 5 — 校验门禁 G5
 - 每条 claim 标注 `confidence`（high/medium/low）与 `status`（open → validated/falsified）。
@@ -62,6 +66,9 @@ version: 1.2
 - [ ] 结论由脚本生成 / 校验，无手写数字与计算值矛盾
 - [ ] 若多源：标注每个来源发布方，≥2 路真正独立源
 - [ ] 判断类结论标 `kind: judgment`，并记录被否决的备选
+- [ ] **同比 / 环比项双年（期）并列**写出，不只写变化量
+- [ ] **比率类指标已拆分子分母**，未把「分母扩张」误读为「主动释放」
+- [ ] **关键数字已回一手**，聚合源仅作交叉校验；存在未裁决冲突即不得交付
 
 > 重型输出（对外 / 入决策 / 多人协作）另须过 rubric §2 后置五维评分（通过线 ≥8/10 且任一维≠0）。
 > 交付形态与载体分层见 `references/delivery-standard.md`（Lark Doc 为主 + 三段式内联 + Sheet 退 reference）。
@@ -85,6 +92,8 @@ version: 1.2
 - 骨架（5 种 Track）：research-track-drill / -entry / -diagnostic / -inductive / -scenario
 - 方法技能（按语境按需加载，无契合回退通用骨架）：method-topdown（景气链·A股，→drill）/ method-market-entry（市场进入，→entry）/ method-sector-momentum（行业景气度横截面，→drill）/ method-ecommerce-ops（电商经营诊断，→diagnostic）
 - 报告质量评分卡（前置自检 + 后置五维）：`references/report-rubric-v1.md`
+- **研究粒度规则**（task 切分判据 / 扇出轴白名单 / 饱和判据 / join 策略 / 申万映射）：`references/granularity.md`
+- **取数纪律**（一手>二手>聚合 / 五类已发生错误 / A1–A5 硬动作）：`references/data-integrity.md`
 - 交付标准（Lark Doc 为主 / 三段式内联 / Sheet 退 reference / 文件级粒度 / 一次性也推 Doc / html 自包含报告）：`references/delivery-standard.md`
 - Lark Doc 主交付模板：`references/templates/lark-doc-delivery.md`
 - HTML 交付渲染（output_target=html，合并自 frontend-design）：`references/skills/research-html/SKILL.md` + 模板 `references/templates/html-delivery.html`

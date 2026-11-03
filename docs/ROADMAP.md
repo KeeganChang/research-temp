@@ -48,7 +48,7 @@
 | 5 | outputs/archive 协同 | `output/` 暂存(确认前) → `archive/raw/` → wiki-skill → `archive/wiki/` |
 | 6 | git 边界 | **仅 `script/` 入库**；本地知识库(archive/memory/docs)不入库，靠 CHANGELOG + 每日 .workbuddy/memory/ 记录更新 |
 | 7 | 典型场景 | 已给 20 场景（见 §4）|
-| 8 | 飞书适配边界 | 仅出报告+分享(只读镜像) + RUtable 写入；协作编辑暂缓 |
+| 8 | 飞书适配边界 | 仅出报告+分享(只读镜像)；协作编辑暂缓。~~RUtable 写入~~ **2026-11-04 作废**（事实层已废止，数据唯一归属地是报告本身） |
 
 ---
 
@@ -58,7 +58,7 @@
 - **大块一 · 文件与归档（file & archive / vault）**：`file-manager`（结构/命名/落位规则）；`wiki-skill`（raw→抽实体/双链/MOC，吸收原 indexer）；`archive/` 即 Obsidian vault（SSOT）。
 - **大块二 · 工具能力（atomic）**：`analysis` / `frontend` / `scraper` / `markitdown`（python + WorkBuddy skill）；**`research-kit` 单列一大类技能**（5 Track + method-*）。
 - **大块三 · 隐私与环境（privacy & env）**：skills 项目级；memory 双轨；`secrets` 双轨；`env-manifest`（WSL/Hermes/K8s；uv/nvm 版本锁定）。
-- **大块四 · 平台适配器（adapters）**：`obsidian-adapter`（极薄/可省）；`feishu-adapter`（出报告 + 分享 + RUtable 写入）；`claw-adapter`（跨平台日程聚合）。
+- **大块四 · 平台适配器（adapters）**：`obsidian-adapter`（极薄/可省）；`feishu-adapter`（出报告 + 分享）；`claw-adapter`（跨平台日程聚合）。
 - **大块五 · 知识迁移（migration）**：`migrate-research`（合并进 wiki-skill）；`migrate-ai-dev`（沉淀为 memory/jsonl）；`sync`（本地为主，飞书为镜像）。
 
 ### 3.2 分工（谁做 / 依赖 / IO 边界）
@@ -109,7 +109,7 @@
 
 **④ 平台适配器**
 - S14 本地 vault → 飞书只读镜像 ⬜：`archive/`(wiki) → 飞书文档只读副本
-- S15 报告推送飞书多维表格 ⬜：元信息写飞书 bitable（RUtable 风格）
+- ~~S15 报告推送飞书多维表格~~ ❌ **2026-11-04 作废**：RUtable 事实层已废止，元信息改由报告内汇总表 + 脚注承载，不再单独建 bitable。
 - S16 Claw 日程入知识库 ⬜：claw-adapter
 - S17 wikilink 保真 ✏️ 重指 wiki-skill（raw→wiki 阶段已做）
 
@@ -182,10 +182,10 @@
 - [ ] **env-manifest**：WSL/Hermes/K8s 环境声明 + uv/nvm 版本锁定。
 
 ### 三、平台适配器（低优先级，等核心稳定）
-- [ ] **obsidian-adapter**（极薄/可省）· **feishu-adapter**（出报告 + RUtable 写入）· **claw-adapter**（跨平台日程聚合）· **sync/S20**（本地↔飞书冲突裁决）
+- [ ] **obsidian-adapter**（极薄/可省）· **feishu-adapter**（出报告 + 分享）· **claw-adapter**（跨平台日程聚合）· **sync/S20**（本地↔飞书冲突裁决）
 
 ### 四、待决策（未定项，阻塞上述部分）
-- [ ] 结构化数据是否上飞书 bitable(RUtable) 查询？（当前已定：本地 csv/json/sqlite 为 SSOT，飞书仅视图；仅待用户最终追认）
+- ~~结构化数据是否上飞书 bitable(RUtable) 查询？~~ ✅ **2026-11-04 已裁决：不上，RUtable 整体废止**。本地 csv/json/sqlite 为 SSOT，飞书仅呈现视图；报告自带汇总表 + 脚注即承载元信息。重启前提见 `ARCHITECTURE.md` §6。
 - [ ] 效果度量：prompt/skill 优化的回归集与量化指标如何建（建议：以 `memory/experience.jsonl` 的 `status` + wiki 笔记复用次数作为初代度量）
 - [ ] 下载 `TradingAgents` / `sherlock` 两仓库到 `skills/`（阻塞：shell 不可靠 + 沙箱网络受限）
 

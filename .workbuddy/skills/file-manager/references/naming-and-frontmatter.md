@@ -68,5 +68,5 @@
 ## 数据源留痕
 
 - **非结构化**（网页 / PDF / 文章）：抽取为 md 存 `archive/raw/`，原件保真另存（同目录或 `assets/`）。
-- **结构化**（API JSON / 行情 / RUtable）：存 csv/json（单次）或 sqlite（cron 定时），本地为 SSOT；飞书 bitable 仅查询视图。
+- **结构化**（API JSON / 行情 / 指标明细）：存 csv/json（单次）或 sqlite（cron 定时），本地为 SSOT；飞书 bitable 仅查询视图。**不建 RUtable 事实层**——报告内的汇总表 + 脚注即数据唯一归属地（2026-11-04 裁决）。
 - **线上版本**：存 URL + 缓存 md + provenance（source/url/fetched_at）。
