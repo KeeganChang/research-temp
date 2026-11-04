@@ -75,6 +75,8 @@
 | （inductive / scenario 暂无 method） | — | 直接用对应 Track 通用骨架 |
 - 方法**不再用 `enabled` 开关**：按任务语境匹配其 described 领域加载；**无契合 method 即兜底回退通用骨架**，不强行套用领域口径。
 
+选完 Track 与 method 后，还需定预算档（shape × cost class）——见 **§七 Effort 预算** 与 `references/rules/effort.md`。
+
 ---
 
 ## 六、扩展：新增 Track / method
@@ -83,6 +85,20 @@
 - **新增某语境打法**：复制 `references/skills/method-topdown/` 成 `references/skills/<your-method>/`，填 `belongs_to_track` 指向某 Track，门禁自动生效，不改 core。
 - 选线是**动态判定**（见 §二 决策树），不依赖任何写死的登记表；本文件即选线权威。
 
+---
+
+## 七、Effort 预算（路由第三步：Track → method → Effort）
+
+选完 Track（§二）与 method（§五）后，还需定「这次花多少力气」——即执行形态 `shape` × 成本档 `cost class`（启发式，详见 `references/rules/effort.md`）：
+
+- **shape**：`straightforward`（直球）/ `breadth`（横向切分）/ `depth`（纵向多视角）。method 技能声明其默认 shape。
+- **cost class**：`S / M / L / XL`，默认取该 shape 的 `default_cost`；重型任务显式选档并写入项目记录。
+- **可权衡**：偏离预算须记理由（记入 `research-state.yaml` 节点或交付物 method note）；**升到 `XL` 必须人工确认**。
+- 与门禁互补：G1–G6 管流程推进，Effort 管花费上限；`tool_calls` / `sources` 为整个 work package 跨 worker 总额。
+
+> 本步对应 GitHub v3.0 的「路由第三步」，本地回填于 2026-11-05。门禁 G1–G6 与 G_rubric 不变。
+
 ## 引用
 
 - 流程与门禁：`references/skills/research-core/SKILL.md` ｜ 编排：`references/skills/research-core/SKILL.md`
+- Effort 预算（shape × cost class）：`references/rules/effort.md` ｜ 硬约束红线 H1–H12：`references/rules/constraints.md`

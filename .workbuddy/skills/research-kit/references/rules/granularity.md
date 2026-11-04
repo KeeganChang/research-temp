@@ -10,7 +10,7 @@ evidence_strength: 弱—中（n=1 行业 + 1 套件结构；§8 的行业映射
 # 研究粒度规则
 
 > 回答三个问题：**这件事该拆成独立 task 还是留在 task 内循环**、**哪些维度允许扇出**、**查到什么时候算够**。
-> 本文只管「怎么切」；信息存哪、报告怎么写由 `report-rubric-v1.md` + `delivery-standard.md` 管。
+> 本文只管「怎么切」；信息存哪、报告怎么写由 `references/rules/report-rubric-v1.md` + `delivery-standard.md` 管。
 
 ---
 

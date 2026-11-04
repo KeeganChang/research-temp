@@ -197,5 +197,15 @@ depends_on: [research-core, research-track-drill]
 - 下游延伸：`method-topdown`（A3 公司层下钻）
 - 取数配方与已知坑：`data-recipes.md`
 - 编排：`research-core`（G1–G6）｜ 选线边界：`references/ROUTING.md`
-- 报告质量评分卡（交付前自检清单）：`references/report-rubric-v1.md`
+- 报告质量评分卡（交付前自检清单）：`references/rules/report-rubric-v1.md`
 - 交付标准（载体分层 / 三段式 / 粒度）：`references/delivery-standard.md`
+
+## 执行预算 Effort（详见 references/rules/effort.md）
+
+- 典型 shape：**`breadth`**（多行业横截面扫描）或 **`straightforward`**（单行业动量快查）；默认 cost class：**M**（全市场扫描可升 **L**）。
+- 偏离预算须记理由（节点或交付物 method note）；升 XL 须人工确认（呼应 H5 人类权威）。
+
+## 相关红线（H-rules，全文见 references/rules/constraints.md）
+
+- 本方法最常触及：H8（数据引用）· H9（数据边界）· H10（抓取作数据）· H1（SSOT）。
+- H2 / H3 / H7 / H10 / H12 等同样适用，执行前通读全文。

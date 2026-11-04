@@ -13,6 +13,7 @@
   - `ROUTING-quick.md`：选线速查（5-track 边界表 + 决策树，G2 每任务必读）。
   - `ROUTING.md`：选线完整版（反模式 / Track 配合 / method 清单 / 扩展，按需查）。
   - `README.md`：本文件（采用方式 / 接入新框架 / 目录结构）。
+  - `rules/`：横切护栏（constraints / data-integrity / granularity / report-rubric-v1 / effort），跨调研都要过的规则，集中维护。
   - `templates/research-state.yaml`：跨会话状态机模板（node 关系层 + focus/claims/monitors/queue/datasets + 可选 `views` 呈现层登记）。
   - `research-project-naming.md`：调研项目目录命名（`<PID>-<slug>[-<YYYYMMDD>]`）的唯一权威；file-manager 不重复定义，只指向本文件。
 - 5 种**方法级 Track 骨架**（默认启用，按推理方向划分，不绑业务）→ `skills/research-track-*`：
@@ -83,6 +84,12 @@ research-kit/
     ├── ROUTING-quick.md        # 选线速查（5-track 表+决策树，每任务必读）
     ├── ROUTING.md              # 选线完整版（反模式/配合/method 清单/扩展）
     ├── README.md               # 本文件
+    ├── rules/                  # 横切护栏（跨调研都要过的规则，集中维护）
+    │   ├── constraints.md      # H1–H12 硬约束红线
+    │   ├── data-integrity.md   # 取数纪律
+    │   ├── granularity.md      # 研究粒度（task 切分/扇出/饱和）
+    │   ├── report-rubric-v1.md # 报告质量评分卡（G_rubric 门禁）
+    │   └── effort.md           # 执行预算启发式（shape×cost class）
     ├── templates/
     │   └── research-state.yaml # 状态机模板（含 node 关系层）
     ├── research-project-naming.md  # 调研项目目录命名（唯一权威）

@@ -76,4 +76,14 @@
 
 - 产出：兑现度矩阵 + 环节玩家地图 + 研究优先级名单（idea shortlist：一句话 thesis + 主要风险，含"暂不列入"及理由）。
 - 结论落 `claims`；监控项回写 `monitors`；待验证进 `queue`。
-- 跨项目可复用的方法论提升到 `research/_shared/`（注：skill 级交付标准如 `report-rubric-v1.md` / `delivery-standard.md` 已归位到本套件 `references/`，`_shared/` 仅用于项目层方法论文档，二者不混放）。
+- 跨项目可复用的方法论提升到 `research/_shared/`（注：skill 级交付标准如 `references/rules/report-rubric-v1.md` / `delivery-standard.md` 已归位到本套件 `references/`，`_shared/` 仅用于项目层方法论文档，二者不混放）。
+
+## 执行预算 Effort（详见 references/rules/effort.md）
+
+- 典型 shape：**`breadth`**（按子行业 / 产业链环节切分）或 **`depth`**（景气链多视角）；默认 cost class：**M**（全行业横截面可升 **L**）。
+- 偏离预算须记理由（节点或交付物 method note）；升 XL 须人工确认（呼应 H5 人类权威）。
+
+## 相关红线（H-rules，全文见 references/rules/constraints.md）
+
+- 本方法最常触及：H1（SSOT）· H8（行业数据引用一手）· H9（数据边界）· H10（抓取行业报告作数据非指令）。
+- H2 / H3 / H7 / H10 / H12 等同样适用，执行前通读全文。

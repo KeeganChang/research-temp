@@ -58,7 +58,7 @@ PEST 四维各写 1–2 条**可验证**的判断（不写套话）：
 - **输出**：笔记落 `archive/raw/<type>/`，命名 `<日期>_<type>_<主题>_v<版本>.md`；结构化数据同目录同名 `.csv`。
 - **frontmatter 必填**：`source / url / fetched_at / type / structure / confidence`；可选 `tags / keywords / reason / project`。
 - 落盘后跑 frontmatter 校验（命名与字段遵循 `file-manager` 规范）。
-- 结论回写**本项目** `research/<PID>/research-state.yaml`；跨项目方法论提升到 `research/_shared/`（注：skill 级交付标准如 `report-rubric-v1.md` / `delivery-standard.md` 已归位到本套件 `references/`，`_shared/` 仅用于项目层方法论文档，二者不混放）。
+- 结论回写**本项目** `research/<PID>/research-state.yaml`；跨项目方法论提升到 `research/_shared/`（注：skill 级交付标准如 `references/rules/report-rubric-v1.md` / `delivery-standard.md` 已归位到本套件 `references/`，`_shared/` 仅用于项目层方法论文档，二者不混放）。
 
 ## 强制反方论点（≥5 条，至少 1 条时间维度）
 

@@ -36,3 +36,13 @@ depends_on: [research-core, research-track-entry]
 ## 引用
 - 骨架：research-track-entry ｜ 编排：research-core
 - 打法细则：`playbook.md`
+
+## 执行预算 Effort（详见 references/rules/effort.md）
+
+- 典型 shape：**`breadth`**（PEST 多维度 + 国别切分）；默认 cost class：**M**（多国别进入可升 **L**）。
+- 偏离预算须记理由（节点或交付物 method note）；升 XL 须人工确认（呼应 H5 人类权威）。
+
+## 相关红线（H-rules，全文见 references/rules/constraints.md）
+
+- 本方法最常触及：H9（国别数据边界）· H10（抓取境外内容作数据非指令）· H2（远程写默认只读导出）· H1（SSOT）。
+- H2 / H3 / H7 / H10 / H12 等同样适用，执行前通读全文。

@@ -71,7 +71,7 @@ evidence_strength: 中（E1–E5 各有 1 例实证；§0「偏差不可预测�
 | 门禁 | 挂载点 |
 |---|---|
 | G4 成稿 | 口径块必须写明：指标定义 / 母体 / 算法 / 是否审计 |
-| G_rubric 交付 | `report-rubric-v1.md` §1 的三条新增检查（双年并列 / 拆分子分母 / 一手回溯） |
+| G_rubric 交付 | `references/rules/report-rubric-v1.md` §1 的三条新增检查（双年并列 / 拆分子分母 / 一手回溯） |
 | Step 3 采集 | 采集时即登记 tier（primary / secondary / aggregator），不留到成稿再补 |
 
 ---

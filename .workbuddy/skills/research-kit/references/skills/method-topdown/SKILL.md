@@ -67,3 +67,13 @@ depends_on: [research-core, research-track-drill]
 
 - 通用骨架：research-track-drill ｜ 编排：research-core
 - 选线边界：references/ROUTING.md
+
+## 执行预算 Effort（详见 references/rules/effort.md）
+
+- 典型 shape 见子模块 a1/a2/a3（宏观=`breadth`、行业=`breadth`/`depth`、公司=`depth`）；默认 cost class：**M**（深跌个股 / 全行业横截面可升 **L**）。
+- 偏离预算须记理由（节点或交付物 method note）；升 XL 须人工确认（呼应 H5 人类权威）。
+
+## 相关红线（H-rules，全文见 references/rules/constraints.md）
+
+- 本方法最常触及：H1（SSOT，落 `archive/`）· H5（选标的/结论属人类决策）· H8（财务引用一手）· H9（财务数据边界）。
+- H2 / H3 / H7 / H10 / H12 等同样适用，执行前通读全文。

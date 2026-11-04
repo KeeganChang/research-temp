@@ -28,7 +28,7 @@ master_template: ""   # 可选·仅 output_target=ppt：公司/客户模板 .ppt
 
 - 切换输出目标 = 改本文件 frontmatter 的 `output_target` 一行，**不动**模板与门禁。
 - 无论哪个目标，**三段式（口径块 → 内联引用 → Reference）与 rubric 门禁不变**（准确性保障与载体解耦）。
-- `html` 目标**不引入外部依赖**（字体走系统栈、无 CDN）；交付文件须满足 `references/report-rubric-v1.md` 的 G_rubric 前置清单，与 lark/local 同标准。
+- `html` 目标**不引入外部依赖**（字体走系统栈、无 CDN）；交付文件须满足 `references/rules/report-rubric-v1.md` 的 G_rubric 前置清单，与 lark/local 同标准。
 
 ### 0.1 ppt 的风格锁（master_template）
 
@@ -81,6 +81,6 @@ master_template: ""   # 可选·仅 output_target=ppt：公司/客户模板 .ppt
 ## 5. 与状态机 / rubric 的关系
 
 - 准确性保障 = **内联引用 + 口径块 + 反方≥5 + 取数纪律**（状态机自 2026-11-02 降级为可选复用层，见 `research-core`）。
-- 交付前须过 `references/report-rubric-v1.md` 前置清单（见 `research-core` G_rubric 门禁）。
-- 数字层面的硬动作（同比双年并列 / 比率拆分子分母 / 关键数字回一手 / 多口径并列不合成）见 `references/data-integrity.md`，它是 rubric 那三条检查的展开版，含真实错例。
-- 多对象 / 多层级任务另须在 G1 过 `references/granularity.md` 的扇出判定。
+- 交付前须过 `references/rules/report-rubric-v1.md` 前置清单（见 `research-core` G_rubric 门禁）。
+- 数字层面的硬动作（同比双年并列 / 比率拆分子分母 / 关键数字回一手 / 多口径并列不合成）见 `references/rules/data-integrity.md`，它是 rubric 那三条检查的展开版，含真实错例。
+- 多对象 / 多层级任务另须在 G1 过 `references/rules/granularity.md` 的扇出判定。

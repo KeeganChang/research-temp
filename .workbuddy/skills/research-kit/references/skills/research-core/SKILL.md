@@ -26,7 +26,7 @@ version: 1.2
 1. 驱动问题（可量化、可证伪）
 2. `scope_in` / `scope_out`（边界）
 3. 交付物形态（报告 / 表格 / 卡片）
-4. **扇出边界**（涉及多对象 / 多层级时必填）：按 `references/granularity.md` §1 四条判据 + 成本闸（对象数 ≥5 且 单对象轮次 ≥3，经验值）判定「拆成并列 task」还是「task 内循环」；扇出轴须在白名单内（对象 / 子行业 / 情景），**调研阶段禁止按层级或章节扇出**（成稿阶段可按章节并行，需共享参数卡）。判定结果写进 `project.yaml` 的 notes（写清扇出单位与理由），不在 `track` 字段里体现。
+4. **扇出边界**（涉及多对象 / 多层级时必填）：按 `references/rules/granularity.md` §1 四条判据 + 成本闸（对象数 ≥5 且 单对象轮次 ≥3，经验值）判定「拆成并列 task」还是「task 内循环」；扇出轴须在白名单内（对象 / 子行业 / 情景），**调研阶段禁止按层级或章节扇出**（成稿阶段可按章节并行，需共享参数卡）。判定结果写进 `project.yaml` 的 notes（写清扇出单位与理由），不在 `track` 字段里体现。
 
 不满足 → 退回向用户澄清，不推进。
 
@@ -38,26 +38,31 @@ version: 1.2
 - **scenario** 情景推演：推演·现在→未来，落点「情景矩阵 + 触发」。
 - 选线**不写死**：直接依据「任务描述」套用 `references/ROUTING-quick.md` 决策树判定，而非读某个预设字段；判定结果写回 `project.yaml` 的 `track` 字段仅作续做记录。同一条链不可混跑（铁律 #3），跨 Track 用父子 task 串起。
 
+### Step 2.5 — 执行预算 Effort（Track → method → Effort 第三步）
+- 选完 Track 与 method 后，按 `references/ROUTING.md` §七 与 `references/rules/effort.md` 定**执行预算档**：`shape`（straightforward / breadth / depth）× `cost class`（S / M / L / XL）。
+- 默认取 method 声明 shape 的 `default_cost`；重型任务显式选档并写入项目记录。
+- 启发式可权衡，偏离须记理由；**升到 `XL` 必须人工确认**。与 G1–G6 互补：门禁管流程推进，Effort 管花费上限。
+
 ### Step 3 — 分模块采集（G3）
 - 按所选 Track 加载对应**骨架**技能（research-track-<drill|entry|diagnostic|inductive|scenario>）。
 - **按语境加载 method skill**：G2 选定 Track 后，若任务语境契合某 `method-*` 的 described 领域（belongs_to_track 一致），则加载该 method；**无契合 method 时兜底 = 仅用该 Track 通用骨架**（agent 与用户按骨架 D1–D3 自行定义口径），不加载任何领域 method。
 - 每个业务框架以 `research-module` 模板接入，逐模块执行；每模块产原始证据+数据指针写入 `datasets` 防重复抓数。
 - 资讯 / 新闻类来源：调用 `script/snapshot_url.py` 存**可检索文本快照**（URL / fetched_at / meta / sha256 + `_index.json`），不存截图；快照作为可核查证据，不进正文。
-- **采集时即登记来源层级**（`primary` 一手披露 / `secondary` 二手转述 / `aggregator` 聚合表），不留到成稿再补——层级的唯一用途是冲突时定优先级，见 `references/data-integrity.md` §0。
-- **多对象扇出时**：每个对象 task 只写自己的事实与证据，共享 question 池由父级在扇出声明阶段一次性下发；终止用**饱和判据**（边际新增有效事实 < 1 且缺口为空），不用计数门槛，见 `references/granularity.md` §4。
+- **采集时即登记来源层级**（`primary` 一手披露 / `secondary` 二手转述 / `aggregator` 聚合表），不留到成稿再补——层级的唯一用途是冲突时定优先级，见 `references/rules/data-integrity.md` §0。
+- **多对象扇出时**：每个对象 task 只写自己的事实与证据，共享 question 池由父级在扇出声明阶段一次性下发；终止用**饱和判据**（边际新增有效事实 < 1 且缺口为空），不用计数门槛，见 `references/rules/granularity.md` §4。
 
 ### Step 4 — 成稿门禁 G4
 逐项核查（任一不满足 → 回 Step 3 补数，带 `depends_on` 入 `queue`）：
 - [ ] 反方论点 ≥ 5 条（且至少 1 条为时间维度）
 - [ ] 关键口径已登记（单位 / 口径冲突处理）
 - [ ] 每条 claim 与证据可互指（evidence ↔ data 指针）
-- [ ] **取数纪律 A1–A5 已过**（`references/data-integrity.md` §2）：同比双年并列、比率拆分子分母、引用落到章节、关键数字回一手、多口径并列不合成
+- [ ] **取数纪律 A1–A5 已过**（`references/rules/data-integrity.md` §2）：同比双年并列、比率拆分子分母、引用落到章节、关键数字回一手、多口径并列不合成
 
 ### Step 5 — 校验门禁 G5
 - 每条 claim 标注 `confidence`（high/medium/low）与 `status`（open → validated/falsified）。
 - 无「悬空结论」（即无证据支撑的断言）。
 
-### Step 5.5 — 交付门禁 G_rubric（前置清单，见 `references/report-rubric-v1.md`）
+### Step 5.5 — 交付门禁 G_rubric（前置清单，见 `references/rules/report-rubric-v1.md`）
 交付前逐条过 rubric §1 前置自检清单，**任一未过不得交付**：
 - [ ] 每个关键数字有内联引用（来源文件 + 短引文 + 抓取时间），无 `[UNSOURCED]`
 - [ ] 顶部有口径块（单位 / 基准日 / 缺月处理 / 代理指标 / caveat）
@@ -92,9 +97,9 @@ version: 1.2
 - 门禁定义：本文件 Step 1–6（G1–G6 + 交付门禁 G_rubric）
 - 骨架（5 种 Track）：research-track-drill / -entry / -diagnostic / -inductive / -scenario
 - 方法技能（按语境按需加载，无契合回退通用骨架）：method-topdown（景气链·A股，→drill）/ method-market-entry（市场进入，→entry）/ method-sector-momentum（行业景气度横截面，→drill）/ method-ecommerce-ops（电商经营诊断，→diagnostic）
-- 报告质量评分卡（前置自检 + 后置五维）：`references/report-rubric-v1.md`
-- **研究粒度规则**（task 切分判据 / 扇出轴白名单 / 饱和判据 / join 策略 / 申万映射）：`references/granularity.md`
-- **取数纪律**（一手>二手>聚合 / 五类已发生错误 / A1–A5 硬动作）：`references/data-integrity.md`
+- 报告质量评分卡（前置自检 + 后置五维）：`references/rules/report-rubric-v1.md`
+- **研究粒度规则**（task 切分判据 / 扇出轴白名单 / 饱和判据 / join 策略 / 申万映射）：`references/rules/granularity.md`
+- **取数纪律**（一手>二手>聚合 / 五类已发生错误 / A1–A5 硬动作）：`references/rules/data-integrity.md`
 - 交付标准（Lark Doc 为主 / 三段式内联 / Sheet 退 reference / 文件级粒度 / 一次性也推 Doc / html 自包含报告）：`references/delivery-standard.md`
 - Lark Doc 主交付模板：`references/templates/lark-doc-delivery.md`
 - HTML 交付渲染（output_target=html，合并自 frontend-design）：`references/skills/research-html/SKILL.md` + 模板 `references/templates/html-delivery.html`

@@ -73,7 +73,7 @@ AGENTS.md 预留的 `frontend`（md/数据 → HTML / PPT，经 lark-cli 发飞�
 ```
 
 ## 与门禁 / 状态机的关系
-- 渲染**前置**须过 `report-rubric-v1.md` 的 G_rubric 前置清单（内联引用、口径块、反方≥5 等）。
+- 渲染**前置**须过 `references/rules/report-rubric-v1.md` 的 G_rubric 前置清单（内联引用、口径块、反方≥5 等）。
 - HTML 文件为**单向呈现视图**，本地 SSOT（`research/<PID>/research-state.yaml` + `caliber.yaml`）不反向写。
 - A股 域色彩：`.up`=红(涨) / `.down`=绿(跌)，与 method-topdown 交付色规一致。
 

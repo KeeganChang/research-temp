@@ -68,3 +68,13 @@
 - 监控项回写 `monitors`（带阈值）；未决事项进 `queue`。
 - 叙述性报告：`output/` 暂存 → 确认 → `archive/raw/<type>/`（命名与 frontmatter 遵循 `file-manager` 规范）。
 - 本段必须**显式点名**交给 A2 的行业（接力棒）。
+
+## 执行预算 Effort（详见 references/rules/effort.md）
+
+- 典型 shape：**`breadth`**（多宏观变量 / 周期阶段横向并列；单指标快查可降 `straightforward`）；默认 cost class：**M**（单指标快查可降 **S**）。
+- 偏离预算须记理由（节点或交付物 method note）；升 XL 须人工确认（呼应 H5 人类权威）。
+
+## 相关红线（H-rules，全文见 references/rules/constraints.md）
+
+- 本方法最常触及：H9（宏观公开数据备份 `artifacts/raw/`）· H8（指标口径引用）· H1（SSOT）· H5（周期/货币判断属人类决策）。
+- H2 / H3 / H7 / H10 / H12 等同样适用，执行前通读全文。

@@ -139,3 +139,13 @@ depends_on: [research-core, research-track-diagnostic]
 - 编排：`research-core`（G1–G6）
 - 大促专项打法：`campaign-diagnostic.md`（M6 七步诊断法、口径坑、反方清单）
 - 选线边界：`references/ROUTING.md`（决策树，diagnostic 优先级最高）
+
+## 执行预算 Effort（详见 references/rules/effort.md）
+
+- 典型 shape：**`depth`**（诊断归因多视角找根因）；默认 cost class：**M**（全店 / 多 campaign 诊断可升 **L**）。
+- 偏离预算须记理由（节点或交付物 method note）；升 XL 须人工确认（呼应 H5 人类权威）。
+
+## 相关红线（H-rules，全文见 references/rules/constraints.md）
+
+- 本方法最常触及：H9（内部 / 经营数据不得进入公开输出）· H8（引用）· H5（诊断结论属人类决策）· H12（保护既有 playbook / 工作）。
+- H2 / H3 / H7 / H10 / H12 等同样适用，执行前通读全文。

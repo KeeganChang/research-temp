@@ -4,6 +4,26 @@
 >
 > **2026-10-30 注**：`docs/` 已收敛为 **README / ARCHITECTURE / CHANGELOG / ROADMAP** 四个文件。原 `prototype/` 设计稿（01–09 + README）并入 `ROADMAP.md` §设计演进史；旧文件（含 MILESTONE / PROGRESS / SCENARIO / TODO / DESIGN）移至 `.workbuddy/_trash/2026-10-30-docs-consolidation/`，**可逆恢复**。历史条目中对旧路径的引用保留原文不改写，以免损伤变更记录本身。
 
+## 2026-11-05 · research-kit `references/` 整理：横切护栏归入 `rules/`
+
+**动作**：把 5 个「跨调研都要过的横切规则」从 `references/` 顶层移入新建的 `references/rules/`，让入口层（`AGENTS` / `README` / `ROUTING` / `ROUTING-quick`）与规则层分离：
+- `constraints.md`（H1–H12 硬约束红线）、`data-integrity.md`（取数纪律）、`granularity.md`（研究粒度）、`report-rubric-v1.md`（报告质量评分卡 / G_rubric 门禁）、`effort.md`（执行预算启发式，GitHub v3.0 回填）。
+- 同步全量改链（约 20 处引用），保持「相对套件根目录」路径一致。
+- `ROUTING.md` / `ROUTING-quick.md` / `delivery-standard.md` / `research-project-naming.md` 留顶层不动（最小分组方案；ROUTING 不与 `routing/` 目录撞名）。
+
+**未动**：历史账本 `docs/CHANGELOG.md` 与本变更前的 `output/` 暂存里对旧路径的引用保留原文（变更记录本身不可损伤，见上方 2026-10-30 注）；活文档 `docs/ARCHITECTURE.md` 与交付物 `research/T1.4…主交付.md` 内的引用路径已同步更新到 `references/rules/`。
+
+## 2026-11-05（之二）· Effort 预算 + H1–H12 红线按编号下沉到各 method 技能
+
+**决策**：采用「中心 SSOT + method 按路径引用」方案（非脚本、非整段照搬），与本地既有范式一致（`report-rubric` / `data-integrity` / `granularity` 均已如此引用）。
+- `references/rules/effort.md` = 预算矩阵单一维护地（shape × cost class）；`references/rules/constraints.md` = H1–H12 红线单一维护地。
+- 给 7 个 method 文件末尾各补「执行预算 Effort」标签（典型 shape + 默认 cost class，升 XL 须人工确认）与「相关红线 H-rules」按编号引用（各方法列最常触及的 3–4 条，其余通读全文）：
+  - `method-topdown/SKILL.md`（总览）+ `a1-macro` / `a2-industry` / `a3-company`（三者 shape 各异）；
+  - `method-market-entry/SKILL.md`、`method-sector-momentum/SKILL.md`、`method-ecommerce-ops/SKILL.md`。
+- `research-core` 作为编排层已在 Step 2.5 引用 `effort.md`，不重复挂 method 级标签。
+
+**未做**：GitHub 式 `script/route_methods.py` 选线脚本未实现——effort 本质是判断，矩阵已是简单表，读 `effort.md` 一步定档即可，脚本属过度工程（若日后要 agent 自动建议档位再单独加）。
+
 ## 2026-11-04 · `views` 字段口径统一 + `load_context` 真正读它（配置债清理）
 
 **背景**：`research-state.yaml` 的 `views`（已发布到 lark 的交付物登记）自 11-01 引入后长出**三套写法**：P06/T1/T1.1 用 `kind` + `document_id`/`spreadsheet_token`，T1.2 用 `type` + `token: docx/…` + `pushed_at`，T1.3–T1.6 为 `[]`；且 `script/load_context.py` **完全不读该字段**（md / `--json` / `--lint` 均无）。结果是状态机里写着"发布到哪了"，但开场加载看不见，等于写了不生效的台账；模板里也没有这一段，新项目只能自创第四套写法。
@@ -50,7 +70,7 @@
 - **A1 加适用边界**：双年并列对存量/比率类成立，对流量型一次性事件（并购、政策发布、单笔处置）不适用，但须注明「一次性」。
 - **§6**「唯一办法」→「最省事的办法」。
 
-**跨文件**：`report-rubric-v1.md` 的 `≥2 路独立源` 加注——那是**引用独立性**要求，不是终止判据（终止见 granularity §4）。`research-core` G1 第 4 项同步补成本闸与阶段限定。
+**跨文件**：`references/report-rubric-v1.md` 的 `≥2 路独立源` 加注——那是**引用独立性**要求，不是终止判据（终止见 granularity §4）。`research-core` G1 第 4 项同步补成本闸与阶段限定。
 
 **未改**：`derived_from` 与实例本身（真实发生过，不改写记录）；两份文件之外的 `method-*` 未逐条审，待下次跑真实项目时按需收窄。
 
@@ -76,7 +96,7 @@
 
 **门禁挂载（避免"文件写了没人读"）**
 - `research-core` G1 增加第 4 项**扇出边界**判定（结果写 `project.yaml` notes，不塞 `track`）；G3 增加「采集时即登记来源层级」「多对象扇出用饱和判据」；G4 增加取数纪律 A1–A5；G_rubric 增加三条数字检查。
-- `report-rubric-v1.md` §1 前置清单 7 条 → **10 条**（同比双年并列 / 比率拆分子分母 / 关键数字回一手）；§2 事实准确性失分项补「同比基数取错年份」。
+- `references/report-rubric-v1.md` §1 前置清单 7 条 → **10 条**（同比双年并列 / 比率拆分子分母 / 关键数字回一手）；§2 事实准确性失分项补「同比基数取错年份」。
 
 **RUtable 正式废止（承接 2026-11-02 的 A/B 实测）**
 - `ARCHITECTURE.md` §6 原写「飞书 bitable（RUtable）仅查询视图」→ 改为**已废止**并写明理由与重启前提。
@@ -97,7 +117,7 @@
 **四步增强（全部是 enhance，非 add）**
 1. 新建 `references/delivery-standard.md`：把「Lark Doc 为主 / §4.5 三段式内联 / Sheet 退 reference / 文件级粒度 / 一次性也推 Doc / 新闻存快照」提升为 skill 级一等工作指令。
 2. `research-core` 新增 **Step 5.5 交付门禁 `G_rubric`**：rubric §1 前置清单焊进门禁，任一未过不交付；重型输出另过 §2 后置五维。
-3. `report-rubric-v1.md` 从 `research/_shared/` **原样移入** `references/`（字节一致 4143B），旧文件移 `_trash/2026-11-03-rubric-move/`，同步更新两处引用路径。
+3. `references/report-rubric-v1.md` 从 `research/_shared/` **原样移入** `references/`（字节一致 4143B），旧文件移 `_trash/2026-11-03-rubric-move/`，同步更新两处引用路径。
 4. `research-core` Step 3 接入 `script/snapshot_url.py`；新建 `templates/lark-doc-delivery.md`（新任务直接套用，不再抄 P06）。
 
 **回归验证**：用新模板重写 P06/T1 两份 `*-LarkDoc-主交付.md`，经 `lark-cli docs +update --command overwrite` **就地覆写**已有飞书 Doc（P06 rev 6 / T1 rev 9），**产生零副本**。

@@ -30,6 +30,8 @@ version: 2.0
 | 看完整流程图 + G1–G6 门禁定义 + 技能路由 | `references/skills/research-core/SKILL.md` |
 | 采用本套件 / 接入新框架 / 目录说明 | `references/README.md` |
 | 新建项目的状态机文件长什么样 | `references/templates/research-state.yaml` |
+| 执行预算启发式（shape × cost class，路由第三步） | `references/rules/effort.md` |
+| 硬约束红线 H1–H12（集中维护，不可逾越） | `references/rules/constraints.md` |
 | 某语境的具体算法与口径 | `references/skills/method-*/SKILL.md` |
 | 产出 HTML 交付 / 渲染（output_target=html） | `references/skills/research-html/SKILL.md` |
 | 产出 PPT 交付 / 渲染（output_target=ppt） | `references/skills/research-ppt/SKILL.md` |
@@ -55,6 +57,8 @@ version: 2.0
 | `references/ROUTING-quick.md` | 选线速查（5-track 边界表 + 决策树，每任务必读） | — |
 | `references/ROUTING.md` | 选线完整版（反模式 / Track 配合 / method 清单 / 扩展） | — |
 | `references/README.md` | 采用 / 接入新框架 / 目录结构 | — |
+| `references/rules/effort.md` | 执行预算启发式（shape × cost class，路由第三步；启发式可权衡，偏离记理由） | — |
+| `references/rules/constraints.md` | 硬约束红线 H1–H12（集中维护；method 技能只按编号引用） | — |
 | `references/templates/research-state.yaml` | 状态机模板（含 node 关系层） | — |
 
 ## 硬规矩
