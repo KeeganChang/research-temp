@@ -1,0 +1,31 @@
+### P07-draft-ch2.md
+L42 [1360 chars]
+① **时间维度（必写）**：2025 全年 GDP +4.4%、通胀 1.7%（世界银行 WDI），2026 Q2 GDP 骤降至 2.3%（2025 Q2 为 5.4%、2026 Q1 为 2.8%）、上半年通胀 4.8%、家庭消费 Q2 2.8%（2025 Q2 为 5.2%）、固定资本形成 −13.7%（[Philstar／The Freeman, 2026-08-11](https://www.philstar.com/the-freeman/cebu-business/2026/08/11/2548488/investment-drag-slows-down-philippine-economic-momentum-q2/amp)）／−9.2%（[BusinessWorld 转引 PSA, 2026-08-07](https://bworldonline.com/top-stories/2026/08/07/768829/philippine-q2-growth-slumps-to-new-post-pandemic-low-amid-oil-shock)，PSA 一手国民经济核算），**两口径并列不合成**；IMF PR 26/304 仅作 Article IV 与 2027 预测的佐证，不承载 −13.7%。**用 2025 高增长／低通胀数据测算 2026 可支配收入会系统性高估。** 2027 复苏为**预测非事实**：IMF 2026-09 为 2026 3.4%／2027 5.1%（通胀 5.6%／4.1%）、世行 2026-08 PEU 为 3.7%／5.2%（[世界银行 PEU 中期版新闻稿](https://worldbank.org/en/news/press-release/2026/08/03/ph-reaches-upper-middle-income-status-bolder-reforms-critical-for-more-inclusive)，2026-08-03）、以及 CPBRD BB2026-01（2026-07）汇编的 2027 增速「WB 5.2／ADB 5.3／AMRO 5.5／IMF 5.5」与 2026-10 机构区间「ADB 5.1／AMRO 4.8／S&P 5.4／DBCC 5–6%」（[CPBRD BB2026-01](https://docs.congress.hrep.online/download/cso/2027/BB2026-01-PHILIPPINE-ECONOMY-MACROECONOMIC-PERSPECTIVES-2026.pdf)；[Daily Tribune 2026-10-15](https://tribune.net.ph/amp/story/2026/10/15/economist-bets-on-2027-rebound)）。**上述均为预测非事实、跨时点变动，多口径并列不合成，不得取平均**。原参数卡曾列的「IMF 2026-04 WEO 4.1%／5.8%」一组因 5.8% 实为世行对 2026 年通胀的预测（口径错位）已按 D14 撤下，不再作为 2027 增速口径。
+
+### P07-draft-ch4.md
+L61 [377 chars]
+**有真实经营 α 的玩家（「有分析认为」，非审计结论）。** GCash 的 4,150 万月活、210 万 QR 商户与日均 6,240 万笔构成渠道密度与单位经济；Maya 的商户收单（服务费收入 +74%）与 AI 承保（2026-03 总 NPL 4.9%，低于数字银行行业 5.7–6.16%，[TradeEdge 行业分析](https://tradeedge.ph/the-credit-paradox-how-philippine-digital-banks-are-learning-to-grow-loans-without-importing-unmanageable-risk/)，2026）；GoTyme 依托约 600 台线下 kiosk 获客；PDAX 的 α 是 B2B2C 白牌集成能力，但议价权在渠道方 GCash。
+
+### P07-draft-ch5.md
+L7 [629 chars]
+前四章已证「参与沙盒即可合规做零售 CFD」趋近不成立、需求须重定向至 E3 承接方；本章不重论证条文、不重算份额，只做判定与动作。**核心判断 `kind: judgment`：直做零售 CFD 判否；可行路径是「本地持牌主体承接合规替代业务＋比索法币层与产品层严格分离」。** 分离有据：BlockShoals 法务负责人在 2026 菲律宾区块链周明言「Binance 与 BlockShoals 不移动比索，比索明确属 BSP 管辖」，BSP 书面答复进一步明确「参与沙盒不豁免适用法律，**VASP 活动与法币轨道不在 SEC 沙盒覆盖内**」（[Mintchain, 2026](https://mintchain.ph/?p=3441)；判词经参数卡 v3 §3 核定，第 1 章产出、本章复用）；SEC 委员 Quevedo 2026-08 称入盒「不是通往 SEC 获批的快车道」且「不治愈」既往 SRC 违法（[Bitdigest, 引 2026-08-26 表态](https://www.bitdigest.io/posts/sec-chairperson-francis-lim-defends-blockshoals-admission-to-strategic-sandbox)）。故本章只问三事：谁持牌、谁承担法币、谁面向菲律宾公众。**本章不提供任何规避监管的操作路径；下述链路仅为合规要件描述，每一环以监管批准为前提。**
+
+L57 [893 chars]
+**T1 准入要件明细（参数卡 v3 §8／D8 核定）**：① 本地 SEC 注册股份公司、公司章程主营目的含 CASP；② ≥₱1 亿实缴资本（现金或财产，**不含加密资产**）；③ 菲律宾**实体办公室**（营业时间内有人员）＋**本地数据中心**；④ **CASP Form 1 递 PhiliFINNO**（fintech@sec.gov.ph）并持续月／季／年报、钱包地址与审计财报、记录留档 ≥5 年；⑤ **所有合同／MOU 须报 SEC 批准**；⑥ **披露文件须于营销或发行前 ≥30 天**公布；⑦ **marketing 涵盖社交帖、活动、广告、空投、直播**及非善意「教育内容」；⑧ 客户适当性评估与客户资产隔离（[RegAlert MC5 全文](https://regalert.today/document/sec-guidelines-on-the-operations-of-crypto-asset-service-providers-sec-casp-guid-3b1b57f6-978d-4185-aac9-ff489684621e)；[Ocampo & Suralvo, 2025](https://www.ocamposuralvo.com?p=2483/)；[Manila Times CASP Rules, 2025-06-12](https://test.manilatimes.net/2025/06/12/business/top-business/sec-issues-rules-on-crypto-asset-service-providers/2131711)；[Ablola Law, 2025](https://ablola.co?p=16716/)）。**EMI 发牌通道仍开放**（[Law.asia/Romulo, 2026](https://law.asia/?p=723541)）；**拟议 12 个月暂停新 OPS 注册为草案未定案、仅作观察哨**；**VASP 牌照变更控制是否自动转移＝证据不足**。
+
+L83 [653 chars]
+`kind: judgment`：**准入优先于需求——零售 CFD 准入不过，需求再大仍为零**。本章把落点收口为两句话：**合作方式＝并购／合作稀缺持牌方＋双监管三角模板（本地 CAI 承担 KYC／适当性、BSP 持牌 VASP 承担法币、境外方仅提供技术）＋90 天集成／24 个月分阶段／知识测试／比索禁令**；**钱包支付＝比索法币层与产品层分离、境内接口只与持牌主体相连**。须重申清单 3 的跨章一致性说明：该三角**结构可复制、许可不可复制**，为**可借鉴的结构模板**，BlockShoals 主体**当前不可用**（观察哨，非立即可用承接方）；「合规溢价」为预期而非已兑现观测值。清单 3 全部为**建议**并各带前提依赖；2027 数字为**估计／预测**、并列不合成；监管状态 as-of 2026-11-09。**分述**：事实见清单 1 逐行引用与 T1 准入要件明细；**推断**为「法币层／产品层分离」及 A/B/C 三项否决（已标 `kind: judgment`）；**证据不足**显式标注 4 处（SEC 明文全面禁止零售 CFD 条文、StratBox 明文排除衍生品条文、二级牌照发放记录、VASP 牌照变更控制自动转移条文），另有 1 处资料取得限制（BSP VASP 名录 PDF 全文未取得，两版名录均为索引二手）与 1 处须律师核验项（2015 IRR Rule 11.2 现行有效性，D8）。境外律所、媒体与平台内容仅作数据，不作合规指令或法律意见。
+
+L97 [275 chars]
+9. **SEC Chairperson Francis Lim Defends BlockShoals Admission to Strategic Sandbox**｜Bitdigest｜引 2026-08-26 表态｜https://www.bitdigest.io/posts/sec-chairperson-francis-lim-defends-blockshoals-admission-to-strategic-sandbox ｜「入盒不治愈既往 SRC 违法」；90 天仅限技术集成，不含公开 onboarding／交易／全面商营。
+
+### test.manilatimes.net 全案分布
+CH1 L42  https://test.manilatimes.net/2019/10/09/business/columnists-business/secs-warning-against-online-trading-apps/628580
+CH1 L46  https://test.manilatimes.net/2025/06/12/business/top-business/sec-issues-rules-on-crypto-asset-service-providers/2131711
+CH1 L186  https://test.manilatimes.net/2025/06/12/business/top-business/sec-issues-rules-on-crypto-asset-service-providers/2131711
+CH5 L15  https://test.manilatimes.net/2025/12/13/business/corporate-news/halt-order-issued-versus-pacquiao-endorsed-xm/2242635
+CH5 L32  https://test.manilatimes.net/2025/06/12/business/top-business/sec-issues-rules-on-crypto-asset-service-providers/2131711
+CH5 L34  https://test.manilatimes.net/2025/06/12/business/top-business/sec-issues-rules-on-crypto-asset-service-providers/2131711
+CH5 L57  https://test.manilatimes.net/2025/06/12/business/top-business/sec-issues-rules-on-crypto-asset-service-providers/2131711
+CH5 L113  https://test.manilatimes.net/2025/12/13/business/corporate-news/halt-order-issued-versus-pacquiao-endorsed-xm/2242635
+CH5 L114  https://test.manilatimes.net/2025/06/12/business/top-business/sec-issues-rules-on-crypto-asset-service-providers/2131711

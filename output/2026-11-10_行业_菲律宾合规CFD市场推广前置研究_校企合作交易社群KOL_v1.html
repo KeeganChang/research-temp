@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<!--
+html 交付模板 · 遵循 delivery-standard §2 三段式（口径块 → 内联引用 → Reference）与反方≥5
+用法：由 references/skills/research-html/render_html.py 读取报告数据(JSON) 后填充占位符生成。
+      口径行 / 章节 / 反方 / 引用 四类占位符由渲染器拼装，其余为静态骨架。
+      自包含、无 CDN、可离线打开、可打印/导出 PDF。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>P07-A1 · P07 增补件 A1｜市场推广前置研究：实习机制（校企合作）、交易社群图谱、KOL 信任（2026-11-10）— 主交付</title>
+<style>
+  :root{
+    --paper:#fbfaf8; --card:#ffffff; --ink:#1f2024; --muted:#6c6f76;
+    --line:#e7e3da; --accent:#0f5e57; --accent-soft:#e8f1ef;
+    --up:#d8382e; --down:#1f9d55; --warn:#b5462f;
+    --serif:"Noto Serif SC","Songti SC","STSong",Georgia,"Times New Roman",serif;
+    --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+    line-height:1.75;font-size:15px;display:flex;justify-content:center;padding:40px 16px 72px;}
+  .doc{width:100%;max-width:860px;background:var(--card);border:1px solid var(--line);
+    border-radius:10px;box-shadow:0 1px 2px rgba(31,32,36,.04),0 12px 40px rgba(31,32,36,.06);
+    padding:48px 52px 56px;}
+  /* 顶部强调条 */
+  .doc::before{content:"";display:block;height:4px;margin:-48px -52px 36px;
+    background:linear-gradient(90deg,var(--accent) 0%,var(--accent-soft) 60%,transparent 100%);
+    border-radius:10px 10px 0 0;}
+  .kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);
+    font-weight:600;margin-bottom:10px;}
+  h1{font-family:var(--serif);font-size:30px;line-height:1.3;margin:0 0 6px;font-weight:700;letter-spacing:.01em;}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:6px;}
+  .meta{color:var(--muted);font-size:13px;margin-bottom:28px;}
+  .rule{height:1px;background:var(--line);border:0;margin:0 0 28px;}
+
+  /* 口径块 */
+  .caliber{background:var(--accent-soft);border:1px solid #d4e6e2;border-radius:8px;
+    padding:18px 22px;margin:0 0 34px;}
+  .caliber h2{font-family:var(--serif);font-size:17px;margin:0 0 12px;color:var(--accent);}
+  table.cal{width:100%;border-collapse:collapse;font-size:13.5px;}
+  table.cal th{text-align:left;color:var(--muted);font-weight:600;width:34%;
+    padding:6px 14px 6px 0;vertical-align:top;border-bottom:1px dashed #cfe0dc;}
+  table.cal td{padding:6px 0;border-bottom:1px dashed #cfe0dc;vertical-align:top;}
+  table.cal tr:last-child th,table.cal tr:last-child td{border-bottom:0;}
+
+  /* 章节 */
+  section{margin:0 0 30px;}
+  section h2{font-family:var(--serif);font-size:21px;margin:0 0 12px;padding-left:13px;
+    border-left:4px solid var(--accent);line-height:1.4;}
+  section p{margin:0 0 12px;}
+  .src{color:var(--muted);font-style:italic;font-size:12.5px;}
+  .src::before{content:"　源：";font-style:normal;}
+  .up{color:var(--up);font-weight:600;}
+  .down{color:var(--down);font-weight:600;}
+  strong{font-weight:700;}
+
+  /* 反方论点 */
+  .counter{margin:0 0 30px;}
+  .counter h2{font-family:var(--serif);font-size:21px;margin:0 0 14px;padding-left:13px;
+    border-left:4px solid var(--warn);}
+  ol.cv{list-style:none;counter-reset:cv;margin:0;padding:0;}
+  ol.cv li{counter-increment:cv;position:relative;background:#fcfbf9;border:1px solid var(--line);
+    border-left:3px solid var(--warn);border-radius:6px;padding:11px 16px 11px 46px;margin-bottom:10px;
+    font-size:14px;}
+  ol.cv li::before{content:counter(cv);position:absolute;left:14px;top:11px;width:22px;height:22px;
+    background:var(--warn);color:#fff;border-radius:50%;font-size:12px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;}
+
+  /* Reference */
+  .ref h2{font-family:var(--serif);font-size:18px;margin:0 0 10px;color:var(--muted);}
+  ul.ref{list-style:none;margin:0;padding:0;}
+  ul.ref li{position:relative;padding-left:18px;color:var(--muted);font-size:13px;margin-bottom:6px;}
+  ul.ref li::before{content:"›";position:absolute;left:2px;color:var(--accent);font-weight:700;}
+
+  footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:12px;text-align:center;}
+
+  @media (max-width:600px){ .doc{padding:32px 22px 40px;} .doc::before{margin:-32px -22px 28px;} h1{font-size:25px;} }
+  @media print{
+    body{background:#fff;padding:0;}
+    .doc{box-shadow:none;border:0;max-width:none;padding:0;}
+    .doc::before{display:none;}
+    section,.counter,ol.cv li{break-inside:avoid;}
+    a{color:var(--ink);text-decoration:none;}
+  }
+
+  /* P07 报告增强（由组装器注入，不修改套件模板） */
+  section h3{font-family:var(--serif);font-size:16.5px;margin:22px 0 10px;color:var(--accent);
+    padding-bottom:6px;border-bottom:1px solid var(--line);}
+  section h4{font-size:14.5px;margin:16px 0 8px;color:var(--ink);}
+  section ul,section ol{margin:0 0 14px;padding-left:24px;}
+  section li{margin-bottom:7px;}
+  section a{color:var(--accent);text-decoration:underline;text-decoration-color:#b9d5d0;
+    text-underline-offset:2px;}
+  section a:hover{text-decoration-color:var(--accent);}
+  section hr{border:0;border-top:1px dashed var(--line);margin:20px 0;}
+  section blockquote{margin:0 0 14px;padding:10px 16px;background:#fcfbf9;
+    border-left:3px solid var(--accent);border-radius:0 6px 6px 0;color:var(--muted);font-size:14px;}
+  section code{background:#f2f0eb;padding:1px 5px;border-radius:3px;font-size:12.5px;}
+  sup{font-size:10.5px;color:var(--accent);}
+  p.fn{font-size:12.5px;color:var(--muted);background:#fcfbf9;border:1px solid var(--line);
+    border-radius:6px;padding:9px 13px;margin:0 0 12px;}
+  .tw{overflow-x:auto;margin:0 0 16px;-webkit-overflow-scrolling:touch;}
+  table.data{width:100%;border-collapse:collapse;font-size:12.8px;min-width:560px;}
+  table.data th{background:var(--accent-soft);color:var(--accent);font-weight:700;
+    text-align:left;padding:9px 11px;border:1px solid #d4e6e2;white-space:nowrap;}
+  table.data td{padding:8px 11px;border:1px solid var(--line);vertical-align:top;line-height:1.6;}
+  table.data tbody tr:nth-child(even){background:#fcfbf9;}
+  table.data td strong{color:var(--ink);}
+  ul.ref li{word-break:break-word;}
+  .toc{background:#fcfbf9;border:1px solid var(--line);border-radius:8px;padding:16px 22px;margin:0 0 30px;}
+  .toc h2{font-family:var(--serif);font-size:17px;margin:0 0 10px;color:var(--accent);}
+  .toc ol{margin:0;padding-left:22px;font-size:13.5px;}
+  .toc li{margin-bottom:5px;}
+  @media print{ .tw{overflow:visible;} table.data{min-width:0;} a{color:var(--ink);} }
+
+</style>
+</head>
+<body>
+<article class="doc">
+<div class="kicker">RESEARCH KIT · 主交付</div>
+<h1>P07 增补件 A1｜市场推广前置研究：实习机制（校企合作）、交易社群图谱、KOL 信任</h1>
+<div class="sub">P07-A1 · 调研主交付</div>
+<div class="meta">日期：2026-11-10 ｜ 载体：自包含 HTML 报告（本地 SSOT 不反向写）</div>
+<hr class="rule"/><div class="toc"><h2>目录</h2><ol><li>一、合规前置约束（先读）：为什么这三问只能做「情报」不能做「动作」</li><li>二、问题一｜实习机制：本地企业筛选学生的流程与特殊要求</li><li>三、问题二｜现有交易社群：有没有、在哪聚集、空缺在哪</li><li>四、问题三｜KOL 信任：为什么信、为什么不信，以及可执行的 KOL 采样方案</li><li>五、跨问统一判断、待执行清单与证据不足清单</li></ol></div>
+<div class="caliber">
+<h2>口径块（Caliber）</h2>
+<table class="cal">
+<tr><th>研究边界</th><td>三问：① 本地企业筛选实习生的流程与特殊要求 → 市场推广之「校企合作」；② 有无交易社群、在哪聚集、是否存在空缺 → 社媒之「社群」；③ 菲律宾受众为何信／不信推广经纪商的 KOL → 「KOL 分析」。复杂项以**可执行思路 + 判据**为主，不强行给结论</td></tr>
+<tr><th>前置约束</th><td>主交付已判「参与沙盒即可合规做零售 CFD」趋近不成立；清单 3 的 T0 明令「不启动任何面向公众的招揽」；CASP 规则把社交帖／活动／直播／空投／非善意「教育内容」全部纳入 marketing。**因此本件所有内容仅作情报与合规预审，不构成推广建议**</td></tr>
+<tr><th>时效与 as-of</th><td>监管条文与执法案例以 2023–2026 为主；社媒平台数据分别标各自报告期（Digital 2026 Philippines／Datambar 2026-01 调查）；KOL 快照 as-of 2026-10-29～11-09。所有数字须带发布方与日期，跨期不合成</td></tr>
+<tr><th>证据等级</th><td>一手（CHED CMO 104 官方 PDF、DOLE 官网、SEC advisory PDF、SEC 官方法规页）&gt; 二手（律所解读、主流媒体、BitPinas／Bitdigest 行业媒体）&gt; 聚合／第三方数据平台（TrySpansa／Tokranks／Hiip，**仅作种子发现，不作定量依据**）。行业站（Mintchain／Sulit PH）仅作线索，**不作定论**</td></tr>
+<tr><th>口径冲突纪律</th><td>平台渗透率（We Are Social／Meltwater 转述 vs Datambar 自采 vs StateGlobe 估算）、罚则（CASP 行政罚 vs advisory 刑责 vs Bitdigest 摘录）**一律并列不合成、不取最大／最小、不外推**；分别标主体、母体与法条</td></tr>
+<tr><th>判断标注</th><td>全部推断类结论标 `kind: judgment`，并保留被否决备选；「空缺」是**监管造成的结构性空白**，不等于可占的营销空位（主交付：准入优先于需求）</td></tr>
+<tr><th>货币与语言</th><td>金额用 PHP 原值；关键词检索须覆盖英文＋Tagalog 混用（Taglish），菲律宾金融内容大量以 Taglish 发布</td></tr>
+<tr><th>已知 caveat</th><td>未取得 SEC MC No.4/5 s.2025 的直连一手条文全文（取官方发布页 + 三份独立二手解读交叉）；未取得任何 KOL 的平台原生 analytics；未做校方／企业访谈；未做社群规模实测</td></tr>
+</table>
+</div>
+<section><h2>一、合规前置约束（先读）</h2><h3>1.1 一条必须先画的红线</h3>
+<p>主交付第 5 章把「未注册即营销／招揽」列为<strong>禁区</strong>，并写明 CASP 规则将社交帖、活动、广告、空投、直播及非善意「教育内容」纳入 marketing、披露文件须于营销前 ≥30 天公布。本轮检索进一步确认：<strong>这套规则明文延伸到 KOL／内容创作者本人，而不只约束平台</strong>。</p>
+<p>因此三问的答案空间被压缩为：</p>
+<blockquote><strong>可以研究「谁在聚集、谁被信任、规则如何运作」；不可以据此设计任何面向菲律宾公众的招揽动作。</strong> 在 T0 法律意见（尤其 2015 IRR Rule 11.2 现行有效性）与本地牌照通道未解决前，校企合作、社群运营、KOL 投放三类动作<strong>全部冻结</strong>。</blockquote>
+<h3>1.2 约束→后果对照表</h3>
+<div class="tw"><table class="data"><thead><tr><th>约束</th><th>依据（发布方，日期）</th><th>对三问的直接后果</th></tr></thead><tbody><tr><td>T0「不启动任何面向公众的招揽」、披露文件营销前 ≥30 天</td><td>主交付第 5 章清单 3、T1 要件⑥⑦（<a href="https://regalert.today/document/sec-guidelines-on-the-operations-of-crypto-asset-service-providers-sec-casp-guid-3b1b57f6-978d-4185-aac9-ff489684621e" rel="noopener" target="_blank">RegAlert MC5 全文转录</a>；<a href="https://www.ocamposuralvo.com?p=2483/" rel="noopener" target="_blank">Ocampo &amp; Suralvo</a>）</td><td>所有社群／KOL 动作只能停在「测绘 + 合规预审」阶段</td></tr><tr><td>CASP Rules §7「marketing」覆盖社媒帖、活动／meetup、空投、教育内容；<strong>第三方营销者须向 SEC 登记报备，CASP 对其违规承担连带责任</strong></td><td>SEC 官方发布页 2025-05-30（<a href="https://www.sec.gov.ph/mc-2025/sec-mc-no-04-series-of-2025the-sec-rules-on-crypto-asset-service-providers-sec-casp-rules/" rel="noopener" target="_blank">SEC MC No.4 s.2025</a>）；<a href="https://bitpinas.com/business/key-takeaways-sec-final-crypto-rules/" rel="noopener" target="_blank">BitPinas, 2025-06-11</a>；<a href="https://www.aureadalaw.com/post/key-compliance-requirements-under-the-2025-sec-casp-rules-in-the-philippines" rel="noopener" target="_blank">Aureada CPA Law</a></td><td>找 KOL 本身即触发「报备 + 连带责任」；「先小范围试水」不是低风险选项</td></tr><tr><td>§7.3.6「good faith / purely educational」豁免极窄：创作者<strong>不得收受任何形式对价、用户数据或非金钱利益</strong>；教师／讲师可收合理制作费但不得与推广挂钩；赞助、affiliate link、推广代币即失豁免</td><td><a href="https://bitpinas.com/business/key-takeaways-sec-final-crypto-rules/" rel="noopener" target="_blank">BitPinas, 2025-06-11</a></td><td>「付津贴让学生做校园推广」「送礼品给群主」都会把内容从教育变成受监管 marketing</td></tr><tr><td>投资顾问须向 SEC 注册；不得自称 / 使用「Investment Adviser」「Financial Adviser」，涵盖通过 publications、writings、电子形式发布分析与报告</td><td>FCPA IRR（SEC MC No.5 s.2023, 2023-04-25）Rule 7，<a href="https://www.ocamposuralvo.com?p=1660/" rel="noopener" target="_blank">Ocampo &amp; Suralvo 解读</a>；<a href="https://www.sec.gov.ph/wp-content/uploads/2023/01/2023Notice_Request-for-Comments-Draft-IRR-FCPA.pdf" rel="noopener" target="_blank">SEC FCPA IRR 征求意见草案 PDF（<strong>草案，非现行条文</strong>）</a></td><td>「喊单／行情分析」型 KOL 内容可能独立触发注册义务，与是否挂平台无关</td></tr><tr><td>promoters / <strong>influencers</strong> / endorsers / recruiters / uplines / abettors / enablers 可被刑事追诉；SRC §28 与 FCPA §11 <strong>分别</strong>最高 ₱500 万罚款或 21 年监禁</td><td><a href="https://www.sec.gov.ph/wp-content/uploads/2023/11/2023Advisory_ARCANE-DIGITAL-MARKETING-Final_11-16-2023-Draft.pdf" rel="noopener" target="_blank">SEC Advisory: Arcane Digital Marketing, 2023-11-16（一手 PDF）</a>；<a href="https://www.sec.gov.ph/wp-content/uploads/2023/12/2023Advisory-CRYPACE-LIMITED.pdf" rel="noopener" target="_blank">SEC Advisory: Crypace, 2023-12（一手 PDF）</a></td><td>刑责主体不是「平台」而是「人」，社群群主与校园大使同样在列</td></tr><tr><td>「not financial advice」免责声明<strong>不当然免责</strong>；判断看实质行为（点名产品、referral link、承诺收益、收入截图、收佣金、个别化指令、促成交易）；「educator」「affiliate」「community leader」标签不阻断责任</td><td><a href="https://ndvlaw.com/can-financial-influencers-promote-investments-and-crypto" rel="noopener" target="_blank">NDV Law: Can Financial Influencers Promote Investments and Crypto?</a>；<a href="https://ndvlaw.com/how-are-cryptocurrency-schemes-promoted-by-influencers-regulated" rel="noopener" target="_blank">NDV Law: How Are Cryptocurrency Schemes Promoted by Influencers Regulated?</a>（引 SEC v. Oudine Santos, G.R. No. 195542, 2014）</td><td>不能用「只做教育」话术绕开；内容设计必须逐条对照实质行为清单</td></tr><tr><td>金融产品推广内容须<strong>发布前获批</strong>、material connection 须披露（#Ad／#Sponsored）、ASC 自律 + Consumer Act RA 7394</td><td><a href="https://www.respicio.ph/commentaries?offset=1772629861402" rel="noopener" target="_blank">Respicio &amp; Co., 2026-03-04</a>；<a href="https://forms-legal.com/philippines/business/contracts/ph-influencer-agreement" rel="noopener" target="_blank">Forms Legal: Influencer Agreement (Philippines), 2026-10 更新</a></td><td>即便未来获牌，KOL 物料也须走预审与披露，不能按通用快消打法执行</td></tr></tbody></table></div>
+<blockquote><strong>罚则口径并列不合成</strong>：BitPinas 报道 CASP 规则行政罚为「每次最高 ₱1,000 万 + 每日 ₱1 万持续罚、最长 5 年监禁／₱200 万」；<a href="https://bitdigest.io/posts/sec-ph-says-crypto-kols-and-content-creators-need-a-license--heres-what-that-means" rel="noopener" target="_blank">Bitdigest, 2025-06-30</a> 另载「₱5 万–₱20 万／次」；两份 SEC advisory 载 SRC §28＋FCPA §11 各 ₱500 万／21 年。三者属<strong>不同法条、不同违规行为、不同发布方</strong>，本件并列登记，不合并、不取极值、不据此推算「违规成本」。</blockquote>
+<h3>1.3 一个容易被忽略的结论</h3>
+<p><code>kind: judgment</code>：<strong>在菲律宾，「KOL 信任」不是传播学问题，而是可被监管核验的资格问题</strong>。当背书行为本身被法条点名、当名人背书被 CDO 直接列为责令停止的对象，「受众信不信」的前置条件变成了「推广者与被推广平台是否具备可被 SEC／BSP 核验的注册状态」。对尚未取得注册通道的零售 CFD，KOL 推广不产生可转化信任，只产生连带责任——这与主交付「准入优先于需求」是同一条判据。</p>
+<hr/></section>
+<section><h2>二、问题一｜实习机制：本地企业筛选学生的流程与特殊要求</h2><h3>2.1 直接回答</h3>
+<p><strong>有特殊要求，但不是「针对外资／金融企业的额外审批」，而是一套以高校为唯一入口的强制性程序框架。</strong> 三句话概括：</p>
+<ol><li><strong>企业不能直接面向学生筛人</strong>：筛选／安置／监督／评估的政策由高校（HEI）制定，企业以 Host Training Establishment（HTE）身份与校方签 MOA 进入，<strong>筛选权在校方</strong>。</li><li><strong>境外主体不能直接当 HTE</strong>：CMO 104 定义 HTE 须为「在菲律宾经 SEC 或 DTI 合法注册、且有既有培训体系」的实体——这与主交付 T1「设本地 SEC 注册股份公司」正好闭环。</li><li><strong>若把实习用于推广／获客，会同时撞三条红线</strong>（详见 2.5）：不得让实习生承担正式岗位职责、marketing 规则、以及对 endorsers 的刑责。</li></ol>
+<h3>2.2 硬程序清单（一手条文为骨架）</h3>
+<p>依据 <a href="https://legacy.ched.gov.ph/wp-content/uploads/2018/03/CMO-NO.-104-S.-2017.pdf" rel="noopener" target="_blank">CHED CMO No.104 s.2017《Revised Guidelines for Student Internship Program in the Philippines (SIPP) for all Programs》官方 PDF</a>（2017-11-07 CEB Resolution No.849-2017；<a href="https://ofa.upd.edu.ph/wp-content/uploads/2018/04/CMO-No.104-S.2017.pdf" rel="noopener" target="_blank">UP Diliman OFA 镜像 PDF</a> 复核）：</p>
+<div class="tw"><table class="data"><thead><tr><th>环节</th><th>硬性要求</th><th>条文落点／补充来源</th></tr></thead><tbody><tr><td>HTE 资格</td><td>须为菲律宾境内经 <strong>SEC 或 DTI</strong> 合法注册／授权、且具 established system of training 的「reputable HTE」；HEI 须维护 HTE 池、只能与持证／获认可 HTE 签约</td><td>CMO 104 Art.III 定义 3、Art.V §10</td></tr><tr><td>谁筛选</td><td><strong>HEI 制定 selection / placement / monitoring / assessment 的校本政策并对学生负全责</strong>；HTE 可「customize the process of technical training through employer-driven internship plans」「select well-equipped beneficiaries」</td><td>Art.VI §14.2.1(b)、Art.II §6.2.3</td></tr><tr><td>必备文件</td><td>① HEI↔HTE <strong>MOA</strong>（角色职责、实习生安全、培训计划、学习目标、评估方法）；② 由双方共同制定并批准的 <strong>Internship Plan</strong>；③ 实习生／HTE／HEI 三方 <strong>实习合同</strong>；④ 校本 Internship Manual</td><td>Art.III 定义 5/6、<a href="https://www.schoolfinderph.com/blog/college-programs-with-internship" rel="noopener" target="_blank">SchoolFinderPH 条文梳理</a></td></tr><tr><td>学生资格</td><td>在菲 HEI 正式注册并修实习科目、已通过校方实习资格并修完主要专业课、<strong>自实习起满 18 岁</strong>、DOH 认可机构出具身心健康证明、<strong>父母／监护人经公证的书面同意且不得豁免</strong></td><td>Art.VI §12；SchoolFinderPH 梳理 §Who qualifies</td></tr><tr><td>时长与负荷</td><td>最长 <strong>5 个月</strong>（高技术专业按各自 PSG 可更长）；实习期间最多同修 <strong>6 units</strong>；1 practicum unit ≥100 小时（6 units ≥600 小时，CMO 62 换算）</td><td>Art.VI §11/§12；<a href="https://www.schoolfinderph.com/blog/college-programs-with-internship" rel="noopener" target="_blank">SchoolFinderPH</a>；<a href="https://lspu.edu.ph/news/chmt-gears-up-students-for-industry-ready-internships" rel="noopener" target="_blank">LSPU 案例：300h 校内 + 400h 外部</a></td></tr><tr><td>禁止事项</td><td><strong>HTE 不得让实习生履行正式岗位的职责／填补空缺</strong>（anti-displacement）；不得借实习便利人口贩运（Art.I §4）</td><td>CMO 104 Art.I §4、Art.VII；SchoolFinderPH</td></tr><tr><td>终止与结业</td><td>HTE 须提前 <strong>30 个工作日</strong>书面通知校方方可中止；结业证书于结束后 <strong>2 周内</strong>签发</td><td>SchoolFinderPH 条文梳理</td></tr><tr><td>报酬与保险</td><td>CHED <strong>不强制付薪</strong>；MOA 可约定津贴、免费用餐、交通、制服；须有旅行／医疗保险；收费须按 CMO No.3 s.2012 已核准项目</td><td>SchoolFinderPH；CMO 104 Art.VII</td></tr></tbody></table></div>
+<p><strong>劳动与数据边界（不可省略）</strong>：若不符合 SIPP 形式要件，DOLE 会<strong>推定存在雇佣关系</strong>并适用全额最低工资、13 薪、SSS／PhilHealth／Pag-IBIG；正式学徒／learnership 另有 75% 工资下限、须向 DOLE 区域办公室登记、人数 ≤ 正式员工 20%，且夜班／加班对未成年实习生有限制（<a href="https://www.lawyer-philippines.com/articles/minimum-wage-and-working-hours-rules-for-trainees-philippines-1" rel="noopener" target="_blank">Respicio &amp; Co. 条文对照</a>）。数据侧受 <strong>RA 10173 Data Privacy Act</strong> 约束：DOLE《Department Order No.204-B s.2026》修订的 Government Internship Program 明确要求伙伴机构遵守 DPA 与职业安全健康标准、签订含学习目标与任务定义的实习协议、津贴按当地最高最低工资，2026-05-15 生效（<a href="https://dole.gov.ph/news/stronger-internship-guidelines-open-better-pathways-to-jobs-public-service" rel="noopener" target="_blank">DOLE 官网</a>；<a href="https://hrforwardasia.com?p=745/" rel="noopener" target="_blank">HR Forward Asia 复核</a>）；DOLE-7 曾专门警示「社媒收集实习生个人资料」的诈骗与合规风险（<a href="https://www.philstar.com/the-freeman/cebu-news/2022/08/19/2203679/dole-7-warns-jobseekers-vs-scammers" rel="noopener" target="_blank">Philstar/The Freeman, 2022-08-19</a>）。另有 DepEd DM 052 自 2025–2026 学年起在 14 所高中试点「加强版工作实习」，与私部门组织 PCORP 签 MOA，指向 SHS 原 ≥80 小时不足（<a href="https://teric.naer.edu.tw/wSite/PDFReader?xmlId=2068517&amp;fileName=1757043905848&amp;format=pdf" rel="noopener" target="_blank">驻菲代表处教育组／台湾教育研究资讯网 PDF</a>）。</p>
+<h3>2.3 现实范本：企业实际怎么进门</h3>
+<div class="tw"><table class="data"><thead><tr><th>范本</th><th>机制</th><th>对「校企合作」的可迁移点</th></tr></thead><tbody><tr><td><strong>Filinvest Group × Ateneo de Manila University</strong>（2026-06-24 签 MOA，07-16 报道）</td><td>统一经 Ateneo <strong>Office of Placement and Career Services (OPCS)</strong> 对接，覆盖地产／银行／酒店／电力；定位「structured, work-based learning」，同时服务企业 early engagement with high-potential students</td><td><strong>校方职业服务中心是唯一入口</strong>；企业诉求写成「人才早期接触」而非「获客」（<a href="https://tribune.net.ph/2026/07/16/filinvest-ateneo-forge-student-internship-program" rel="noopener" target="_blank">Daily Tribune</a>；<a href="https://manilastandard.net/spotlight/314766271/filinvest-and-ateneo-de-manila-university-forge-partnership-to-develop-future-ready-talent.html" rel="noopener" target="_blank">Manila Standard</a>）</td></tr><tr><td><strong>DLSU Investors' Society「Ignite 2026」</strong>（2026-08-01, Henry Sy Sr. Hall）</td><td><strong>学生自治投资社团主办</strong>的金融素养旗舰活动，两场 plenary（市场波动、组合韧性），行业人士以讲者身份参与</td><td>学生社团是天然的「教育型」接口，企业只出讲者不出招揽（<a href="https://www.manilatimes.net/2026/07/30/tmt-newswire/ignite-2026-empowering-the-next-generation-of-investors/2394576/amp" rel="noopener" target="_blank">Manila Times, 2026-07-30</a>）</td></tr><tr><td><strong>BOI ENvest Mindanao 2026</strong></td><td>投资委员会搭台做 academe–industry matching，BOI 注册企业与高校对接，TESDA 参展</td><td>政府对接平台可作为「找合作院校」的合规入口（<a href="https://www.linkedin.com/posts/boiphilippines_envest-envestmindanao2026-academeindustrymatching-activity-7485919110590210048-T4OS" rel="noopener" target="_blank">BOI LinkedIn 活动页</a>）</td></tr><tr><td><strong>Investa／Investagrams 校园渗透</strong></td><td>平台自述「many of you, including <strong>students and teachers from various Universities</strong>, rely on Investa」；设 Investa University（含 Forex／Crypto 入门课）、VTrade 模拟盘，并已接入 GCash／Maya 渠道</td><td>平台侧已有校园用户基础，是比自建渠道更低摩擦的观察对象（<a href="http://www.investagrams.com" rel="noopener" target="_blank">Investagrams 官网</a>；<a href="http://investagrams.com/About/About" rel="noopener" target="_blank">About</a>；<a href="https://fintech.ph/listing/investa" rel="noopener" target="_blank">FinTech.ph 企业档</a>）</td></tr></tbody></table></div>
+<h3>2.4 映射到「市场推广的校企合作」：三形态合规分级</h3>
+<p><code>kind: judgment</code>（下表为分级判断，非法律意见；每条须经本地律师复核）：</p>
+<div class="tw"><table class="data"><thead><tr><th>形态</th><th>具体做法</th><th>判定</th><th>主要依据</th></tr></thead><tbody><tr><td><strong>A. 研究／教育型（唯一可讨论）</strong></td><td>与校方 OPCS 或学生社团签 MOA，做<strong>零对价、纯教育</strong>的市场结构／支付基建／合规科普讲座或联合课题；学生不接触客户、不接触真实账户、不做任何平台推荐；内容由校方主导并留存</td><td><strong>条件可做（T0 冻结期仍只做设计，不执行）</strong></td><td>满足 CMO 104 三方 MOA 与 anti-displacement；若严格零对价且不含推广，可对应 CASP §7.3.6 豁免；但「非善意教育内容」仍可能被认定 marketing，须逐案预审</td></tr><tr><td><strong>B. 品牌／雇主型</strong></td><td>以本地注册实体做实习基地、招聘宣讲、人才培养，不出现任何产品、开户、平台名称</td><td><strong>可做但须彻底去产品化</strong></td><td>Filinvest×Ateneo 范本；一旦出现产品名或注册链接即转化为 marketing</td></tr><tr><td><strong>C. 获客／校园大使型</strong></td><td>学生发社媒帖、拉群、发 referral link、办推广活动、按拉新给津贴</td><td><strong>禁区</strong></td><td>同时违反 CMO 104 anti-displacement、CASP §7（对价使教育豁免失效 + 第三方营销者须报备 + 连带责任）、SEC advisory 对 promoters／influencers 的刑责条款</td></tr></tbody></table></div>
+<p><strong>关键推论</strong>：CMO 104 要求实习生「不承担正式岗位职责」与 CASP §7.3.6「收受任何形式对价即非纯教育」两条叠加，意味着<strong>「给学生津贴换推广」在菲律宾是双重违规</strong>，不是灰色地带。校企合作若要存在，只能以「校方主导、零对价、纯教育、本地注册实体、法务预审」五条同时成立为条件。</p>
+<h3>2.5 可执行调研思路（待补一手与访谈）</h3>
+<p>复杂项按下列路径补齐，先做小范围验证再扩面：</p>
+<ol><li><strong>条文回一手</strong>：直接取 <a href="https://www.sec.gov.ph/mc-2025/sec-mc-no-04-series-of-2025the-sec-rules-on-crypto-asset-service-providers-sec-casp-rules/" rel="noopener" target="_blank">SEC MC No.4 s.2025 官方页</a> 附件 PDF 全文，核对 §7 与 §7.3.6 原文；目前 §7.3.6 细节仅由 BitPinas 一家转述 + Aureada／Bitdigest 旁证，<strong>须回一手条文</strong>。</li><li><strong>校本政策采样</strong>：选 3–5 所（Ateneo、DLSU、UP、一所省立、一所 TESDA 体系），取各自 internship manual / OPCS 的 HTE 申请条件、筛选流程、MOA 模板、是否允许金融类企业、是否禁止学生对外发布内容。<strong>一手材料优先于任何二手解读</strong>。</li><li><strong>访谈清单</strong>：HEI 的 SIPP Coordinator / OPCS（谁筛、依据什么）、HTE 的 HR（能否参与筛选）、本地律师（实习生接触客户数据是否触发 DPA 与外包规则、金融类实习是否触发 SRC §28 associated person 注册）。</li><li><strong>判据表</strong>：把「是否有特殊要求」拆成 8 个二值判据（本地法人 / MOA / 校方筛选 / 18 岁 / 公证同意 / 保险 / 不替代岗位 / 数据边界），逐校打分，输出可复用 checklist。</li><li><strong>不做什么</strong>：不做校园投放测算、不估算获客成本、不设计校园大使 KPI——在准入证伪前这些数字没有业务含义。</li></ol>
+<hr/></section>
+<section><h2>三、问题二｜现有交易社群：有没有、在哪聚集、是否存在空缺</h2><h3>3.1 直接回答</h3>
+<p><strong>有，而且高度活跃；但「空缺」不在流量，而在合规供给与教育供给。</strong> 菲律宾的交易社群集中在 Facebook 群／主页、Telegram（含 BonChat、Viber、Signal 等私域）、YouTube 与垂直社交投资平台，规模与使用时长均居全球前列；问题在于<strong>活跃社群里相当部分被 SEC 反复警示为未注册招揽渠道，而合规侧几乎没有覆盖衍生品／CFD 的教育型社群</strong>。这个空缺是监管造成的，不是「没人做所以有机会」。</p>
+<h3>3.2 平台底盘（多口径并列，不合成）</h3>
+<div class="tw"><table class="data"><thead><tr><th>口径</th><th>数值</th><th>母体／方法</th><th>来源</th></tr></thead><tbody><tr><td>We Are Social × Meltwater《Digital 2026 Philippines》转述</td><td>95.8M 社媒用户身份（人口 81.9%）、98M 网民、每周社媒 <strong>33h50m</strong>、97.8% 手机上网；FB <strong>94.9%</strong>、Messenger 90.6%、YouTube 85%、TikTok 82.2%、IG 71.2%；社媒广告 $679M(+14.5%)、<strong>influencer 广告 $125M(+15%)</strong></td><td>该国别报告，经媒体转述，<strong>原始报告未直连</strong></td><td><a href="https://newsbytes.ph/?p=112521" rel="noopener" target="_blank">Newsbytes PH</a>；<a href="https://www.eliteasia.co/top-digital-and-social-media-trends-in-the-philippines-in-2026/" rel="noopener" target="_blank">Elite Asia 另一转述</a>（该转述平台绝对值与前者不同，仅作存在性印证，<strong>不取数</strong>）</td></tr><tr><td>Datambar 自采调查</td><td>FB 97.2%、YouTube 90.5%、TikTok 67%、IG 58%、X 40.7%、<strong>Telegram 36.8%</strong>、Reddit 19%；日活使用 FB 91%／YT 84%／TikTok 78%／Telegram 54%（55–64 岁 80%）／X 62%</td><td>2026-01-05～23，n=600，18–64 岁，在线面板 CAWI，95% 置信 ±4</td><td><a href="https://datambar.com/en/social-media-global-trends-philippines/" rel="noopener" target="_blank">Datambar</a></td></tr><tr><td>第三方估算</td><td>FB 88M／YT 75M／TikTok 62M 等</td><td>自述为 estimates &amp; projections</td><td><a href="https://data.stateglobe.com/blog/top-10-social-media-platforms-in-philippines" rel="noopener" target="_blank">StateGlobe</a> — <strong>仅登记，不采信为数据</strong></td></tr></tbody></table></div>
+<blockquote>三组<strong>母体、方法、年份不同，按项目口径纪律并列不合成、不取平均</strong>。可稳妥使用的只有定性结论：<strong>Facebook 为绝对主场、YouTube／TikTok 次之、Telegram 等私域在投资招揽中占比显著高于其泛人群渗透率</strong>（下节有一手佐证）。</blockquote>
+<h3>3.3 社群类型图谱</h3>
+<div class="tw"><table class="data"><thead><tr><th>类型</th><th>代表</th><th>主要聚集地</th><th>证据等级</th><th>合规状态</th></tr></thead><tbody><tr><td>垂直社交投资平台</td><td><strong>Investa／Investagrams</strong>（2015 创立，Makati，自述 <strong>100 万+ 用户</strong>，第三方档 <strong>1.2M+</strong>；social feed、VTrade 模拟盘、Investa University、InvestaTrade／InvestaFunds，InvestaFinancial 为 SEC 持牌共同基金分销商，已接入 GCash／Maya）</td><td>自有平台 + FB／IG／TikTok／X</td><td>企业一手官网 + 第三方档</td><td>相对合规；以 PSE 股票／基金为主，课程含 Forex／Crypto 入门。官网自述「菲律宾实时行情数据断连、正申请重连，其余市场（Crypto／美股／大宗／forex）仍可用」，并称「仍有大量挑战待共同解决」</td></tr><tr><td>行业协会型交易社群</td><td><strong>PAFTI（Philippine Association of Forex Traders Inc.）</strong>，自述「leading and only registered association」；课程、每周直播分析、<strong>Telegram 实时喊单群</strong>、FXMS 周报；教练 Alex Manabat、Jonathan Lou Reyes、Alex Samson</td><td>Investagrams 合作伙伴页 + <strong>Telegram 私域</strong></td><td>平台合作页（企业自述）</td><td>⚠️ 见 3.4 证据链</td></tr><tr><td>券商场／活动型</td><td>Traders Fair 等线下交易展会（媒体报道 2027-04-03 将返马尼拉，<strong>PR 稿性质</strong>）；DLSU Ignite 2026 等学生金融素养活动</td><td>线下 + 社媒扩散</td><td>二手／PR</td><td>教育型为主</td></tr><tr><td>私域招揽型</td><td>SEC 多份 advisory 点名的 Facebook <strong>Pages／Groups／Chatgroups</strong>、Telegram 群；BG Wealth／Riscoin 等 copy-trading 群使用 WhatsApp／Telegram／Signal／<strong>BonChat</strong></td><td>FB 群 + Telegram／Viber／BonChat</td><td><strong>SEC 一手 advisory（关于渠道形态）</strong> + 行业站二手（关于具体平台）</td><td><strong>禁区</strong></td></tr><tr><td>反诈／合规自查型</td><td>「Crypto Watch」类志愿者 Telegram／Viber 社群（Metro Manila／Cebu／Davao），核对 BSP 注册、公布黑名单钱包；据称 BSP／SEC 与社群 moderator 有定期线上咨询</td><td>Telegram／Viber</td><td><strong>行业站二手，须一手核验</strong></td><td>潜在建设性方向，见 3.5</td></tr></tbody></table></div>
+<p><strong>一手佐证（渠道形态）</strong>：SEC 2019 advisory 转述明确点名 Facebook Pages、Groups、Chatgroups 被用于投资招揽（<a href="https://bitpinas.com/news/sec-scammers-usually-claim-invest-funds-forex-crypto-justify-earning-capacity/" rel="noopener" target="_blank">BitPinas, 2019-08-13</a>）；更早的 SEC advisory 记载 14 家实体通过「secret Facebook groups and chatrooms」许诺月 10%–200% 回报，入金走 Coins.ph 账户、GCash、汇款公司与面对面（<a href="https://manilastandard.net/?p=263491" rel="noopener" target="_blank">Manila Standard</a>）；2023 年两份 SEC advisory 一手 PDF 明文记载 Crypace「transacts with the public only through social media such as online group chats on <strong>Facebook (FB), Telegram</strong>」（<a href="https://www.sec.gov.ph/wp-content/uploads/2023/12/2023Advisory-CRYPACE-LIMITED.pdf" rel="noopener" target="_blank">Crypace advisory</a>），以及 Arcane Digital Marketing 以 Facebook Page 招揽 ₱1,000 起投（<a href="https://www.sec.gov.ph/wp-content/uploads/2023/11/2023Advisory_ARCANE-DIGITAL-MARKETING-Final_11-16-2023-Draft.pdf" rel="noopener" target="_blank">Arcane advisory</a>）。</p>
+<h3>3.4 关键证据链：社群 → 教练 → 名人 → 执法</h3>
+<p>这条链把三个问题串在一起，也是本轮最值得留档的发现：</p>
+<ol><li><strong>PAFTI 教练页</strong>（Investagrams 合作伙伴页）写明联合创始人 <strong>Jonathan Lou Reyes</strong> 为「the only certified FX instructor in the country」，并明写「he now currently <strong>works closely with XM</strong>」；PAFTI 提供 Telegram 实时喊单与每周直播分析（<a href="https://www.investagrams.com/partners/pafti/" rel="noopener" target="_blank">Investagrams × PAFTI</a>）。</li><li><strong>SEC 2025-11-07 CDO</strong>（12-12 公布）针对 Trading Point Holdings／XM／XM Global／XM Philippines，点名两位 endorser：<strong>Manny Pacquiao</strong> 与 <strong>forex trader Jonathan Lou Reyes</strong>；命令对象含「officers, promoters, representatives, agents, <strong>influencers</strong>… to cease their Internet presence」，并认定 XM 通过 <strong>XM Philippines Facebook 与 YouTube 账号</strong>推广、设有 Friend Referral Program 现金奖励、以本地银行与 e-wallet 作支付伙伴（<a href="https://www.manilatimes.net/2025/12/13/business/corporate-news/halt-order-issued-versus-pacquiao-endorsed-xm/2242635" rel="noopener" target="_blank">Manila Times, 2025-12-13</a>；<a href="https://manilastandard.net/business/314680000/sec-orders-firm-endorsed-by-pacquiao-to-cease-operations.html" rel="noopener" target="_blank">Manila Standard</a>；<a href="https://malaya.com.ph/business/business-news/sec-orders-xm-group-broker-to-cease-offering-forex-crypto-services-in-ph" rel="noopener" target="_blank">Malaya Business Insight</a>；<a href="https://business.inquirer.net/?p=564085" rel="noopener" target="_blank">Inquirer</a>）。</li><li>结论 <code>kind: judgment</code>：<strong>本地 forex 社群的意见领袖与被 SEC 责令停止的境外经纪商之间存在公开可查的人员关联</strong>。因此「社群里谁被信任」与「谁有合规资格」在菲律宾是<strong>两张不重合的名单</strong>——这是社群测绘必须双表记录（影响力表 + 合规状态表）的原因。</li></ol>
+<p>补充：2026 年 SEC 执法密度显著上升（<a href="https://sulit.ph/is-crypto-forex-trading-scam-philippines-sec-check-2026" rel="noopener" target="_blank">Sulit PH 汇编，二手</a> 列出 VT Markets、FBS、HTX、dYdX／Deriv 等 advisory 与 Riscoin CDO；该汇编<strong>非 SEC 一手清单，须逐条回官网核验</strong>）。<a href="https://mintchain.ph/inside-the-philippines-150m-crypto-ponzi-collapse-how-bg-wealth-and-dsj-exchange-orchestrated-2026s-largest-fraud" rel="noopener" target="_blank">Mintchain 报道</a> 记载 BG Wealth／DSJ Exchange（2026-05-20 CDO）通过 Facebook 群 + WhatsApp／Telegram／Signal／BonChat 定向 OFW，崩盘后同一批 promoter 在<strong>同一批群</strong>里推新平台（Swift Wave Capital、HQI Exchange）——即「信任基础设施被复用」，<strong>行业站二手，仅作机制线索，不作事实定值</strong>。</p>
+<h3>3.5 「空缺」的三层判断</h3>
+<p><code>kind: judgment</code>（结构性判断，非市场 sizing）：</p>
+<div class="tw"><table class="data"><thead><tr><th>层</th><th>是否空缺</th><th>判断依据</th></tr></thead><tbody><tr><td><strong>流量／注意力</strong></td><td><strong>不空缺</strong></td><td>FB 94.9%、每周 33h50m、influencer 广告 $125M(+15%)；Investa 百万级用户、PAFTI 有 Telegram 喊单群、FB／Telegram 招揽群被 SEC 连年点名</td></tr><tr><td><strong>合规衍生品／CFD 的教育型社群</strong></td><td><strong>真空缺</strong></td><td>主交付已判零售 CFD 无本地持牌主体、无注册通道；合规侧（Investa／Coins.ph／PDAX 类）以 PSE 股票、基金、现货为主；MC 5 对 CASP 提供加密衍生品／杠杆交易设限。空缺是<strong>监管造成的</strong>，不是供给疏忽</td></tr><tr><td><strong>可核验的持牌主体 + 反诈自查型社群</strong></td><td><strong>部分空缺、刚起步</strong></td><td>志愿者 Crypto Watch 类社群、BSP／SEC 与 moderator 的定期咨询（<strong>均为行业站二手，须一手核验</strong>）；Investa 官网自述实时行情断连、学生教师依赖、仍有大量挑战——是「工具／数据供给」缺口而非「拉新」缺口</td></tr></tbody></table></div>
+<blockquote><strong>空缺 ≠ 机会</strong>：在主交付「准入证伪」前提下，第 2 层空缺不可被商业填充；把它读成「蓝海」会重蹈 XM 的覆辙。唯一有建设性的方向是第 3 层——<strong>合规科普、注册状态核验、反诈</strong>，且须满足 §7.3.6 零对价教育豁免并由本地持牌主体主导。</blockquote>
+<h3>3.6 可执行调研思路（社群测绘方案）</h3>
+<ol><li><strong>双表记录</strong>：每个社群／账号同时登记「影响力字段」（成员数、日均发帖、互动中位数、主题分布）与「合规字段」（是否点名具体平台、是否发 referral link、是否承诺收益、被推广平台是否在 SEC／BSP 名录、是否出现 #Ad）。两表<strong>不得合并成一个「优质社群」评分</strong>。</li><li><strong>平台优先级</strong>：FB Groups／Pages → Telegram／Viber／BonChat 私域 → YouTube 频道 → TikTok → X（新闻向）→ Investagrams 站内 feed。私域需合规授权后进群观察，不得伪装身份。</li><li><strong>关键词（英文 + Taglish）</strong>：<code>forex ph</code>、<code>#CryptoPH</code>、<code>#trader</code>、<code>PSEi</code>、<code>$PSE:</code>、<code>paano mag-invest</code>、<code>copy trading</code>、<code>signal group</code>、<code>CFD</code>、<code>broker review</code>、<code>XM</code>、<code>Deriv</code>、<code>IUX</code>、<code>GCash crypto</code>、<code>PDAX</code>、<code>Coins.ph</code>、<code>Binance PH</code>、<code>Traders Fair</code>、<code>guaranteed return</code>、<code>daily 1%</code>。</li><li><strong>编码框架</strong>（每条 post 单标签 + 可多选风险标签）：主题 = ①宏观／教育 ②技术分析／喊单 ③平台测评／开户导流 ④生活方式／炫富 ⑤反诈／合规科普 ⑥纯娱乐；风险标签 = 点名产品 / referral link / 收益承诺 / 收入截图 / 未披露赞助 / 深伪疑似。</li><li><strong>饱和度判据</strong>（复用项目 <code>granularity.md</code>）：连续两轮采样的<strong>边际新增事实 &lt; 1 且缺口清单为空</strong>即停止扩面；不设「抓满 N 个群」的硬指标。</li><li><strong>输出</strong>：社群地形图 + 意见领袖名单 + 合规状态矩阵 + 证据缺口清单；<strong>不输出</strong>投放建议、转化率估算或 KPI。</li></ol>
+<hr/></section>
+<section><h2>四、问题三｜KOL 信任：为什么信、为什么不信，以及可执行的 KOL 采样方案</h2><h3>4.1 直接回答</h3>
+<p><code>kind: judgment</code>：<strong>菲律宾受众对「推广经纪商的 KOL」的信任，主要由「关系型信任 + 权威迁移 + 信息不对称」生成，再由「监管点名 + 骗局复用 + 深伪背书」系统性破坏；而 2025 年 CASP 规则把这种信任直接法律化——使「是否有资格被信」取代「是否被信」成为决定性变量。</strong></p>
+<h3>4.2 信任生成 vs 信任破坏（可验证假设）</h3>
+<div class="tw"><table class="data"><thead><tr><th>生成机制（假设）</th><th>可观测信号</th><th>破坏机制（假设）</th><th>可观测信号</th></tr></thead><tbody><tr><td>名人／公共权威的公信力可迁移到金融产品</td><td>Pacquiao 被 XM 聘为全球品牌大使；2026-06 SEC 专门就<strong>伪造 Vico Sotto 背书</strong>发警示，说明公信力有可变现价值（<a href="https://mb.com.ph/2026/06/15/sec-warns-of-surge-in-fake-vico-sotto-investment-videos" rel="noopener" target="_blank">Manila Bulletin, 2026-06-15</a>；<a href="https://www.philstar.com/business/2026/06/08/2533506/vico-sottos-appeal-being-used-illegal-investment-schemes/amp" rel="noopener" target="_blank">Philstar, 2026-06-08</a>）</td><td><strong>背书被法条点名、被 CDO 责令停止</strong></td><td>XM CDO 点名两位 endorser，并命令 influencers「cease their Internet presence」；SEC advisory 把 influencers／endorsers／recruiters 列入可追刑责主体</td></tr><tr><td>社群内「熟人／半熟人」关系与群体认同</td><td>Investa 社区称用户「mga ka-Investa」；FB 群／Telegram 群为招揽主渠道（SEC 一手 advisory）</td><td><strong>同一批群与 promoter 在崩盘后换名复用</strong></td><td>BG Wealth → Swift Wave／HQI 的「scam pipeline」（行业站二手，须核）</td></tr><tr><td>低投资参与率 + 高社媒时长 → 依赖人际线索而非独立核验</td><td>主交付 BSP 2025 CFIS：投资参与率 23%、虚拟资产认知 20%、实际持有约 1%；Digital 2026 转述每周社媒 33h50m</td><td><strong>「verify before you invest」成为公开反制话术</strong></td><td>SEC 要求核验公司注册、招揽授权、从业人员注册、产品注册四项；明写「endorsement ≠ legitimacy／registration／regulatory approval」</td></tr><tr><td>Taglish + 生活方式化内容降低理解门槛</td><td>Marvin Favis 3M TikTok 粉丝、#mindset #trader #forex #crypto；Coach Miranda Miner 用 Tagalog 短句＋直播画图</td><td><strong>AI 深伪使「眼见为实」失效</strong></td><td>SEC 2026-06 Vico Sotto 深伪警示；Invescorum 自称 AI 交易平台并伪称 ₱15,000→₱940,000/月</td></tr><tr><td>重复曝光与算法放大</td><td>FB 94.9% 覆盖；influencer 广告支出 $125M(+15%)</td><td><strong>「收对价」本身成为合规信号</strong></td><td>CASP §7.3.6：赞助／affiliate／推广代币／用户数据／非金钱利益 → 失去纯教育豁免；ASC 要求披露 material connection</td></tr></tbody></table></div>
+<p>主交付第 5 章 5.3⑦ 已引 SiGMA 行业观点「<strong>Awareness is not trust</strong>」并判「仅作背景解读、不作判据」——本件沿用该边界：上表机制<strong>均为待验证假设</strong>，不是已证实的因果结论。</p>
+<h3>4.3 可核实的 KOL 种子池（<strong>仅作发现线索，不作定量依据</strong>）</h3>
+<div class="tw"><table class="data"><thead><tr><th>KOL／主体</th><th>平台与公开快照</th><th>主题线索</th><th>合规关注点</th></tr></thead><tbody><tr><td><strong>Manny Pacquiao</strong></td><td>名人／XM 全球品牌大使</td><td>名人背书</td><td><strong>SEC CDO 点名 endorser</strong>（四家媒体印证）</td></tr><tr><td><strong>Jonathan Lou Reyes</strong></td><td>PAFTI 联合创始人／forex 教练；Telegram 喊单与周直播</td><td>forex 教学</td><td><strong>SEC CDO 点名 endorser</strong>；PAFTI 页自述与 XM 密切合作</td></tr><tr><td><strong>Alex Manabat／Alex Samson</strong></td><td>PAFTI 研究发展总监／内部事务总监</td><td>量化分析、直播、FinExpo 演讲</td><td>与上述同一协会，须逐人核状态</td></tr><tr><td><strong>Marvin Favis</strong>（@marvinfavisofficial）</td><td>TikTok 3M 粉丝、27.1M 赞、2.9K 视频、平均 1.2M 观看、ER 0.3%；快照 2026-10-29（<a href="https://tokranks.com/creator/marvinfavisofficial" rel="noopener" target="_blank">Tokranks</a>）</td><td>最新 posts 为<strong>旅行／励志／生活方式</strong>（Ritz-Carlton Singapore、酒店独处、Practice makes progress），hashtag 含 #trader #forex #crypto #binance，并出现 #iuxcelebration #iux10thanniversary #iuxgalanight2026</td><td>典型「交易生活方式型」：内容不含教学但带经纪商品牌标签，<strong>若含对价即属 marketing</strong></td></tr><tr><td><strong>Coach Miranda Miner</strong></td><td>YouTube 131K 订阅、3,318 视频、9.41M 总观看、~5 视频/周、2013 起（<a href="https://tryspansa.com/channels/coachmirandaminer" rel="noopener" target="_blank">TrySpansa</a>，更新 2026-05）</td><td>近期标题：Clarity Act 解读、Mentors' Thursday Live 实时画图、燃油税／通胀、<strong>PH PESO COLLAPSES TO 61</strong> → 宏观 + 加密立法 + 直播教学</td><td>页面「Top Countries」列美国 28%／英国 18%／巴西 12%，<strong>本地受众占比存疑</strong>；同页指标自相矛盾（见 4.5）</td></tr><tr><td><strong>Insane on Crypto</strong></td><td>YouTube 22.4K 订阅、456 视频、1.08M 观看、~1 视频/周（<a href="https://tryspansa.com/channels/insaneoncrypto" rel="noopener" target="_blank">TrySpansa</a>）</td><td>近期标题偏 NFT／GameFi／presale／meme（PIE BIT EXCHANGE、CS2 SKINS、MINEGRAM、MYPAL、GROVE、GETMNG、BEE EMPIRE）</td><td>自述「partnering with Coins.ph」「Main Ambassador of Superpower Squad」→ <strong>已有商业合作</strong>，主题亦从交易漂移至项目推广</td></tr><tr><td>个人理财型 KOL 群</td><td>Antonette Aquino（注册理财规划师）、Nik Madriñan、Ivy Bermejo（CPA）、Samuel Uy（大学生／NFT）、Simply Finance／Mariel Bitanga 等（<a href="https://www.moneymax.ph/personal-finance/blog/top-financial-bloggers-philippines" rel="noopener" target="_blank">Moneymax 榜单</a>）</td><td>储蓄、预算、MP2、保险、个人理财</td><td>与「推广经纪商」不同类；可作对照样本，说明本地金融内容以<strong>理财</strong>而非<strong>杠杆交易</strong>为主</td></tr><tr><td>交易类长尾频道</td><td>JUANMillionCLUB、TRADEKOTO、Kryptoinvestorph 等（<a href="https://www.hiip.asia?p=8910/" rel="noopener" target="_blank">Hiip 榜单</a>）</td><td>交易技巧／市场观点</td><td>该榜单 audience 字段出现明显模板填充（如「Real 91% United State」），<strong>只取账号名作种子，不取任何数值</strong></td></tr></tbody></table></div>
+<h3>4.4 「按关键词检索 KOL → 抓最新 posts → 分析主题与关注度」的可执行方案</h3>
+<p>用户提出的方法可行，但需按菲律宾的合规环境改写为<strong>双轨</strong>（内容轨 + 合规轨）。分步：</p>
+<p><strong>Step 1｜建种子池（关键词 → 账号）</strong></p>
+<ul><li>平台与检索式：YouTube／TikTok／FB／X 用 <code>forex ph OR #CryptoPH OR #trader OR copy trading OR broker review</code>；Taglish 用 <code>paano mag-invest</code>、<code>sinyal</code>、<code>kumita sa trading</code>；Investagrams 站内用 <code>$PSE:</code>、<code>PSEi</code>；私域群从公开邀请链接／群目录反查（须合规授权）。</li><li>补充入口：SEC advisory／CDO 里的 endorser 名单（<strong>反向种子，最高效</strong>）、CASP 报备的第三方营销者名单（若可公开取得）、Traders Fair 等活动的讲者名单、Investa University 讲师、Moneymax／Hiip 榜单。</li><li>每账号登记：账号 ID、平台、语言（EN／Tagalog／Taglish）、自述身份、粉丝量级、首次发布日、是否自述商业合作。</li></ul>
+<p><strong>Step 2｜取最新 posts（样本窗口）</strong></p>
+<ul><li>固定窗口：<strong>近 30 天</strong>（另取近 90 天作趋势对照），每账号 ≥20 条或全取（不足则标注）。</li><li>字段：发布时间、格式（长视频／Shorts／直播／图文／群消息）、标题与首句、hashtag、外链（是否 referral／affiliate）、商业标识、互动量（赞／评／分享／观看）、是否置顶、是否重复投放。</li><li><strong>必须通过平台官方 API 或合规授权导出</strong>；本件所用第三方索引页仅能证明「存在」，不能证明「量级」。</li></ul>
+<p><strong>Step 3｜主题与关注度编码</strong></p>
+<ul><li>主题按 3.6 的六类编码，另加「漂移位」：记录账号宣称定位与实际近 30 天主题是否一致（如 Marvin Favis 定位 trader、实际为旅行励志；Insane on Crypto 定位 crypto trading、实际为 GameFi 项目推广）。<strong>主题漂移率本身就是选 KOL 的风险指标</strong>。</li><li>关注度指标：优先用<strong>互动中位数 / 近 30 天发帖数</strong>、ER（互动 ÷ 粉丝）、本地受众占比、评论区语言分布；<strong>不用全账号历史均值</strong>（会被早期爆款污染），不把「点赞数」当「观看数」，不跨口径合成。</li><li>输出「主题 × 关注度」矩阵，而非单一粉丝排行。</li></ul>
+<p><strong>Step 4｜合规轨并行（不可后置）</strong></p>
+<ul><li>每账号逐条过 §一 1.2 的实质行为清单：点名产品 / referral link / 收益承诺 / 收入截图 / 收佣金 / 个别化指令 / 促成交易。命中任一 → 标 <code>regulated-risk</code>。</li><li>核对被推广平台是否同时具备 <strong>SEC CASP 注册 + BSP VASP 资质</strong>（BitPinas 引 GCash Head of Crypto Luis Buenaventura 的澄清：influencer 只可推广已注册平台，示例 Coins.ph／PDAX）；营销者自身须为菲律宾注册企业。</li><li>记录 material connection 披露（#Ad／#Sponsored）、是否存在免责声明（<strong>注明免责声明不当然免责</strong>）。</li></ul>
+<p><strong>Step 5｜判据与停止条件</strong></p>
+<ul><li>交付判据：每个候选 KOL 给出「主题分布、关注度中位数、商业标识、合规风险等级、被推广平台注册状态」五列；<strong>任一列缺失即列入证据不足，不补推断</strong>。</li><li>停止条件：边际新增事实 &lt; 1 且缺口清单为空；或命中「未注册平台推广」即整条链转合规处置，不再做影响力评估。</li></ul>
+<h3>4.5 数据可信度警示（本轮实证踩到的坑）</h3>
+<p><code>kind: judgment</code>：第三方 KOL 数据平台<strong>普遍存在模板字段污染，不可直接引用</strong>。实测两例：</p>
+<ul><li>TrySpansa 的 Coach Miranda Miner 页同屏出现「Videos average <strong>2.8K</strong> views」与「<strong>128K Avg Views</strong>」「Views/Video 284K」，且「Audience Insights」区块在 Insane on Crypto 页数值完全相同（284K／1.2M／同一年龄与国别分布）——属模板填充，<strong>该页所有 audience / performance 字段判为不可用</strong>，仅保留订阅数、视频数、总观看量与近期标题（这些与页面自述一致）。</li><li>Hiip 榜单多个账号的「Real 91%」「Follower location by country 84%」「26-32 41%」完全相同，且「United State」拼写异常；Tokranks 的「1.2M avg views」与最新三条 posts 的 8.4K／6.5K／3.4K 点赞差距过大（历史均值 vs 近期表现，母体不同）。<strong>一律不合成、不外推、不作为关注度结论</strong>。</li></ul>
+<p>因此本件给出的 KOL 数字<strong>全部标注「第三方索引页快照，as-of 见各行」</strong>，只用于说明「有哪些可查的账号与主题方向」；正式 KOL 分析必须以 Step 2 的平台原生数据重做。这与项目 <code>data-integrity.md</code>「一手 &gt; 二手 &gt; 聚合，聚合源偏差方向随机不可校准」一致。</p>
+<hr/></section>
+<section><h2>五、跨问统一判断、待执行清单与证据不足清单</h2><h3>5.1 统一判断</h3>
+<p><code>kind: judgment</code>：<strong>三问其实是同一个问题的三个切面——在菲律宾，「触达人的能力」与「合法触达人的资格」已经分离。</strong></p>
+<ul><li>实习机制给出的资格门槛是<strong>本地法人 + 校方 MOA + 零对价教育</strong>；</li><li>社群图谱显示触达能力高度集中在<strong>被监管反复点名的私域</strong>；</li><li>KOL 规则把「收受对价」直接定义为受监管 marketing，并把 influencer 列为 CDO 责令对象。</li></ul>
+<p>三者叠加的结论是：主交付「准入优先于需求」在获客侧同样成立。<strong>在牌照通道解决前，唯一可积累的资产是「合规知识、社群地形图、可核验的名单」，而不是「渠道关系或投放能力」</strong>。被否决备选：<code>A</code> 先做校园／社群试水再补牌照 → 否决（招揽即构成管辖连接点，主交付清单 1 首行已引 XM CDO 判词）；<code>B</code> 用「纯教育」话术绕开 → 否决（§7.3.6 对价测试 + NDV Law 实质行为判据）；<code>C</code> 与境外平台合作由对方承担合规 → 否决（M-2026-003 零售直连禁令，母国持牌亦不免）。</p>
+<h3>5.2 待执行清单（按优先级）</h3>
+<div class="tw"><table class="data"><thead><tr><th>优先级</th><th>动作</th><th>为什么先做</th></tr></thead><tbody><tr><td>P0</td><td>回一手取 SEC MC No.4 s.2025 附件 PDF，核 §7／§7.3.6 原文；本地律师出「教育内容豁免」书面意见</td><td>目前 §7.3.6 细节仅一家媒体转述，是整份增补件最大的单点不确定性</td></tr><tr><td>P0</td><td>取 3–5 所高校的 internship manual / OPCS HTE 条件与 MOA 模板</td><td>问题一的「筛选流程」必须落到校本一手文件，二手条文梳理不够</td></tr><tr><td>P1</td><td>用 Step 1–5 做 KOL 种子池与近 30 天 posts 采集（须平台 API／授权）</td><td>现有第三方索引数据已被证实污染，不能支撑任何定量结论</td></tr><tr><td>P1</td><td>社群双表测绘（影响力表 + 合规状态表），逐条回 SEC 官网核 advisory／CDO</td><td>Sulit PH／Mintchain 汇编均为二手，不得直接当执法清单</td></tr><tr><td>P2</td><td>核 「Crypto Watch」类反诈社群是否真实存在、BSP／SEC 与 moderator 咨询是否有官方记录</td><td>行业站二手，若为真则是第 3 层空缺的唯一建设性抓手</td></tr><tr><td>P2</td><td>复核 Investa 实时行情断连状态、校园用户规模口径（100 万 vs 1.2 万+ 用户数母体不同）</td><td>两组数字分别来自企业自述与第三方档，并列不合成</td></tr></tbody></table></div>
+<h3>5.3 证据不足清单（显式标注，不作推断填补）</h3>
+<ol><li><strong>未取得</strong> SEC MC No.4／5 s.2025 直连一手条文全文；§7.3.6 仅由 BitPinas 转述 + Aureada／Bitdigest 旁证。</li><li><strong>未取得</strong> 任何 KOL 的平台原生 analytics；所有粉丝／观看／ER 均为第三方索引页快照且已发现模板污染。</li><li><strong>未取得</strong> 菲律宾交易社群的成员规模、活跃度、主题分布实测数据；「空缺」为结构性判断，非 sizing。</li><li><strong>未取得</strong> 高校校本 internship manual / MOA 模板 / HTE 申请条件；「企业筛选流程」目前依据 CMO 104 条文 + 单个校企 MOA 新闻范本。</li><li><strong>未取得</strong> 「Crypto Watch」反诈社群、BSP／SEC 与 moderator 定期咨询的一手记录（仅行业站二手）。</li><li><strong>未取得</strong> SEC CASP 已报备第三方营销者名单（若存在且公开），无法核对哪些 KOL 已具合规身份。</li><li><strong>未核验</strong> 2026 年 SEC advisory／CDO 逐条清单（Sulit PH 汇编为二手，含日期与实体名，须回官网）。</li><li><strong>未做</strong> 校方、企业 HR、本地律师访谈；「金融类实习是否触发 SRC §28 associated person 注册」为开放问题。</li><li><strong>未核验</strong> PAFTI「only registered association」自述、及其与 XM 关联的当前状态（CDO 后是否终止合作）。</li><li><strong>未取得</strong> We Are Social／Meltwater《Digital 2026 Philippines》原始报告直连，平台数值均为媒体转述。</li></ol>
+<hr/></section>
+<div class="counter">
+<h2>反方论点（≥5 条，含 ≥1 条时间维度）</h2>
+<ol class="cv">
+<li><strong>「社群活跃 + KOL 便宜 + influencer 广告 +15%」不等于可进入</strong>：把流量空缺读成机会，会忽略 CASP §7 的连带责任与 T0 招揽冻结；主交付已判准入证伪，需求再大仍为零。</li>
+<li><strong>「纯教育内容可以绕开」不成立</strong>：§7.3.6 以是否收受任何对价（含用户数据、非金钱利益）为判据，且 NDV Law 明确免责声明与「educator」标签不当然阻断责任。</li>
+<li><strong>「校企合作是低风险品牌动作」不成立</strong>：CMO 104 的 anti-displacement 与三方 MOA、18 岁／公证同意、DPA 约束叠加，使「学生发社媒帖换津贴」成为双重违规；校方对筛选与内容拥有主导权，企业无法自由设计。</li>
+<li><strong>「找本地持牌平台合作即可推广」需再拆一层</strong>：BitPinas 引 GCash 高管澄清 influencer 只可推广同时具 SEC CASP + BSP VASP 资质的平台，且营销者自身须为菲律宾注册企业；主交付另指出 VASP 名录在收缩、牌照变更控制是否自动转移「证据不足」。</li>
+<li><strong>「KOL 名单可按粉丝量排序使用」不成立</strong>：本轮已实证第三方数据平台模板污染，且 Coach Miranda Miner 的流量国别以美／英为主，粉丝量与本地可转化触达不是同一口径。</li>
+<li><strong>【时间维度】2025→2026 监管密度显著上升，历史打法不可外推</strong>：2023 年 SEC advisory 已把 influencers 列入刑责主体，2025-05 CASP §7 把 KOL 纳入 marketing、2025-11 XM CDO 点名 endorsers、2026-06 深伪背书警示、2026 年多起 copy-trading CDO。<strong>用 2023–2024 年的社媒投放经验设计 2027 动作会系统性低估合规成本</strong>；且 2027 年宏观复苏为预测非事实（主交付反方⑥），可支配收入与风险偏好不可据 2025 高增长外推。</li>
+<li><strong>「空缺＝没人做」的反向可能</strong>：第 2 层合规教育社群的空缺可能是<strong>理性供给退出</strong>（无牌照通道 → 无人愿承担连带责任），而非市场失灵；若如此，任何补位尝试都会遇到同样的法律约束。</li>
+</ol>
+</div>
+<div class="ref">
+<h2>Reference</h2>
+<ul class="ref">
+<li>About<a href="http://investagrams.com/About/About" rel="noopener" target="_blank">http://investagrams.com/About/About</a></li>
+<li>Investagrams 官网<a href="http://www.investagrams.com" rel="noopener" target="_blank">http://www.investagrams.com</a></li>
+<li>Bitdigest, 2025-06-30<a href="https://bitdigest.io/posts/sec-ph-says-crypto-kols-and-content-creators-need-a-license--heres-what-that-means" rel="noopener" target="_blank">https://bitdigest.io/posts/sec-ph-says-crypto-kols-and-content-creators-need-a-license--heres-what-that-means</a></li>
+<li>BitPinas, 2025-06-11<a href="https://bitpinas.com/business/key-takeaways-sec-final-crypto-rules/" rel="noopener" target="_blank">https://bitpinas.com/business/key-takeaways-sec-final-crypto-rules/</a></li>
+<li>BitPinas, 2019-08-13<a href="https://bitpinas.com/news/sec-scammers-usually-claim-invest-funds-forex-crypto-justify-earning-capacity/" rel="noopener" target="_blank">https://bitpinas.com/news/sec-scammers-usually-claim-invest-funds-forex-crypto-justify-earning-capacity/</a></li>
+<li>Inquirer<a href="https://business.inquirer.net/?p=564085" rel="noopener" target="_blank">https://business.inquirer.net/?p=564085</a></li>
+<li>StateGlobe<a href="https://data.stateglobe.com/blog/top-10-social-media-platforms-in-philippines" rel="noopener" target="_blank">https://data.stateglobe.com/blog/top-10-social-media-platforms-in-philippines</a></li>
+<li>Datambar<a href="https://datambar.com/en/social-media-global-trends-philippines/" rel="noopener" target="_blank">https://datambar.com/en/social-media-global-trends-philippines/</a></li>
+<li>DOLE 官网<a href="https://dole.gov.ph/news/stronger-internship-guidelines-open-better-pathways-to-jobs-public-service" rel="noopener" target="_blank">https://dole.gov.ph/news/stronger-internship-guidelines-open-better-pathways-to-jobs-public-service</a></li>
+<li>FinTech.ph 企业档<a href="https://fintech.ph/listing/investa" rel="noopener" target="_blank">https://fintech.ph/listing/investa</a></li>
+<li>Forms Legal: Influencer Agreement (Philippines), 2026-10 更新<a href="https://forms-legal.com/philippines/business/contracts/ph-influencer-agreement" rel="noopener" target="_blank">https://forms-legal.com/philippines/business/contracts/ph-influencer-agreement</a></li>
+<li>HR Forward Asia 复核<a href="https://hrforwardasia.com?p=745/" rel="noopener" target="_blank">https://hrforwardasia.com?p=745/</a></li>
+<li>CHED CMO No.104 s.2017《Revised Guidelines for Student Internship Program in the Philippines (SIPP) for all Programs》官方 PDF<a href="https://legacy.ched.gov.ph/wp-content/uploads/2018/03/CMO-NO.-104-S.-2017.pdf" rel="noopener" target="_blank">https://legacy.ched.gov.ph/wp-content/uploads/2018/03/CMO-NO.-104-S.-2017.pdf</a></li>
+<li>LSPU 案例：300h 校内 + 400h 外部<a href="https://lspu.edu.ph/news/chmt-gears-up-students-for-industry-ready-internships" rel="noopener" target="_blank">https://lspu.edu.ph/news/chmt-gears-up-students-for-industry-ready-internships</a></li>
+<li>Malaya Business Insight<a href="https://malaya.com.ph/business/business-news/sec-orders-xm-group-broker-to-cease-offering-forex-crypto-services-in-ph" rel="noopener" target="_blank">https://malaya.com.ph/business/business-news/sec-orders-xm-group-broker-to-cease-offering-forex-crypto-services-in-ph</a></li>
+<li>Manila Standard<a href="https://manilastandard.net/?p=263491" rel="noopener" target="_blank">https://manilastandard.net/?p=263491</a></li>
+<li>Manila Standard<a href="https://manilastandard.net/business/314680000/sec-orders-firm-endorsed-by-pacquiao-to-cease-operations.html" rel="noopener" target="_blank">https://manilastandard.net/business/314680000/sec-orders-firm-endorsed-by-pacquiao-to-cease-operations.html</a></li>
+<li>Manila Standard<a href="https://manilastandard.net/spotlight/314766271/filinvest-and-ateneo-de-manila-university-forge-partnership-to-develop-future-ready-talent.html" rel="noopener" target="_blank">https://manilastandard.net/spotlight/314766271/filinvest-and-ateneo-de-manila-university-forge-partnership-to-develop-future-ready-talent.html</a></li>
+<li>Manila Bulletin, 2026-06-15<a href="https://mb.com.ph/2026/06/15/sec-warns-of-surge-in-fake-vico-sotto-investment-videos" rel="noopener" target="_blank">https://mb.com.ph/2026/06/15/sec-warns-of-surge-in-fake-vico-sotto-investment-videos</a></li>
+<li>Mintchain 报道<a href="https://mintchain.ph/inside-the-philippines-150m-crypto-ponzi-collapse-how-bg-wealth-and-dsj-exchange-orchestrated-2026s-largest-fraud" rel="noopener" target="_blank">https://mintchain.ph/inside-the-philippines-150m-crypto-ponzi-collapse-how-bg-wealth-and-dsj-exchange-orchestrated-2026s-largest-fraud</a></li>
+<li>Mintchain, 社群反诈（二手）<a href="https://mintchain.ph?p=2742/" rel="noopener" target="_blank">https://mintchain.ph?p=2742/</a></li>
+<li>NDV Law: Can Financial Influencers Promote Investments and Crypto?<a href="https://ndvlaw.com/can-financial-influencers-promote-investments-and-crypto" rel="noopener" target="_blank">https://ndvlaw.com/can-financial-influencers-promote-investments-and-crypto</a></li>
+<li>NDV Law: How Are Cryptocurrency Schemes Promoted by Influencers Regulated?<a href="https://ndvlaw.com/how-are-cryptocurrency-schemes-promoted-by-influencers-regulated" rel="noopener" target="_blank">https://ndvlaw.com/how-are-cryptocurrency-schemes-promoted-by-influencers-regulated</a></li>
+<li>Newsbytes PH<a href="https://newsbytes.ph/?p=112521" rel="noopener" target="_blank">https://newsbytes.ph/?p=112521</a></li>
+<li>UP Diliman OFA 镜像 PDF<a href="https://ofa.upd.edu.ph/wp-content/uploads/2018/04/CMO-No.104-S.2017.pdf" rel="noopener" target="_blank">https://ofa.upd.edu.ph/wp-content/uploads/2018/04/CMO-No.104-S.2017.pdf</a></li>
+<li>RegAlert MC5 全文转录<a href="https://regalert.today/document/sec-guidelines-on-the-operations-of-crypto-asset-service-providers-sec-casp-guid-3b1b57f6-978d-4185-aac9-ff489684621e" rel="noopener" target="_blank">https://regalert.today/document/sec-guidelines-on-the-operations-of-crypto-asset-service-providers-sec-casp-guid-3b1b57f6-978d-4185-aac9-ff489684621e</a></li>
+<li>RichestPH, 投资 App 与社群<a href="https://richestph.com/maximize-your-earnings-the-essential-investment-apps-for-filipino-investors" rel="noopener" target="_blank">https://richestph.com/maximize-your-earnings-the-essential-investment-apps-for-filipino-investors</a></li>
+<li>Sulit PH 汇编，二手<a href="https://sulit.ph/is-crypto-forex-trading-scam-philippines-sec-check-2026" rel="noopener" target="_blank">https://sulit.ph/is-crypto-forex-trading-scam-philippines-sec-check-2026</a></li>
+<li>驻菲代表处教育组／台湾教育研究资讯网 PDF<a href="https://teric.naer.edu.tw/wSite/PDFReader?xmlId=2068517&amp;fileName=1757043905848&amp;format=pdf" rel="noopener" target="_blank">https://teric.naer.edu.tw/wSite/PDFReader?xmlId=2068517&amp;fileName=1757043905848&amp;format=pdf</a></li>
+<li>Tokranks<a href="https://tokranks.com/creator/marvinfavisofficial" rel="noopener" target="_blank">https://tokranks.com/creator/marvinfavisofficial</a></li>
+<li>Daily Tribune<a href="https://tribune.net.ph/2026/07/16/filinvest-ateneo-forge-student-internship-program" rel="noopener" target="_blank">https://tribune.net.ph/2026/07/16/filinvest-ateneo-forge-student-internship-program</a></li>
+<li>TrySpansa<a href="https://tryspansa.com/channels/coachmirandaminer" rel="noopener" target="_blank">https://tryspansa.com/channels/coachmirandaminer</a></li>
+<li>TrySpansa<a href="https://tryspansa.com/channels/insaneoncrypto" rel="noopener" target="_blank">https://tryspansa.com/channels/insaneoncrypto</a></li>
+<li>Aureada CPA Law<a href="https://www.aureadalaw.com/post/key-compliance-requirements-under-the-2025-sec-casp-rules-in-the-philippines" rel="noopener" target="_blank">https://www.aureadalaw.com/post/key-compliance-requirements-under-the-2025-sec-casp-rules-in-the-philippines</a></li>
+<li>Elite Asia 另一转述<a href="https://www.eliteasia.co/top-digital-and-social-media-trends-in-the-philippines-in-2026/" rel="noopener" target="_blank">https://www.eliteasia.co/top-digital-and-social-media-trends-in-the-philippines-in-2026/</a></li>
+<li>Hiip 榜单<a href="https://www.hiip.asia?p=8910/" rel="noopener" target="_blank">https://www.hiip.asia?p=8910/</a></li>
+<li>Investagrams × PAFTI<a href="https://www.investagrams.com/partners/pafti/" rel="noopener" target="_blank">https://www.investagrams.com/partners/pafti/</a></li>
+<li>Respicio &amp; Co. 条文对照<a href="https://www.lawyer-philippines.com/articles/minimum-wage-and-working-hours-rules-for-trainees-philippines-1" rel="noopener" target="_blank">https://www.lawyer-philippines.com/articles/minimum-wage-and-working-hours-rules-for-trainees-philippines-1</a></li>
+<li>BOI LinkedIn 活动页<a href="https://www.linkedin.com/posts/boiphilippines_envest-envestmindanao2026-academeindustrymatching-activity-7485919110590210048-T4OS" rel="noopener" target="_blank">https://www.linkedin.com/posts/boiphilippines_envest-envestmindanao2026-academeindustrymatching-activity-7485919110590210048-T4OS</a></li>
+<li>Manila Times, 2025-12-13<a href="https://www.manilatimes.net/2025/12/13/business/corporate-news/halt-order-issued-versus-pacquiao-endorsed-xm/2242635" rel="noopener" target="_blank">https://www.manilatimes.net/2025/12/13/business/corporate-news/halt-order-issued-versus-pacquiao-endorsed-xm/2242635</a></li>
+<li>Manila Times, 2026-07-30<a href="https://www.manilatimes.net/2026/07/30/tmt-newswire/ignite-2026-empowering-the-next-generation-of-investors/2394576/amp" rel="noopener" target="_blank">https://www.manilatimes.net/2026/07/30/tmt-newswire/ignite-2026-empowering-the-next-generation-of-investors/2394576/amp</a></li>
+<li>Moneymax 榜单<a href="https://www.moneymax.ph/personal-finance/blog/top-financial-bloggers-philippines" rel="noopener" target="_blank">https://www.moneymax.ph/personal-finance/blog/top-financial-bloggers-philippines</a></li>
+<li>Ocampo &amp; Suralvo 解读<a href="https://www.ocamposuralvo.com?p=1660/" rel="noopener" target="_blank">https://www.ocamposuralvo.com?p=1660/</a></li>
+<li>Ocampo &amp; Suralvo<a href="https://www.ocamposuralvo.com?p=2483/" rel="noopener" target="_blank">https://www.ocamposuralvo.com?p=2483/</a></li>
+<li>Philstar, 2026-06-08<a href="https://www.philstar.com/business/2026/06/08/2533506/vico-sottos-appeal-being-used-illegal-investment-schemes/amp" rel="noopener" target="_blank">https://www.philstar.com/business/2026/06/08/2533506/vico-sottos-appeal-being-used-illegal-investment-schemes/amp</a></li>
+<li>Philstar/The Freeman, 2022-08-19<a href="https://www.philstar.com/the-freeman/cebu-news/2022/08/19/2203679/dole-7-warns-jobseekers-vs-scammers" rel="noopener" target="_blank">https://www.philstar.com/the-freeman/cebu-news/2022/08/19/2203679/dole-7-warns-jobseekers-vs-scammers</a></li>
+<li>Respicio &amp; Co., 2026-03-04<a href="https://www.respicio.ph/commentaries?offset=1772629861402" rel="noopener" target="_blank">https://www.respicio.ph/commentaries?offset=1772629861402</a></li>
+<li>SchoolFinderPH 条文梳理<a href="https://www.schoolfinderph.com/blog/college-programs-with-internship" rel="noopener" target="_blank">https://www.schoolfinderph.com/blog/college-programs-with-internship</a></li>
+<li>SEC MC No.4 s.2025<a href="https://www.sec.gov.ph/mc-2025/sec-mc-no-04-series-of-2025the-sec-rules-on-crypto-asset-service-providers-sec-casp-rules/" rel="noopener" target="_blank">https://www.sec.gov.ph/mc-2025/sec-mc-no-04-series-of-2025the-sec-rules-on-crypto-asset-service-providers-sec-casp-rules/</a></li>
+<li>SEC FCPA IRR 征求意见草案 PDF（**草案，非现行条文**）<a href="https://www.sec.gov.ph/wp-content/uploads/2023/01/2023Notice_Request-for-Comments-Draft-IRR-FCPA.pdf" rel="noopener" target="_blank">https://www.sec.gov.ph/wp-content/uploads/2023/01/2023Notice_Request-for-Comments-Draft-IRR-FCPA.pdf</a></li>
+<li>SEC Advisory: Arcane Digital Marketing, 2023-11-16（一手 PDF）<a href="https://www.sec.gov.ph/wp-content/uploads/2023/11/2023Advisory_ARCANE-DIGITAL-MARKETING-Final_11-16-2023-Draft.pdf" rel="noopener" target="_blank">https://www.sec.gov.ph/wp-content/uploads/2023/11/2023Advisory_ARCANE-DIGITAL-MARKETING-Final_11-16-2023-Draft.pdf</a></li>
+<li>SEC Advisory: Crypace, 2023-12（一手 PDF）<a href="https://www.sec.gov.ph/wp-content/uploads/2023/12/2023Advisory-CRYPACE-LIMITED.pdf" rel="noopener" target="_blank">https://www.sec.gov.ph/wp-content/uploads/2023/12/2023Advisory-CRYPACE-LIMITED.pdf</a></li>
+</ul>
+</div>
+<footer>由 research-kit · research-html（合并自 frontend-design）渲染 · 本地 SSOT 为权威来源</footer>
+</article>
+</body>
+</html>
